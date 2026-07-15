@@ -132,7 +132,7 @@ export default function Dashboard() {
       <div style={{ marginTop: 6 }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14, padding: "0 4px" }}>
           <Pill style={{ background: "rgba(28,26,23,0.06)", color: "var(--text-primary)" }}>Team</Pill>
-          <button onClick={() => navigate("/app/team")} aria-label="Open team view" style={{ width: 34, height: 34, borderRadius: "50%", border: "1px solid var(--border-strong)", background: "rgba(255,255,255,0.5)", cursor: "pointer", color: "var(--text-primary)", fontSize: 18, lineHeight: 1 }}>+</button>
+          <button onClick={() => navigate("/app/team")} aria-label="Open team view" style={{ display: "inline-flex", alignItems: "center", gap: 7, height: 34, padding: "0 14px", borderRadius: 999, border: "1px solid var(--border-strong)", background: "rgba(255,255,255,0.5)", cursor: "pointer", color: "var(--text-secondary)", fontFamily: "var(--font-body)", fontSize: 13.5, fontWeight: 600 }}>View team <Icon name="arrowRight" size={15} /></button>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 24, borderTop: "1px solid var(--border-default)", paddingTop: 22 }}>
           <div style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 66, lineHeight: 1, letterSpacing: "-0.01em", color: "var(--text-primary)", textShadow: "0 1px 14px rgba(255,255,255,0.55)" }}>{activePct}%</div>
