@@ -1,0 +1,42 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__Claude_Preview__preview_start",
+      "Read(//Users/isabelgordalla/Library/Application Support/Claude/local-agent-mode-sessions/skills-plugin/6328b799-5cfa-43c5-ac49-510830c0bf83/431017a1-6c6f-48d0-b157-6f2a887b8967/skills/docx/**)",
+      "Bash(extract-text \"/Users/isabelgordalla/Downloads/Team_App_Konzept.docx\")",
+      "Bash(perl -0pi -e 's/scores:null, type:null, team:null \\\\}/scores:null, type:null, team:null, constellation:{} }/g' index.html)",
+      "Bash(perl -0pi -e 's/#12152e/var\\(--field\\)/g; s/#3a4178/#544e43/g; s/rgba\\\\\\(15,18,38,\\\\.92\\\\\\)/rgba\\(38,36,34,.92\\)/g; s/#0e1834/#211f1d/g; s/rgba\\\\\\(108,92,231,\\\\.5\\\\\\)/rgba\\(184,155,106,.45\\)/g; s/rgba\\\\\\(108,92,231,\\\\.45\\\\\\)/rgba\\(184,155,106,.4\\)/g; s/rgba\\\\\\(143,123,255,\\\\.2\\\\\\)/rgba\\(216,184,126,.25\\)/g; s/rgba\\\\\\(143,123,255,\\\\.25\\\\\\)/rgba\\(216,184,126,.3\\)/g' index.html)",
+      "Bash(perl -0pi -e 's/#22d3ee/#e0916f/g' index.html)",
+      "Bash(perl -0pi -e 's/rgba\\\\\\(34,211,238,\\\\.07\\\\\\)/rgba\\(231,211,168,.07\\)/g; s/rgba\\\\\\(34,211,238,\\\\.25\\\\\\)/rgba\\(231,211,168,.3\\)/g; s/rgba\\\\\\(34,211,238,\\\\.35\\\\\\)/rgba\\(224,145,111,.4\\)/g' index.html)",
+      "Bash(perl -0pi -e ' *)",
+      "Bash(npm -v)",
+      "Bash(echo \"npm: $\\(npm -v 2>&1\\)\")",
+      "Bash(npm ping *)",
+      "Read(//opt/homebrew/bin/**)",
+      "Read(//Users/isabelgordalla/.nvm/versions/**)",
+      "Bash(zsh -lic 'which node; node -v')",
+      "Read(//Users/isabelgordalla/.volta/bin/**)",
+      "Read(//Users/isabelgordalla/Library/Application Support/**)",
+      "Read(//Users/isabelgordalla/**)",
+      "Bash(echo 'export PATH=\"$HOME/.local/node/bin:$PATH\"')",
+      "Bash(mkdir -p _legacy-prototype)",
+      "Bash(mv index.html _legacy-prototype/index.html)",
+      "mcp__Claude_in_Chrome__tabs_context_mcp",
+      "Bash(mkdir -p _design-import)",
+      "Bash(unzip -o \"/Users/isabelgordalla/Downloads/HI Design System-handoff.zip\" -d _design-import)",
+      "Bash(mkdir -p src/assets/fonts src/assets/brand src/styles/tokens)",
+      "Bash(cp __TRACKED_VAR__/assets/fonts/SpaceGrotesk.ttf src/assets/fonts/)",
+      "Bash(cp __TRACKED_VAR__/assets/fonts/Inter.ttf src/assets/fonts/)",
+      "Bash(cp __TRACKED_VAR__/assets/fonts/Inter-Italic.ttf src/assets/fonts/)",
+      "Bash(cp __TRACKED_VAR__/assets/fonts/InterTight.ttf src/assets/fonts/)",
+      "Bash(mkdir -p src/assets/audio)",
+      "Bash(cp \"/Users/isabelgordalla/Downloads/Still Water Drift.mp3\" \"src/assets/audio/still-water-drift.mp3\")",
+      "Bash(awk '{print $5, $9}')",
+      "Bash(pbcopy)",
+      "Bash(perl -CSD -i -pe 's/ \\\\x{2014} /, /g' src/data/feedbackTraining.ts)",
+      "Bash(rm src/game/sprites.ts)",
+      "Bash(npx tsc *)",
+      "Bash(echo \"EXIT: $?\")"
+    ]
+  }
+}

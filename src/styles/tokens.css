@@ -1,0 +1,41 @@
+/* HI design tokens — sourced from the official design-system handoff. */
+@import "./tokens/colors.css";
+@import "./tokens/typography.css";
+@import "./tokens/spacing.css";
+
+/* ---- Compatibility bridge ----
+   Maps the variable names used in the app components to the design-system
+   tokens, so the whole UI picks up the official CI without rewriting every rule. */
+:root {
+  /* surfaces */
+  --color-bg-app: var(--bg-app);
+  --color-bg-card: var(--bg-card);
+  --color-bg-elevated: var(--bg-elevated);
+  --color-bg-input: var(--bg-input);
+  --color-border: var(--border-default);
+  --color-border-strong: var(--border-strong);
+
+  /* brand (azure) */
+  --color-primary: var(--brand);
+  --color-primary-dark: var(--brand-dark);
+  --color-primary-light: var(--brand-light);
+  --color-primary-subtle: var(--brand-subtle);
+
+  /* text */
+  --color-text-primary: var(--text-primary);
+  --color-text-body: var(--text-body);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-on-primary: var(--text-on-brand);
+
+  /* status */
+  --color-safe: var(--safe);       --color-safe-bg: var(--safe-bg);
+  --color-warning: var(--warning); --color-warning-bg: var(--warning-bg);
+  --color-danger: var(--danger);   --color-danger-bg: var(--danger-bg);
+  --color-info: var(--info);       --color-info-bg: var(--info-bg);
+
+  /* radius / shadow aliases used in components */
+  --radius-md: var(--radius-card);
+  --shadow-card: var(--shadow-md);
+  --shadow-pop: var(--shadow-lg);
+}

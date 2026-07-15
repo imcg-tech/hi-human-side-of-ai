@@ -1,0 +1,91 @@
+/* HI — Color tokens.
+   Warm sand surfaces, near-black warm ink, bold terracotta brand.
+   Base palette first, then semantic aliases. */
+
+:root {
+  /* ---- Surfaces (warm sand, never pure white/black) ---- */
+  --sand-100: #FAF8F4; /* inputs */
+  --sand-200: #F4F1EB; /* elevated, sheets */
+  --sand-300: #EFEBE3; /* cards */
+  --sand-400: #E6E1D8; /* app background */
+  --sand-500: #D8D2C7; /* default borders */
+  --sand-600: #C6BFB2; /* strong borders */
+
+  /* ---- Ink (warm near-black) ---- */
+  --ink: #1C1A17;      /* bold contrast fills */
+  --ink-soft: #23211E; /* primary text */
+  --anthracite: #2A2722;      /* warm dark-grey surface (sheets, dark cards) */
+  --anthracite-soft: #38342E; /* raised rows on anthracite */
+
+  /* ---- Brand (calm, confident azure) ---- */
+  --azure-700: #1F56AE; /* hover / pressed */
+  --azure-500: #2A6FDB; /* primary accent */
+  --azure-300: #8CBEF2; /* tints */
+  --azure-100: #DDEAFB; /* badges, chips, subtle bg */
+
+  /* ---- Aura blues (vivid, for radial atmospheres) ---- */
+  --aura-core: #0E63E8;
+  --aura-mid: #2E86F0;
+  --aura-soft: #74B6F2;
+
+  /* ---- Candy pastels (muted & unisex: dusty, grown-up) ---- */
+  --candy-pink: #E0A1B0;   --candy-pink-deep: #C97E90;  /* dusty rose */
+  --candy-yellow: #EBC94C;  --candy-yellow-deep: #D6AE2A; /* mustard */
+  --candy-green: #A6C079;   --candy-green-deep: #87A557;  /* sage */
+  --candy-lilac: #B9A6D2;  --candy-lilac-deep: #9C86C0;  /* dusty lilac */
+  --candy-peri: #A7B1DE;   --candy-peri-deep: #8591D2;  /* slate blue */
+  --candy-blue: #AAC8E6;   --candy-blue-deep: #84ABDB;  /* dusty sky */
+  --candy-mint: #A9D4BD;   --candy-mint-deep: #84C1A0;  /* sage mint */
+  --candy-teal: #7FBEB4;   --candy-teal-deep: #5CA396;  /* dusty teal */
+
+  /* ---- Warm terracotta (kept as the alternate accent ramp) ---- */
+  --terracotta-700: #C24A2C; /* hover / pressed */
+  --terracotta-500: #E0603D; /* primary accent */
+  --terracotta-300: #F2A98E; /* tints */
+  --terracotta-100: #F8E3D8; /* badges, chips, subtle bg */
+
+  /* ---- Status hues (candy-bright, semantics preserved) ---- */
+  --green-600: #22BE86;  --green-100: #D4F2E7;  /* safe / psych safety */
+  --gold-600:  #F2B007;  --gold-100:  #FCEFC6;  /* warning / burnout */
+  --red-600:   #F5384E;  --red-100:   #FFDFE2;  /* danger */
+  --blue-600:  #3E8EF7;  --blue-100:  #DCE9FD;  /* info */
+
+  /* ============ Semantic aliases ============ */
+
+  /* Surfaces */
+  --bg-app: var(--sand-400);
+  --bg-elevated: var(--sand-200);
+  --bg-card: var(--sand-300);
+  --bg-input: var(--sand-100);
+  --border-default: var(--sand-500);
+  --border-strong: var(--sand-600);
+  --surface-dark: var(--anthracite);      /* dark sheets, modals, accent cards */
+  --surface-dark-row: var(--anthracite-soft);
+
+  /* Text */
+  --text-primary: var(--ink-soft);
+  --text-body: #3A3733;
+  --text-secondary: #5E5A53;
+  --text-muted: #8A867D;
+  --text-on-brand: #FAF8F4;
+  --text-on-ink: #F4F1EB;
+
+  /* Brand — azure (swap these four to the --terracotta-* ramp to revert to warm) */
+  --brand: var(--azure-500);
+  --brand-dark: var(--azure-700);
+  --brand-light: var(--azure-300);
+  --brand-subtle: var(--azure-100);
+  --ink-fill: var(--ink);
+
+  /* Status semantic */
+  --safe: var(--green-600);        --safe-bg: var(--green-100);
+  --warning: var(--gold-600);      --warning-bg: var(--gold-100);
+  --danger: var(--red-600);        --danger-bg: var(--red-100);
+  --info: var(--blue-600);         --info-bg: var(--blue-100);
+
+  /* DISC personality mapping — neon candy hues */
+  --disc-d: #FF2E7E; --disc-d-bg: #FFE0EC; /* Dominance  — neon pink */
+  --disc-i: #FFC400; --disc-i-bg: #FFF0C2; /* Influence  — neon amber */
+  --disc-s: #00D68F; --disc-s-bg: #CFF6E7; /* Steadiness — neon mint */
+  --disc-c: #2F7BFF; --disc-c-bg: #DCE8FF; /* Conscientiousness — electric blue */
+}

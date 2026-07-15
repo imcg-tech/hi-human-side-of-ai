@@ -1,0 +1,57 @@
+@import "./fonts.css";
+@import "./tokens.css";
+
+* { box-sizing: border-box; }
+html, body, #root { height: 100%; margin: 0; }
+html, body { overflow-x: hidden; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-app);
+  color: var(--text-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3 {
+  color: var(--text-primary); font-family: var(--font-display); margin: 0;
+  font-weight: var(--fw-semibold); letter-spacing: var(--tracking-display);
+}
+p { margin: 0; line-height: var(--lh-body); }
+button { font-family: inherit; }
+
+.app-shell { position: relative; z-index: 1; min-height: 100%; }
+
+/* page layer sits above the fixed aura + scrim */
+.page { position: relative; z-index: 1; }
+
+/* readability scrim over the calm aura on inner pages */
+.scrim {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background: rgba(237, 234, 229, 0);
+  transition: background 0.9s var(--ease-out);
+}
+.scrim.on { background: rgba(230, 225, 216, 0.40); }
+
+/* micro-interactions */
+.magnetic { transition: transform 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out); will-change: transform; }
+.magnetic:hover { transform: translateY(-3px); }
+.magnetic:active { transform: translateY(-1px) scale(0.99); }
+.glass.magnetic:hover { box-shadow: 0 24px 50px rgba(40, 60, 90, 0.18); }
+
+/* shared primary button */
+.btn {
+  appearance: none; border: 0; cursor: pointer; font-weight: 600;
+  background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+  color: var(--text-on-brand);
+  border-radius: var(--radius-pill);
+  padding: 14px 22px; font-size: 16px;
+  box-shadow: var(--shadow-brand);
+  transition: transform 0.12s var(--ease-out), box-shadow 0.2s;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn:active { transform: translateY(0); }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+}

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160" role="img" aria-label="HI alien app icon">
+  <rect x="0" y="0" width="160" height="160" rx="46" fill="#2A2722"></rect>
+  <circle cx="80" cy="31" r="9.7" fill="#2A6FDB"></circle>
+  <ellipse cx="57" cy="78" rx="19" ry="23" fill="#F4F1EB"></ellipse>
+  <ellipse cx="103" cy="78" rx="19" ry="23" fill="#F4F1EB"></ellipse>
+  <circle cx="59" cy="80" r="9" fill="#2A2722"></circle>
+  <circle cx="105" cy="80" r="9" fill="#2A2722"></circle>
+  <path d="M63 114 Q80 126 97 114" stroke="#F4F1EB" stroke-width="7.6" fill="none" stroke-linecap="round"></path>
+</svg>

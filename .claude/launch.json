@@ -1,0 +1,22 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "dev",
+      "runtimeExecutable": "/Users/isabelgordalla/.local/node/bin/node",
+      "runtimeArgs": ["node_modules/.bin/vite"],
+      "autoPort": true
+    },
+    {
+      "name": "monster-brawl",
+      "runtimeExecutable": "/Users/isabelgordalla/.local/node/bin/node",
+      "runtimeArgs": [
+        "/Users/isabelgordalla/Documents/monster-brawl/node_modules/.bin/vite",
+        "/Users/isabelgordalla/Documents/monster-brawl",
+        "--port",
+        "5180"
+      ],
+      "port": 5180
+    }
+  ]
+}

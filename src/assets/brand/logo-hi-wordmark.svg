@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="340" height="92" viewBox="0 0 340 92" role="img" aria-label="HI — the Human side of AI">
+  <rect x="0" y="10" width="72" height="72" rx="21" fill="#2A2722"></rect>
+  <circle cx="36" cy="25" r="4.6" fill="#2A6FDB"></circle>
+  <ellipse cx="25" cy="47" rx="9" ry="11" fill="#F4F1EB"></ellipse>
+  <ellipse cx="47" cy="47" rx="9" ry="11" fill="#F4F1EB"></ellipse>
+  <circle cx="26" cy="48" r="4.3" fill="#2A2722"></circle>
+  <circle cx="48" cy="48" r="4.3" fill="#2A2722"></circle>
+  <path d="M28 64 Q36 70 44 64" stroke="#F4F1EB" stroke-width="3.6" fill="none" stroke-linecap="round"></path>
+  <text x="98" y="52" dominant-baseline="middle" font-family="Space Grotesk, Inter Tight, system-ui, sans-serif" font-weight="600" font-size="44" letter-spacing="-2" fill="#23211E">HI</text>
+  <circle cx="158" cy="30" r="5" fill="#2A6FDB"></circle>
+  <text x="98" y="74" font-family="Inter, system-ui, sans-serif" font-weight="500" font-size="13" fill="#3A3733">the Human side of AI</text>
+</svg>
