@@ -9,3 +9,5 @@ dist-ssr
 .vite
 _design-import
 _legacy-prototype
+.vercel
+.env*

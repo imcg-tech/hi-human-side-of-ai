@@ -4,9 +4,10 @@ import Icon from "../components/Icon";
 import { Pill } from "../components/ds";
 import MoodFace, { MOODS } from "../components/MoodFace";
 import MeditationFace from "../components/MeditationFace";
-import { WeeklyThemeBanner, MomentumCard, TeamSignal, ManagerNudge } from "../components/engagement";
+import { WeeklyThemeBanner, MomentumCard, ManagerNudge } from "../components/engagement";
 import { MODULES } from "../data/modules";
 import { DISC_INFO } from "../data/disc";
+import { teamActiveThisWeek } from "../data/engagement";
 import { useStore } from "../lib/store";
 
 export default function Dashboard() {
@@ -20,12 +21,9 @@ export default function Dashboard() {
   // verzeihendes Momentum: einmal pro Tag beim Öffnen, ohne Druck
   useEffect(() => { recordVisit(); }, [recordVisit]);
 
-  const team = [
-    { name: "Lena Brandt", meta: "S · Design Lead", score: "94%", tone: "var(--disc-s)" },
-    { name: "Theo Voss", meta: "D · Engineering", score: "61%", tone: "var(--disc-d)" },
-    { name: "Mara Iqbal", meta: "I · Product", score: "88%", tone: "var(--disc-i)" },
-    { name: "Cem Kraus", meta: "C · Data", score: "73%", tone: "var(--disc-c)" },
-  ];
+  // Team: only an anonymous company-wide activity share, never individual profiles.
+  const { active, total } = teamActiveThisWeek();
+  const activePct = Math.round((active / total) * 100);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 16, height: "100%", overflowY: "auto", padding: "4px 4px 30px" }}>
@@ -130,25 +128,25 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* ── Team list ── */}
+      {/* ── Team: anonymous company-wide activity, never individual profiles ── */}
       <div style={{ marginTop: 6 }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10, padding: "0 4px", gap: 12, flexWrap: "wrap" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <Pill style={{ background: "rgba(28,26,23,0.06)", color: "var(--text-primary)" }}>Team</Pill>
-            <TeamSignal />
-          </div>
-          <button onClick={() => navigate("/app/team")} style={{ width: 34, height: 34, borderRadius: "50%", border: "1px solid var(--border-strong)", background: "rgba(255,255,255,0.5)", cursor: "pointer", color: "var(--text-primary)", fontSize: 18, lineHeight: 1 }}>+</button>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14, padding: "0 4px" }}>
+          <Pill style={{ background: "rgba(28,26,23,0.06)", color: "var(--text-primary)" }}>Team</Pill>
+          <button onClick={() => navigate("/app/team")} aria-label="Open team view" style={{ width: 34, height: 34, borderRadius: "50%", border: "1px solid var(--border-strong)", background: "rgba(255,255,255,0.5)", cursor: "pointer", color: "var(--text-primary)", fontSize: 18, lineHeight: 1 }}>+</button>
         </div>
-        {team.map((m) => (
-          <div key={m.name} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 4px", borderTop: "1px solid var(--border-default)" }}>
-            <span style={{ flex: 1, fontFamily: "var(--font-display)", fontWeight: 500, fontSize: 30, letterSpacing: "-0.008em", color: "var(--text-primary)", textShadow: "0 1px 14px rgba(255,255,255,0.55)" }}>{m.name}</span>
-            <span style={{ display: "flex", alignItems: "center", gap: 9, flex: 1, justifyContent: "center" }}>
-              <span style={{ width: 10, height: 10, borderRadius: "50%", background: m.tone }} />
-              <span style={{ fontFamily: "var(--font-body)", fontSize: 13, fontWeight: 600, color: "var(--text-secondary)" }}>{m.meta}</span>
-            </span>
-            <span style={{ flex: 1, textAlign: "right", fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 28, letterSpacing: "-0.005em", color: "var(--text-primary)" }}>{m.score}</span>
+        <div style={{ display: "flex", alignItems: "center", gap: 24, borderTop: "1px solid var(--border-default)", paddingTop: 22 }}>
+          <div style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 66, lineHeight: 1, letterSpacing: "-0.01em", color: "var(--text-primary)", textShadow: "0 1px 14px rgba(255,255,255,0.55)" }}>{activePct}%</div>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontFamily: "var(--font-body)", fontSize: 15.5, color: "var(--text-body)", marginBottom: 10, lineHeight: 1.4 }}>of the company was active this week</div>
+            <div style={{ height: 8, borderRadius: 999, background: "rgba(28,26,23,0.08)", overflow: "hidden" }}>
+              <div style={{ width: `${activePct}%`, height: "100%", background: "var(--candy-blue)", borderRadius: 999 }} />
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 10, fontFamily: "var(--font-body)", fontSize: 12.5, color: "var(--text-muted)" }}>
+              <Icon name="users" size={14} color="var(--text-muted)" stroke={1.75} />
+              <span>{active} of {total} people · always anonymous, never individual profiles</span>
+            </div>
           </div>
-        ))}
+        </div>
       </div>
     </div>
   );
