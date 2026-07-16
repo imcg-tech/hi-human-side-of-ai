@@ -4,6 +4,7 @@ import Icon from "../components/Icon";
 import Logo from "../components/Logo";
 import SearchOverlay from "../components/SearchOverlay";
 import PrivacyIntro from "../components/PrivacyIntro";
+import HiGuide from "../components/HiGuide";
 import { useAuth } from "../lib/auth";
 import { supabaseReady } from "../lib/supabase";
 import { useStore } from "../lib/store";
@@ -45,7 +46,7 @@ export default function AppLayout() {
     const expanded = openId === n.id && !!n.children;
     return (
       <div>
-        <button aria-current={on ? "page" : undefined} onClick={() => navigate(n.route)}
+        <button aria-current={on ? "page" : undefined} data-tour={`nav-${n.id || "home"}`} onClick={() => navigate(n.route)}
           style={{ position: "relative", display: "flex", alignItems: "center", gap: 12, width: "100%",
             padding: "10px 12px", border: "none", borderRadius: 14, cursor: "pointer", textAlign: "left",
             background: on ? "var(--brand-subtle)" : "transparent", color: on ? "var(--brand-dark)" : "var(--text-secondary)",
@@ -172,7 +173,7 @@ export default function AppLayout() {
           {NAV_ITEMS.map((n) => {
             const on = active === n.id;
             return (
-              <button key={n.id} aria-current={on ? "page" : undefined} onClick={() => navigate(n.route)}
+              <button key={n.id} aria-current={on ? "page" : undefined} data-tour={`nav-${n.id || "home"}`} onClick={() => navigate(n.route)}
                 style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 3, padding: "6px 2px", border: "none", background: "transparent", cursor: "pointer", color: on ? n.color : "var(--text-muted)" }}>
                 <Icon name={n.icon} size={21} color={on ? n.color : "var(--text-muted)"} stroke={on ? 2.1 : 1.9} />
                 <span style={{ fontFamily: "var(--font-body)", fontSize: 10.5, fontWeight: on ? 700 : 500, color: on ? "var(--brand-dark)" : "var(--text-muted)" }}>{n.label}</span>
@@ -184,6 +185,7 @@ export default function AppLayout() {
 
       <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
       <PrivacyIntro />
+      <HiGuide />
     </div>
   );
 }

@@ -83,6 +83,9 @@ export interface HiState {
   // Trust layer: one-time privacy intro shown before any data entry (persists across resets).
   privacyIntroSeen: boolean;
 
+  // Hi guide: one-time interactive intro tour (persists across resets; replayable via the helper).
+  tourSeen: boolean;
+
   // Coffee Roulette (Connection & Bonding), local participation state. Feedback is anonymous.
   coffeeEnabled: boolean;
   coffeeCadence: CoffeeCadence;
@@ -119,6 +122,7 @@ export interface HiState {
   oooUpdate: (id: string, patch: Partial<OooSession>) => void;
   oooRemove: (id: string) => void;
   setPrivacyIntroSeen: () => void;
+  setTourSeen: () => void;
   coffeeSet: (patch: Partial<Pick<HiState, "coffeeEnabled" | "coffeeCadence" | "coffeePref" | "coffeePaused">>) => void;
   coffeeAddMet: (id: string) => void;
   coffeeRate: (good: boolean) => void;
@@ -170,6 +174,7 @@ export const useStore = create<HiState>()(
       ocaSolved: 0,
       oneOnOnes: [],
       privacyIntroSeen: false,
+      tourSeen: false,
       coffeeEnabled: false,
       coffeeCadence: "weekly",
       coffeePref: "any",
@@ -250,6 +255,7 @@ export const useStore = create<HiState>()(
       oooUpdate: (id, patch) => set((s) => ({ oneOnOnes: s.oneOnOnes.map((o) => (o.id === id ? { ...o, ...patch } : o)) })),
       oooRemove: (id) => set((s) => ({ oneOnOnes: s.oneOnOnes.filter((o) => o.id !== id) })),
       setPrivacyIntroSeen: () => set({ privacyIntroSeen: true }),
+      setTourSeen: () => set({ tourSeen: true }),
       coffeeSet: (patch) => set(patch),
       coffeeAddMet: (id) => set((s) => (s.coffeeMet.includes(id) ? {} : { coffeeMet: [...s.coffeeMet, id] })),
       coffeeRate: (good) => set((s) => (good ? { coffeeGood: s.coffeeGood + 1 } : { coffeeMeh: s.coffeeMeh + 1 })),
