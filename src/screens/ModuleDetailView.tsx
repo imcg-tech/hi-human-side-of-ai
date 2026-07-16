@@ -2,7 +2,7 @@ import { useNavigate, useParams, Navigate } from "react-router-dom";
 import Icon from "../components/Icon";
 import { Glass } from "../components/ds";
 import { MODULES } from "../data/modules";
-import { gamesFor } from "../data/games";
+import { gamesFor, gameBadges } from "../data/games";
 
 export default function ModuleDetailView() {
   const { id } = useParams();
@@ -38,9 +38,25 @@ export default function ModuleDetailView() {
                   <span style={{ width: 48, height: 48, borderRadius: 14, background: m.color, display: "grid", placeItems: "center", fontSize: 24, flexShrink: 0 }}>{g.emoji}</span>
                   <div style={{ flex: 1 }}>
                     <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 18, color: "var(--text-primary)", lineHeight: 1.15 }}>{g.title}</div>
-                    <div style={{ fontFamily: "var(--font-body)", fontSize: 13, color: "var(--text-secondary)" }}>{g.skill}{g.rounds.length > 0 ? ` · ${g.rounds.length} rounds` : ""}</div>
+                    <div style={{ fontFamily: "var(--font-body)", fontSize: 13, color: "var(--text-secondary)" }}>{g.skill}</div>
                   </div>
                 </div>
+
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 7, marginTop: 12 }}>
+                  {gameBadges(g).map((b) => {
+                    const live = b.kind === "live";
+                    return (
+                      <span key={b.label} style={{ display: "inline-flex", alignItems: "center", gap: 5, padding: "4px 9px", borderRadius: 999, fontFamily: "var(--font-body)", fontSize: 12, fontWeight: 600,
+                        background: live ? "rgba(226,75,77,0.10)" : "rgba(28,26,23,0.05)", color: live ? "var(--danger, #E24B4D)" : "var(--text-secondary)", border: `1px solid ${live ? "rgba(226,75,77,0.28)" : "var(--border-default)"}` }}>
+                        {b.kind === "time" && <Icon name="clock" size={12} />}
+                        {b.kind === "mode" && b.label === "Team" && <Icon name="users" size={12} />}
+                        {live && <span style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--danger, #E24B4D)", flexShrink: 0 }} />}
+                        {b.label}
+                      </span>
+                    );
+                  })}
+                </div>
+
                 <button onClick={() => navigate(g.route ?? `/app/game/${g.key}`)} style={{ marginTop: 16, width: "100%", height: 44, borderRadius: 999, border: "none", background: "var(--ink-fill)", color: "var(--text-on-ink)", fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 14.5, cursor: "pointer", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
                   <Icon name="play" size={16} /> Play
                 </button>

@@ -365,3 +365,19 @@ GAMES.repairkit = {
 
 export const GAME_LIST: Game[] = Object.values(GAMES);
 export const gamesFor = (moduleId: string): Game[] => GAME_LIST.filter((g) => g.category === moduleId);
+
+/* At-a-glance badges for a game card: duration, Solo/Team, and a Live flag for
+   synchronous formats. Derived from existing metaTags / route / estMinutes, so a
+   solo player can tell before clicking whether a game needs the team to be there. */
+export interface GameBadge { label: string; kind: "time" | "mode" | "live"; }
+export function gameBadges(g: Game): GameBadge[] {
+  const meta = (g.metaTags ?? []).join(" ").toLowerCase();
+  const liveOnly = /\/app\/live\//.test(g.route ?? "");
+  const hasLive = liveOnly || meta.includes("live");
+  const teamOnly = liveOnly || (!meta.includes("solo") && (meta.includes("team") || meta.includes("pair")));
+  const out: GameBadge[] = [];
+  if (g.estMinutes) out.push({ label: `${g.estMinutes} min`, kind: "time" });
+  out.push({ label: teamOnly ? "Team" : "Solo", kind: "mode" });
+  if (hasLive) out.push({ label: "Live", kind: "live" });
+  return out;
+}
