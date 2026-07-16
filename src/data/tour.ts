@@ -11,12 +11,12 @@ export interface TourStep {
 }
 
 export const TOUR: TourStep[] = [
-  { title: "Hi, I'm Hi", line: "I live in here, and I'll show you around, super quick. Come on!", clip: "hi-1.mp3", wave: true },
-  { title: "Home", line: "This is where you land. Your week, your mood, all calm. No to-dos, promise.", target: "nav-home", clip: "hi-2.mp3" },
-  { title: "Modules", line: "Little games to play with your team, talking, trust, all the good stuff. Short and fun.", target: "nav-modules", clip: "hi-3.mp3" },
-  { title: "Balance", line: "Your quiet corner. Breathe, reset, let things settle. This one's just for you.", target: "nav-balance", clip: "hi-4.mp3" },
-  { title: "Pulse", line: "A little check-in with yourself. How are you, really? Stays private, always.", target: "nav-signal", clip: "hi-5.mp3" },
-  { title: "That's the tour", line: "Everything here is yours and stays private. Need me? Just tap me. Have fun!", clip: "hi-6.mp3", wave: true },
+  { title: "Hi, I'm Hi", line: "Your little guide here. Welcome! Let me show you around in ten seconds.", clip: "hi-1.mp3", wave: true },
+  { title: "Home", line: "Your home base, a calm overview of your week, this week's focus, your mood, and your gentle momentum. All at a glance, no pressure.", target: "nav-home", clip: "hi-2.mp3" },
+  { title: "Modules", line: "Playful mini-games to grow together, communication, trust, leadership. Short and light.", target: "nav-modules", clip: "hi-3.mp3" },
+  { title: "Balance", line: "Your private corner: breathe, reset, recharge. Just for you.", target: "nav-balance", clip: "hi-4.mp3" },
+  { title: "Pulse", line: "Check in with how you feel. Always anonymous, always yours.", target: "nav-signal", clip: "hi-5.mp3" },
+  { title: "You're all set", line: "Everything here is private and yours to control. Tap me any time you need me. Have fun!", clip: "hi-6.mp3", wave: true },
 ];
 
 export const tourClipUrl = (clip: string) => import.meta.env.BASE_URL + "tour/" + clip;
