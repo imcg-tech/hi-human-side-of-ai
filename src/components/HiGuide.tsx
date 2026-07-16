@@ -76,8 +76,8 @@ export default function HiGuide() {
     if (!tourSeen) return null;
     return (
       <button onClick={replay} aria-label="Replay the intro tour with Hi" title="Need a hand? Replay the tour"
-        style={{ position: "fixed", right: 16, bottom: isMobile ? 90 : 22, zIndex: 45, width: 54, height: 54, borderRadius: "50%", border: "1px solid var(--border-default)", background: "var(--bg-elevated, #F7F4EF)", boxShadow: "0 8px 24px rgba(28,26,23,0.18)", cursor: "pointer", display: "grid", placeItems: "center", padding: 0 }}>
-        <HiMascot size={38} reduced={reduced} />
+        style={{ position: "fixed", right: 16, bottom: isMobile ? 88 : 22, zIndex: 45, width: 58, height: 64, borderRadius: 20, border: "1px solid var(--border-default)", background: "var(--bg-elevated, #F7F4EF)", boxShadow: "0 8px 24px rgba(28,26,23,0.18)", cursor: "pointer", display: "grid", placeItems: "end center", paddingBottom: 4 }}>
+        <HiMascot size={52} pose="wave" reduced={reduced} />
       </button>
     );
   }
@@ -96,9 +96,13 @@ export default function HiGuide() {
     : { top: "50%", transform: "translateY(-42%)" };
 
   const isLast = idx === TOUR.length - 1;
+  const pose: "wave" | "point" | "idle" = step.wave ? "wave" : step.target ? "point" : "idle";
+  const bubbleBg = "var(--bg-elevated, #F7F4EF)";
+  const bLine = "1px solid rgba(28,26,23,0.10)";
 
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 200 }}>
+      <style>{"@keyframes hi-pop{0%{opacity:0;transform:translateY(10px) scale(0.97)}100%{opacity:1;transform:none}}"}</style>
       {/* dimmed backdrop with a spotlight hole */}
       <svg width="100%" height="100%" style={{ position: "absolute", inset: 0 }}>
         <defs>
@@ -111,33 +115,34 @@ export default function HiGuide() {
         {rect && <rect x={hx} y={hy} width={hw} height={hh} rx={16} fill="none" stroke="rgba(255,255,255,0.9)" strokeWidth={2.5} />}
       </svg>
 
-      {/* speech bubble + mascot */}
-      <div style={{ position: "fixed", left: 0, right: 0, margin: "0 auto", width: "calc(100% - 40px)", maxWidth: 360, ...cardPos }}>
-        <div style={{ position: "relative", background: "var(--bg-elevated, #F7F4EF)", borderRadius: 24, padding: "22px 22px 20px", boxShadow: "0 20px 60px rgba(28,26,23,0.28)", border: "1px solid rgba(255,255,255,0.6)" }}>
-          {/* mascot peeking on top */}
-          <div style={{ position: "absolute", top: -46, left: 18 }}>
-            <HiMascot size={72} waving={!!step.wave} reduced={reduced} />
+      {/* Hi as a standing figure, with a comic speech bubble pointing at it */}
+      <div style={{ position: "fixed", left: 0, right: 0, margin: "0 auto", width: "calc(100% - 28px)", maxWidth: 384, ...cardPos }}>
+        <div style={{ display: "flex", alignItems: "center", animation: reduced ? "none" : "hi-pop 0.42s cubic-bezier(0.22,1,0.36,1)" }}>
+          <div style={{ flex: "0 0 auto", marginRight: -10, marginBottom: -6, zIndex: 2 }}>
+            <HiMascot size={122} pose={pose} reduced={reduced} />
           </div>
 
-          {/* mute toggle */}
-          <button onClick={() => setMuted((m) => !m)} aria-label={muted ? "Turn Hi's voice on" : "Turn Hi's voice off"} title={muted ? "Voice on" : "Voice off"}
-            style={{ position: "absolute", top: 16, right: 16, width: 34, height: 34, borderRadius: 10, border: "1px solid var(--border-default)", background: "rgba(255,255,255,0.5)", cursor: "pointer", display: "grid", placeItems: "center", color: "var(--text-secondary)" }}>
-            <Icon name={muted ? "volumeOff" : "volume"} size={16} />
-          </button>
+          <div style={{ position: "relative", flex: 1, minWidth: 0, background: bubbleBg, border: bLine, borderRadius: 22, padding: "18px 18px 15px", boxShadow: "0 18px 50px rgba(28,26,23,0.24)" }}>
+            <span style={{ position: "absolute", left: -8, top: 30, width: 16, height: 16, background: bubbleBg, borderLeft: bLine, borderBottom: bLine, transform: "rotate(45deg)" }} />
 
-          <div style={{ paddingTop: 30 }}>
-            <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 20, color: "var(--text-primary)", marginBottom: 6 }}>{step.title}</div>
-            <p style={{ fontFamily: "var(--font-body)", fontSize: 15.5, color: "var(--text-body)", lineHeight: 1.5, margin: 0 }}>{step.line}</p>
+            <button onClick={() => setMuted((m) => !m)} aria-label={muted ? "Turn Hi's voice on" : "Turn Hi's voice off"} title={muted ? "Voice on" : "Voice off"}
+              style={{ position: "absolute", top: 12, right: 12, width: 32, height: 32, borderRadius: 10, border: "1px solid var(--border-default)", background: "rgba(255,255,255,0.5)", cursor: "pointer", display: "grid", placeItems: "center", color: "var(--text-secondary)" }}>
+              <Icon name={muted ? "volumeOff" : "volume"} size={15} />
+            </button>
 
-            {/* progress dots */}
-            <div style={{ display: "flex", gap: 6, margin: "18px 0 16px" }}>
-              {TOUR.map((_, i) => <span key={i} style={{ width: i === idx ? 20 : 7, height: 7, borderRadius: 999, background: i === idx ? "var(--brand, #3B6FF6)" : "rgba(28,26,23,0.14)", transition: "all 0.25s" }} />)}
+            <div style={{ paddingRight: 30 }}>
+              <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 18, color: "var(--text-primary)", marginBottom: 5 }}>{step.title}</div>
+              <p style={{ fontFamily: "var(--font-body)", fontSize: 14.5, color: "var(--text-body)", lineHeight: 1.45, margin: 0 }}>{step.line}</p>
             </div>
 
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
-              <button onClick={finish} style={{ border: "none", background: "transparent", cursor: "pointer", fontFamily: "var(--font-body)", fontSize: 14, color: "var(--text-muted)", padding: "8px 4px" }}>Skip</button>
-              <button onClick={next} style={{ height: 46, padding: "0 22px", borderRadius: 999, border: "none", background: "var(--ink-fill)", color: "var(--text-on-ink)", fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 15, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 8 }}>
-                {isLast ? "Let's go" : "Next"} <Icon name="arrowRight" size={17} />
+            <div style={{ display: "flex", gap: 5, margin: "14px 0 12px" }}>
+              {TOUR.map((_, i) => <span key={i} style={{ width: i === idx ? 18 : 6, height: 6, borderRadius: 999, background: i === idx ? "var(--brand, #3B6FF6)" : "rgba(28,26,23,0.14)", transition: "all 0.25s" }} />)}
+            </div>
+
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
+              <button onClick={finish} style={{ border: "none", background: "transparent", cursor: "pointer", fontFamily: "var(--font-body)", fontSize: 13.5, color: "var(--text-muted)", padding: "6px 2px" }}>Skip</button>
+              <button onClick={next} style={{ height: 42, padding: "0 20px", borderRadius: 999, border: "none", background: "var(--ink-fill)", color: "var(--text-on-ink)", fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 14.5, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 7 }}>
+                {isLast ? "Let's go" : "Next"} <Icon name="arrowRight" size={16} />
               </button>
             </div>
           </div>
