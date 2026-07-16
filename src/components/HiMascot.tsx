@@ -20,9 +20,11 @@ export default function HiMascot({ size = 120, pose = "idle", reduced = false, s
         @keyframes hi-blink { 0%,90%,100%{transform:scaleY(1)} 94%{transform:scaleY(0.1)} }
         @keyframes hi-spark { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.55;transform:scale(0.82)} }
         @keyframes hi-wave { 0%,100%{transform:rotate(-8deg)} 25%{transform:rotate(22deg)} 50%{transform:rotate(-4deg)} 75%{transform:rotate(18deg)} }
+        @keyframes hi-antenna { 0%,100%{transform:rotate(-7deg)} 50%{transform:rotate(7deg)} }
         .him-bob{ animation:${anim ? "hi-bob 3.4s ease-in-out infinite" : "none"}; transform-origin:center bottom; }
         .him-eyes{ transform-box:fill-box; transform-origin:center; ${anim ? "animation:hi-blink 5.5s ease-in-out infinite;" : ""} }
         .him-spark{ transform-box:fill-box; transform-origin:center; ${anim ? "animation:hi-spark 2.6s ease-in-out infinite;" : ""} }
+        .him-ant{ transform-box:fill-box; transform-origin:50% 100%; ${anim ? "animation:hi-antenna 3.2s ease-in-out infinite;" : ""} }
         .him-wave{ transform-box:fill-box; transform-origin:12% 88%; ${anim && waving ? "animation:hi-wave 0.7s ease-in-out infinite;" : ""} }
       `}</style>
       <div className="him-bob" style={{ width: "100%", height: "100%" }}>
@@ -56,16 +58,24 @@ export default function HiMascot({ size = 120, pose = "idle", reduced = false, s
             </>
           )}
 
-          {/* head */}
-          <circle className="him-spark" cx="75" cy="12" r="7" fill={SPARK} />
-          <rect x="30" y="24" width="90" height="86" rx="29" fill={INK} />
-          <g className="him-eyes">
-            <circle cx="60" cy="62" r="12" fill={CREAM} />
-            <circle cx="90" cy="62" r="12" fill={CREAM} />
-            <circle cx="61" cy="63" r="5.4" fill={INK} />
-            <circle cx="91" cy="63" r="5.4" fill={INK} />
+          {/* head + wobbly antenna */}
+          <g className="him-ant">
+            <path d="M75 27 Q71 18 75 15" stroke={INK} strokeWidth="3.5" fill="none" strokeLinecap="round" />
+            <circle className="him-spark" cx="75" cy="11" r="6.5" fill={SPARK} />
           </g>
-          <path d="M60 86 Q75 98 90 86" stroke={CREAM} strokeWidth="4" fill="none" strokeLinecap="round" />
+          <rect x="30" y="24" width="90" height="86" rx="30" fill={INK} />
+          {/* rosy cheeks */}
+          <ellipse cx="47" cy="80" rx="8.5" ry="5" fill="#F7A8C6" opacity="0.7" />
+          <ellipse cx="103" cy="80" rx="8.5" ry="5" fill="#F7A8C6" opacity="0.7" />
+          <g className="him-eyes">
+            <circle cx="59" cy="61" r="13.5" fill={CREAM} />
+            <circle cx="91" cy="61" r="13.5" fill={CREAM} />
+            <circle cx="60" cy="63" r="5.8" fill={INK} />
+            <circle cx="92" cy="63" r="5.8" fill={INK} />
+            <circle cx="62.6" cy="60" r="2.1" fill="#FFFFFF" />
+            <circle cx="94.6" cy="60" r="2.1" fill="#FFFFFF" />
+          </g>
+          <path d="M60 89 Q75 99 90 89" stroke={CREAM} strokeWidth="4" fill="none" strokeLinecap="round" />
         </svg>
       </div>
     </div>
