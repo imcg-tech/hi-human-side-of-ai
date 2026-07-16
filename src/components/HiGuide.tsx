@@ -89,11 +89,23 @@ export default function HiGuide() {
   const hw = rect ? rect.width + pad * 2 : 0;
   const hh = rect ? rect.height + pad * 2 : 0;
 
+  // Position the whole unit next to the highlighted nav item: on desktop the
+  // sidebar sits on the left, so the bubble goes to its right; on mobile the tab
+  // bar is at the bottom, so the bubble floats just above it. No target → centered.
+  const vw = typeof window !== "undefined" ? window.innerWidth : 400;
   const vh = typeof window !== "undefined" ? window.innerHeight : 800;
-  const cardAtTop = !!rect && rect.top > vh * 0.5;
-  const cardPos: React.CSSProperties = rect
-    ? (cardAtTop ? { top: isMobile ? 26 : 34 } : { bottom: isMobile ? 100 : 34 })
-    : { top: "50%", transform: "translateY(-42%)" };
+  const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
+  const UNIT_W = Math.min(384, vw - 24);
+  const EST_H = 250;
+  let unitPos: React.CSSProperties;
+  if (!rect) {
+    unitPos = { left: clamp((vw - UNIT_W) / 2, 12, vw - UNIT_W - 12), top: clamp(vh * 0.5 - EST_H / 2, 16, vh - EST_H - 16) };
+  } else if (!isMobile) {
+    unitPos = { left: clamp(rect.right + 18, 12, vw - UNIT_W - 12), top: clamp(rect.top + rect.height / 2 - 100, 14, vh - EST_H - 14) };
+  } else {
+    const above = rect.top > vh * 0.5;
+    unitPos = { left: clamp(rect.left + rect.width / 2 - UNIT_W / 2, 12, vw - UNIT_W - 12), top: above ? clamp(rect.top - EST_H - 12, 12, vh - EST_H - 12) : clamp(rect.bottom + 12, 12, vh - EST_H - 12) };
+  }
 
   const isLast = idx === TOUR.length - 1;
   const pose: "wave" | "point" | "idle" = step.wave ? "wave" : step.target ? "point" : "idle";
@@ -116,7 +128,7 @@ export default function HiGuide() {
       </svg>
 
       {/* Hi as a standing figure, with a comic speech bubble pointing at it */}
-      <div style={{ position: "fixed", left: 0, right: 0, margin: "0 auto", width: "calc(100% - 28px)", maxWidth: 384, ...cardPos }}>
+      <div style={{ position: "fixed", width: UNIT_W, ...unitPos }}>
         <div style={{ display: "flex", alignItems: "center", animation: reduced ? "none" : "hi-pop 0.42s cubic-bezier(0.22,1,0.36,1)" }}>
           <div style={{ flex: "0 0 auto", marginRight: -10, marginBottom: -6, zIndex: 2 }}>
             <HiMascot size={122} pose={pose} reduced={reduced} />
