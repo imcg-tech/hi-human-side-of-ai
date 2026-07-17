@@ -11,7 +11,7 @@ import Icon from "./Icon";
 
 type Kind = "feedback" | "oneclearask";
 type Coaching = { warmth: string; sharpen: string; rewrite: string };
-type Status = "idle" | "loading" | "done" | "off" | "error";
+type Status = "idle" | "loading" | "done" | "off" | "busy" | "error";
 
 export default function AiCoach({ kind, scenario, text, accent = "var(--brand)" }: { kind: Kind; scenario?: string; text: string; accent?: string }) {
   const [status, setStatus] = useState<Status>("idle");
@@ -28,6 +28,7 @@ export default function AiCoach({ kind, scenario, text, accent = "var(--brand)" 
         body: JSON.stringify({ kind, scenario, text: trimmed }),
       });
       if (r.status === 503) { setStatus("off"); return; }
+      if (r.status === 429) { setStatus("busy"); return; }
       if (!r.ok) { setStatus("error"); return; }
       const data = (await r.json()) as Coaching;
       if (!data?.rewrite) { setStatus("error"); return; }
@@ -59,6 +60,9 @@ export default function AiCoach({ kind, scenario, text, accent = "var(--brand)" 
         </button>
       )}
 
+      {status === "busy" && (
+        <p style={{ fontFamily: "var(--font-body)", fontSize: 12.5, color: "var(--text-muted)", margin: "10px 0 0" }}>The coach is in high demand right now. Give it a minute and try again.</p>
+      )}
       {status === "error" && (
         <p style={{ fontFamily: "var(--font-body)", fontSize: 12.5, color: "var(--text-muted)", margin: "10px 0 0" }}>The coach is unavailable right now. Your self-check above still has you covered.</p>
       )}

@@ -33,6 +33,27 @@ const RUBRIC: Record<Kind, string> = {
   ].join("\n"),
 };
 
+// Best-effort in-memory rate limit for a public demo. It lives per warm
+// function instance (resets on cold start, not shared across instances), so it
+// blunts bursts and casual abuse but is not a hard guarantee. The real cost
+// backstop is an Anthropic spend limit.
+const WINDOW_MS = 60_000;
+const PER_IP = 5; // requests per IP per window
+const GLOBAL = 60; // requests across this instance per window
+const hits = new Map<string, number[]>();
+let globalHits: number[] = [];
+
+function rateLimited(ip: string): boolean {
+  const now = Date.now();
+  const cutoff = now - WINDOW_MS;
+  globalHits = globalHits.filter((t) => t > cutoff);
+  const arr = (hits.get(ip) ?? []).filter((t) => t > cutoff);
+  if (globalHits.length >= GLOBAL || arr.length >= PER_IP) { hits.set(ip, arr); return true; }
+  arr.push(now); globalHits.push(now); hits.set(ip, arr);
+  if (hits.size > 5000) { for (const [k, v] of hits) if (!v.some((t) => t > cutoff)) hits.delete(k); }
+  return false;
+}
+
 const SCHEMA = {
   type: "object" as const,
   properties: {
@@ -58,6 +79,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (kind !== "feedback" && kind !== "oneclearask") { res.status(400).json({ error: "bad_kind" }); return; }
   if (!text) { res.status(400).json({ error: "empty" }); return; }
   if (text.length > MAX_TEXT) { res.status(400).json({ error: "too_long" }); return; }
+
+  const ip = ((req.headers["x-forwarded-for"] as string) || "").split(",")[0].trim() || "unknown";
+  if (rateLimited(ip)) { res.setHeader("Retry-After", "60"); res.status(429).json({ error: "rate_limited" }); return; }
 
   const client = new Anthropic({ apiKey: key });
 
