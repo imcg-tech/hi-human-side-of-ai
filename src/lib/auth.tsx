@@ -33,8 +33,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const raw = (error.message || "").trim();
     const looksRateLimited = error.status === 429 || /rate limit/i.test(raw) || raw === "" || raw === "{}";
     const msg = looksRateLimited
-      ? "E-Mail-Limit erreicht (Supabase-Standardversand ist stark gedrosselt). Bitte später erneut versuchen, oder eigenes SMTP einrichten."
-      : raw || "Senden fehlgeschlagen. Bitte erneut versuchen.";
+      ? "Email limit reached (Supabase's default sender is heavily throttled). Please try again later, or set up your own SMTP."
+      : raw || "Couldn't send. Please try again.";
     return { error: msg };
   }
   async function signOut() { await supabase.auth.signOut(); }
