@@ -11,7 +11,7 @@ export const SEARCH_INDEX: SearchEntry[] = [
   ...MODULES.map((m) => ({ label: m.title, sub: m.desc, route: m.route ?? `/app/module/${m.id}`, kind: "Area", icon: m.icon })),
   ...GAME_LIST.map((g) => ({ label: g.title, sub: g.skill, route: g.route ?? `/app/game/${g.key}`, kind: "Game", icon: "play" })),
   ...SUBAREAS.map((s) => ({ label: s.title, sub: s.tagline, route: "/app/balance", kind: "Balance", icon: "heart" })),
-  { label: "Choose your mood", sub: "How are you today?", route: "/app/signal", kind: "Mood", icon: "signal" },
+  { label: "Check-in", sub: "How are you today?", route: "/app/signal", kind: "Mood", icon: "signal" },
   { label: "Meditation", sub: "Breathe and unwind", route: "/meditation", kind: "Balance", icon: "leaf" },
   { label: "Star Map", sub: "The company's shared world", route: "/network", kind: "Universe", icon: "sparkles" },
 ];

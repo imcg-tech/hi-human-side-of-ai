@@ -78,15 +78,16 @@ export default function Dashboard() {
         {/* Stimmung, the face fills the whole card */}
         <div style={{ position: "relative", overflow: "hidden", borderRadius: 22, minHeight: 200, display: "flex", flexDirection: "column",
           background: mood ? MOODS[mood].color : "var(--bg-elevated)", border: mood ? "none" : "1px solid var(--border-default)", boxShadow: "var(--shadow-sm)" }}>
-          <Pill style={{ position: "absolute", top: 16, left: 16, zIndex: 1, background: "rgba(28,26,23,0.10)", color: "var(--text-primary)" }}>Your mood</Pill>
+          <Pill style={{ position: "absolute", top: 16, left: 16, zIndex: 1, background: "rgba(28,26,23,0.10)", color: "var(--text-primary)" }}>Check-in</Pill>
           <div style={{ flex: 1, position: "relative", overflow: "hidden" }}>
             {mood
               ? <div style={{ position: "absolute", inset: 0 }}><MoodFace mood={mood} bleed /></div>
               : <div style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center" }}><MoodFace mood={3} size={72} /></div>}
           </div>
           <div style={{ padding: 14, position: "relative" }}>
+            {mood && <div style={{ fontFamily: "var(--font-body)", fontSize: 12.5, fontWeight: 600, color: "var(--text-primary)", textAlign: "center", marginBottom: 8 }}>Checked in today · {MOODS[mood].label}</div>}
             <button onClick={() => navigate("/app/signal")} style={{ width: "100%", height: 40, borderRadius: 999, border: "none", cursor: "pointer", background: "var(--ink-fill)", color: "var(--text-on-ink)", fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 13.5, display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 7 }}>
-              {mood ? "Change your mood" : "Choose your mood"} <Icon name="arrowRight" size={15} />
+              {mood ? "Update check-in" : "How are you today?"} <Icon name="arrowRight" size={15} />
             </button>
           </div>
         </div>
