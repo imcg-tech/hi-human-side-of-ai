@@ -17,6 +17,10 @@ export default function AssessmentView() {
   const navigate = useNavigate();
   const setProfile = useStore((s) => s.setProfile);
   const setShareWithTeam = useStore((s) => s.setShareWithTeam);
+  const discType = useStore((s) => s.discType);
+  const assessmentSkipped = useStore((s) => s.assessmentSkipped);
+  const setAssessmentSkipped = useStore((s) => s.setAssessmentSkipped);
+  const forced = !discType && !assessmentSkipped; // sent here as the first step
 
   const [phase, setPhase] = useState<"intro" | "quiz" | "result">("intro");
   const [index, setIndex] = useState(0);
@@ -57,8 +61,8 @@ export default function AssessmentView() {
 
   return (
     <div ref={scope} style={{ height: "100%", overflowY: "auto", padding: "8px 4px 40px", display: "flex", flexDirection: "column" }}>
-      <button onClick={() => navigate("/app")} style={{ alignSelf: "flex-start", display: "inline-flex", alignItems: "center", gap: 8, padding: "8px 14px", borderRadius: 999, border: "1px solid var(--border-strong)", background: "rgba(255,255,255,0.5)", color: "var(--text-secondary)", cursor: "pointer", fontFamily: "var(--font-body)", fontSize: 14, marginBottom: 18 }}>
-        <Icon name="arrowLeft" size={16} /> Home
+      <button onClick={() => { if (forced) setAssessmentSkipped(); navigate("/app"); }} style={{ alignSelf: "flex-start", display: "inline-flex", alignItems: "center", gap: 8, padding: "8px 14px", borderRadius: 999, border: "1px solid var(--border-strong)", background: "rgba(255,255,255,0.5)", color: "var(--text-secondary)", cursor: "pointer", fontFamily: "var(--font-body)", fontSize: 14, marginBottom: 18 }}>
+        {forced ? "Skip for now" : <><Icon name="arrowLeft" size={16} /> Home</>}
       </button>
 
       {/* ───────── Intro ───────── */}
@@ -154,6 +158,12 @@ export default function AssessmentView() {
                   …with a good dose of <strong style={{ color: sec.color }}>{sec.persona}</strong>.
                 </p>
               )}
+
+              {/* first personalized tip (immediate reward) */}
+              <div style={{ marginTop: 18, padding: "16px 18px", borderRadius: 16, background: "var(--brand-subtle, rgba(59,111,246,0.08))", border: "1px solid var(--brand-light, rgba(59,111,246,0.18))" }}>
+                <div style={{ fontFamily: "var(--font-body)", fontSize: 12, fontWeight: 700, letterSpacing: "0.05em", textTransform: "uppercase", color: "var(--brand, #3B6FF6)", marginBottom: 6 }}>Your first tip</div>
+                <div style={{ fontFamily: "var(--font-body)", fontSize: 15, color: "var(--text-body)", lineHeight: 1.5 }}>{p.communication}</div>
+              </div>
 
               {/* percent bars */}
               <div style={{ margin: "24px 0 8px", fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 16, color: "var(--text-primary)" }}>Your DISC profile</div>

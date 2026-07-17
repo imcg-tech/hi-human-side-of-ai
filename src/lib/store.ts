@@ -86,6 +86,9 @@ export interface HiState {
   // Hi guide: one-time interactive intro tour (persists across resets; replayable via the helper).
   tourSeen: boolean;
 
+  // Onboarding: new users are sent through the DISC assessment first; this lets them defer it.
+  assessmentSkipped: boolean;
+
   // Coffee Roulette (Connection & Bonding), local participation state. Feedback is anonymous.
   coffeeEnabled: boolean;
   coffeeCadence: CoffeeCadence;
@@ -123,6 +126,7 @@ export interface HiState {
   oooRemove: (id: string) => void;
   setPrivacyIntroSeen: () => void;
   setTourSeen: () => void;
+  setAssessmentSkipped: () => void;
   coffeeSet: (patch: Partial<Pick<HiState, "coffeeEnabled" | "coffeeCadence" | "coffeePref" | "coffeePaused">>) => void;
   coffeeAddMet: (id: string) => void;
   coffeeRate: (good: boolean) => void;
@@ -175,6 +179,7 @@ export const useStore = create<HiState>()(
       oneOnOnes: [],
       privacyIntroSeen: false,
       tourSeen: false,
+      assessmentSkipped: false,
       coffeeEnabled: false,
       coffeeCadence: "weekly",
       coffeePref: "any",
@@ -256,6 +261,7 @@ export const useStore = create<HiState>()(
       oooRemove: (id) => set((s) => ({ oneOnOnes: s.oneOnOnes.filter((o) => o.id !== id) })),
       setPrivacyIntroSeen: () => set({ privacyIntroSeen: true }),
       setTourSeen: () => set({ tourSeen: true }),
+      setAssessmentSkipped: () => set({ assessmentSkipped: true }),
       coffeeSet: (patch) => set(patch),
       coffeeAddMet: (id) => set((s) => (s.coffeeMet.includes(id) ? {} : { coffeeMet: [...s.coffeeMet, id] })),
       coffeeRate: (good) => set((s) => (good ? { coffeeGood: s.coffeeGood + 1 } : { coffeeMeh: s.coffeeMeh + 1 })),
@@ -265,7 +271,7 @@ export const useStore = create<HiState>()(
       addRecovery: (text, shared) => set((s) => ({ recovery: [{ id: Math.random().toString(36).slice(2, 10), date: ymd(new Date()), text: text.trim(), shared }, ...s.recovery] })),
       addStrength: (text, moment, source) => set((s) => ({ strengths: [{ id: Math.random().toString(36).slice(2, 10), text: text.trim(), moment: moment.trim() || undefined, source, date: ymd(new Date()) }, ...s.strengths] })),
       setComebackKit: (items) => set({ comebackKit: items }),
-      reset: () => set({ email: null, displayName: null, department: null, country: null, teamId: null, profileLoaded: false, discType: null, scores: null, profile: null, shareWithTeam: false, notify: false, mood: null, moodHistory: {}, moodShareDefault: false, gratitude: [], deckAnswers: {}, streakCurrent: 0, streakLongest: 0, lastAnsweredDate: null, todayCount: 0, fwqStart: null, fwqDone: [], momentum: 0, momentumDate: null, activeDays: [], lastGap: 0, isManager: false, ocaSolved: 0, oneOnOnes: [], coffeeEnabled: false, coffeeCadence: "weekly", coffeePref: "any", coffeePaused: false, coffeeMet: [], coffeeGood: 0, coffeeMeh: 0, boundary: null, recovery: [], strengths: [], comebackKit: [] }),
+      reset: () => set({ email: null, displayName: null, department: null, country: null, teamId: null, profileLoaded: false, discType: null, scores: null, profile: null, shareWithTeam: false, notify: false, mood: null, moodHistory: {}, moodShareDefault: false, gratitude: [], deckAnswers: {}, streakCurrent: 0, streakLongest: 0, lastAnsweredDate: null, todayCount: 0, fwqStart: null, fwqDone: [], momentum: 0, momentumDate: null, activeDays: [], lastGap: 0, isManager: false, ocaSolved: 0, oneOnOnes: [], coffeeEnabled: false, coffeeCadence: "weekly", coffeePref: "any", coffeePaused: false, coffeeMet: [], coffeeGood: 0, coffeeMeh: 0, boundary: null, recovery: [], strengths: [], comebackKit: [], assessmentSkipped: false }),
     }),
     { name: "hi-app" }
   )

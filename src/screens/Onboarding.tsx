@@ -70,14 +70,21 @@ export default function Onboarding() {
   );
 }
 
-/** Redirects logged-in users to onboarding until their profile is complete. */
+/** Gates the app: profile details first (live only), then the DISC assessment as
+ *  the forced first step for new users (demo and live) until done or deferred. */
 export function OnboardingGate({ children }: { children: ReactNode }) {
   const { pathname } = useLocation();
   const profileLoaded = useStore((s) => s.profileLoaded);
   const incomplete = useStore((s) => !s.displayName || !s.department || !s.country);
+  const discType = useStore((s) => s.discType);
+  const assessmentSkipped = useStore((s) => s.assessmentSkipped);
 
-  if (!supabaseReady) return <>{children}</>;
-  if (!profileLoaded) return <div style={{ minHeight: "100dvh", display: "grid", placeItems: "center", fontFamily: "var(--font-body)", color: "var(--text-secondary)" }}>…</div>;
-  if (incomplete && pathname !== "/onboarding") return <Navigate to="/onboarding" replace />;
+  if (supabaseReady) {
+    if (!profileLoaded) return <div style={{ minHeight: "100dvh", display: "grid", placeItems: "center", fontFamily: "var(--font-body)", color: "var(--text-secondary)" }}>…</div>;
+    if (incomplete && pathname !== "/onboarding") return <Navigate to="/onboarding" replace />;
+  }
+  // New user with no profile yet → straight into the assessment (a personal aha,
+  // not an exploration tour). "Skip for now" sets assessmentSkipped to release it.
+  if (!discType && !assessmentSkipped && pathname !== "/app/assessment") return <Navigate to="/app/assessment" replace />;
   return <>{children}</>;
 }
