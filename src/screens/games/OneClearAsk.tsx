@@ -7,6 +7,7 @@ import Icon from "../../components/Icon";
 import { useStore } from "../../lib/store";
 import { backBtn, primaryBtn, ghostBtn } from "./gameStyles";
 import GameBrief from "./GameBrief";
+import AiCoach from "../../components/AiCoach";
 import { GAMES } from "../../data/games";
 import { SITUATIONS, LEVELS, ELEMENTS, ELEMENT_HELP, surfaceObservations, type Level, type Situation, type BlockKey } from "../../data/oneClearAsk";
 
@@ -187,6 +188,8 @@ export default function OneClearAsk({ onComplete, embedded = false }: { onComple
                 <div style={{ padding: "10px 13px", borderRadius: 11, background: "rgba(235,201,76,0.12)", fontFamily: "var(--font-body)", fontSize: 14, color: "var(--text-body)", lineHeight: 1.45 }}>{text}</div>
               </div>
             )}
+
+            <AiCoach kind="oneclearask" scenario={sit.text} text={text} accent={ACCENT} />
 
             {/* Muster, aufklappbar */}
             <button onClick={() => setShowSample((v) => !v)} style={{ ...ghostBtn, width: "100%", justifyContent: "center", display: "inline-flex", alignItems: "center", gap: 8 }}>

@@ -10,6 +10,7 @@ import { BARRIERS, PATHS, CULTURE_COUNTRIES, PRINCIPLES, INTRO_POINTS, LEITMOTIV
 import { backBtn, primaryBtn, ghostBtn } from "./gameStyles";
 import PrivacyHint from "../../components/PrivacyHint";
 import GameBrief from "./GameBrief";
+import AiCoach from "../../components/AiCoach";
 
 const ACCENT = MODULES.find((m) => m.id === "leadership")?.color ?? "var(--brand)";
 type Screen = "intro" | "barriers" | "path" | "culture" | "outro";
@@ -208,6 +209,7 @@ export default function FeedbackTrainingGame({ game: g }: { game: Game }) {
                   {path.practice.sample}
                 </div>
               )}
+              <AiCoach kind="feedback" scenario={path.practice.scenario} text={practiceText} accent={ACCENT} />
               </Glass>
               <button onClick={nextPath} style={{ ...primaryBtn, marginTop: 16, width: "100%" }}>{pathIdx + 1 < barriers.length ? (practiceText.trim() ? "Next" : "Next without exercise") : "To the culture map"} <Icon name="arrowRight" size={18} /></button>
             </>
