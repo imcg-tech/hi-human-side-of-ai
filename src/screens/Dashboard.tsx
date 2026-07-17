@@ -4,10 +4,11 @@ import Icon from "../components/Icon";
 import { Pill } from "../components/ds";
 import MoodFace, { MOODS } from "../components/MoodFace";
 import MeditationFace from "../components/MeditationFace";
-import { WeeklyThemeBanner, MomentumCard, ManagerNudge } from "../components/engagement";
+import { MomentumCard, ManagerNudge } from "../components/engagement";
 import { MODULES } from "../data/modules";
 import { DISC_INFO } from "../data/disc";
-import { teamActiveThisWeek } from "../data/engagement";
+import { teamActiveThisWeek, currentTheme } from "../data/engagement";
+import { gamesFor } from "../data/games";
 import { useStore } from "../lib/store";
 
 export default function Dashboard() {
@@ -25,11 +26,32 @@ export default function Dashboard() {
   const { active, total } = teamActiveThisWeek();
   const activePct = Math.round((active / total) * 100);
 
+  // One dominant action for today: this week's theme + a matching short exercise.
+  const theme = currentTheme();
+  const themeAccent = MODULES.find((mm) => mm.id === theme.moduleId)?.color ?? "var(--candy-blue)";
+  const recGame = gamesFor(theme.moduleId)[0];
+  const recRoute = recGame ? (recGame.route ?? `/app/game/${recGame.key}`) : theme.route;
+  const recMin = recGame?.estMinutes ?? 3;
+  const recTitle = recGame?.title ?? "Today's moment";
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 16, height: "100%", overflowY: "auto", padding: "4px 4px 30px" }}>
-      {/* ── Wochen-Thema + Manager-Impuls (dezent, oben) ── */}
-      <WeeklyThemeBanner />
+      {/* ── One dominant action for today: this week's theme + a matching exercise ── */}
+      <button onClick={() => navigate(recRoute)} style={{ width: "100%", textAlign: "left", cursor: "pointer", border: "none", borderRadius: 26, padding: "24px 26px", background: themeAccent, marginBottom: 14, display: "flex", flexDirection: "column", boxShadow: "var(--shadow-sm)" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginBottom: 8 }}>
+          <span style={{ fontFamily: "var(--font-body)", fontSize: 12, fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", color: "rgba(28,26,23,0.55)" }}>Your moment today</span>
+          <Pill style={{ background: "rgba(28,26,23,0.10)", color: "var(--text-primary)" }}>{theme.title}</Pill>
+        </div>
+        <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 27, color: "var(--text-primary)", lineHeight: 1.12 }}>{recTitle}</div>
+        <p style={{ fontFamily: "var(--font-body)", fontSize: 15, color: "rgba(28,26,23,0.66)", margin: "3px 0 0", lineHeight: 1.5 }}>{theme.line}</p>
+        <span style={{ alignSelf: "flex-start", marginTop: 18, height: 46, padding: "0 22px", borderRadius: 999, background: "var(--ink-fill)", color: "var(--text-on-ink)", fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 15, display: "inline-flex", alignItems: "center", gap: 9 }}>
+          <Icon name="play" size={16} /> Start · {recMin} min
+        </span>
+      </button>
       <ManagerNudge />
+
+      {/* ── Explore: everything below is secondary ── */}
+      <div style={{ fontFamily: "var(--font-body)", fontSize: 12, fontWeight: 600, letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--text-muted)", margin: "22px 4px 12px" }}>Explore</div>
 
       {/* ── Row 1: three small cards (collapses to 1 column on phones) ── */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 16 }}>
