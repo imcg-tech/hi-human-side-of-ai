@@ -18,7 +18,7 @@ export const WEEKLY_THEMES: WeeklyTheme[] = [
   { title: "Week of connection", line: "Closer together, with no effort.", moduleId: "bonding", route: "/app/module/bonding" },
   { title: "Week of calm", line: "Take a breath and recharge.", moduleId: "meditation", route: "/meditation" },
   { title: "Week of goals", line: "Goals that pull rather than push.", moduleId: "performance", route: "/app/module/performance" },
-  { title: "Week of trust", line: "Mistakes are okay, and here you practice that.", moduleId: "safety", route: "/app/module/safety" },
+  { title: "Week of trust", line: "Mistakes are okay, and here you practice that.", moduleId: "bonding", route: "/app/module/bonding" },
   { title: "Week of arriving", line: "Good to have you here, a warm start.", moduleId: "onboarding", route: "/app/module/onboarding" },
 ];
 export const currentTheme = (d: Date = new Date()): WeeklyTheme => WEEKLY_THEMES[weekOfYear(d) % WEEKLY_THEMES.length];

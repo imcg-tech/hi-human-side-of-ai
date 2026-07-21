@@ -9,7 +9,7 @@ import { useGameRoom } from "./useGameRoom";
 import { RoomShell } from "./RoomShell";
 import { GAMES } from "../../data/games";
 
-const ACCENT = MODULES.find((m) => m.id === "safety")?.color ?? "var(--brand)";
+const ACCENT = MODULES.find((m) => m.id === "bonding")?.color ?? "var(--brand)";
 const CARD_TIME = 70;
 const REACTIONS = ["😄", "🤯", "💡", "👏"];
 const rand = (n: number) => Math.floor(Math.random() * n);
@@ -81,7 +81,7 @@ export default function FailForwardLive() {
   const activeName = room.players.find((p) => p.key === activeKey)?.name ?? "…";
 
   return (
-    <RoomShell room={room} game={GAMES.failforward} emoji="🛟" title="Fail Forward, Live" accent={ACCENT} backTo="/app/module/safety"
+    <RoomShell room={room} game={GAMES.failforward} emoji="🛟" title="Fail Forward, Live" accent={ACCENT} backTo="/app/module/bonding"
       intro="Taking turns, each person draws a worst-case card and reacts spontaneously. The team reacts along. Fictional, playful, no wrong answer."
       lobbyHint="Share the code with the team. Whoever joins is in the round." started={phase !== "lobby"} onStart={start} startLabel="Start round">
       {phase === "card" && (
@@ -122,7 +122,7 @@ export default function FailForwardLive() {
           <p style={{ fontFamily: "var(--font-body)", fontSize: 15, color: "var(--text-body)", lineHeight: 1.6, margin: "0 0 22px" }}>Playing through mistakes in a safe space builds resilience and safety. What counts is the next step.</p>
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
             {room.isHost && <button onClick={start} style={primaryBtn}>New round</button>}
-            <button onClick={() => location.assign(location.origin + location.pathname + "#/app/module/safety")} style={ghostBtn}>Back to the module</button>
+            <button onClick={() => location.assign(location.origin + location.pathname + "#/app/module/bonding")} style={ghostBtn}>Back to the module</button>
           </div>
         </Glass>
       )}

@@ -15,15 +15,16 @@ export const MODULES: Module[] = [
   { id: "communication", title: "Communication", icon: "message", color: "var(--candy-yellow)", desc: "Listen and speak clearly." },
   { id: "leadership", title: "Leadership", icon: "compass", color: "var(--candy-lilac)", desc: "Leadership in small steps." },
   { id: "performance", title: "Performance", icon: "target", color: "var(--candy-teal)", desc: "Healthy performance, without constant pressure." },
-  { id: "safety", title: "Psychological Safety", icon: "shield", color: "var(--candy-mint)", desc: "Mistakes are okay." },
   { id: "conflict", title: "Conflict & Repair", icon: "bridge", color: "var(--candy-pink)", desc: "Resolve tension early and fairly." },
 ];
+// Psychological Safety was a one-game module; its game (Fail Forward) now lives
+// under Bonding (trust/safety are neighbours), so it's no longer its own card.
 
 /* Meditation lebt im Balance Hub (Unterbereich „Meditation & Achtsamkeit“),
    nicht mehr als eigenes Modul. Als Vorschlag bei niedriger Stimmung führt es
    in den Balance Hub, siehe SignalView. */
 export const MOOD_SUGGESTIONS: Record<number, string[]> = {
-  1: ["balance", "safety"],
+  1: ["balance", "bonding"],
   2: ["balance", "bonding"],
   3: ["leadership", "communication"],
   4: ["communication", "bonding"],

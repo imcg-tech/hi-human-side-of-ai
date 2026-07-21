@@ -185,7 +185,7 @@ GAMES.signalnoise = {
   rounds: [],
 };
 GAMES.failforward = {
-  key: "failforward", category: "safety", kind: "failforward", emoji: "🛟",
+  key: "failforward", category: "bonding", kind: "failforward", emoji: "🛟",
   title: "Fail Forward", skill: "Psychological safety & resilience",
   intro: "Worst-case lottery: draw a fictional, exaggerated disaster card and react spontaneously. No one shares anything personal, humor lowers the barrier. The reflection is the learning.",
   closing: "Playing through mistakes in a safe space builds resilience and safety. In a real team: mistakes are allowed. What counts is the next step.",
