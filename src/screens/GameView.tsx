@@ -18,6 +18,8 @@ export default function GameView() {
     case "failforward": return <FailForwardGame game={g} />;
     case "crisisroom": return <CrisisRoomGame game={g} />;
     case "feedbackclass": return <FeedbackTrainingGame game={g} />;
-    default: return <QuizGame game={g} />;
+    // Games with their own route (no quiz rounds) would crash QuizGame if opened
+    // via /app/game/:key by hand, send them to their real home instead.
+    default: return g.rounds?.length ? <QuizGame game={g} /> : <Navigate to={g.route ?? "/app/modules"} replace />;
   }
 }

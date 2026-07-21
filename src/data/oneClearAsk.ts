@@ -23,6 +23,10 @@ export const SITUATIONS: Situation[] = [
     sample: "Hi IT team, could you enable Figma access for me by Friday? I'm starting on the design project next week and need it to get going." },
   { id: "A04", level: "leicht", to: "Colleague", urgency: "tomorrow 9:30", text: "You'd like a colleague to run the next standup for you.",
     sample: "Hey Jon, can you run the 9:30 standup for me tomorrow? I'm in the client presentation. Thanks a lot." },
+  { id: "A05", level: "leicht", to: "Colleague", urgency: "by Friday", text: "You need a short written summary of a meeting you missed.",
+    sample: "Hi Petra, could you send me three bullet points on what was decided in yesterday's roadmap meeting, by Friday? I was out sick and want to plan Monday properly." },
+  { id: "A06", level: "leicht", to: "Facilities / Office", urgency: "before Thursday", text: "You need the big meeting room instead of the small one for a workshop.",
+    sample: "Hi Chris, could you switch our Thursday 2pm booking to the big room? We'll be 9 people with sticky notes, the small one won't fit us." },
 
   // Medium
   { id: "B01", level: "mittel", to: "Colleague", urgency: "next time", text: "A colleague regularly delivers things to you late. You want it on time next time.",
@@ -35,6 +39,8 @@ export const SITUATIONS: Situation[] = [
     sample: "Suggestion for next time: let's cap the weekly at 30 minutes and start with a clear agenda. I think we'll get through it more focused that way." },
   { id: "B05", level: "mittel", to: "Manager", urgency: "by Thursday", text: "You need a decision from your manager that they keep putting off.",
     sample: "Hi Anna, I need a decision on the budget by Thursday, otherwise the launch slips. Are last week's numbers enough for you, or is something still missing?" },
+  { id: "B06", level: "mittel", to: "Colleague", urgency: "by end of day", text: "A colleague keeps answering your written questions with 'let's hop on a call'. This time you need it in writing.",
+    sample: "Hi Deniz, this one I need in writing for the audit trail: can you confirm by end of day that the export uses the new schema? One sentence in the thread is enough." },
 
   // Hard
   { id: "C01", level: "schwer", to: "Manager", urgency: "in the next 1:1", text: "You want to ask your manager for more responsibility without sounding demanding.",
@@ -47,6 +53,8 @@ export const SITUATIONS: Situation[] = [
     sample: "Hi Kim, I need a one-off 30 minutes from you this week to align on the architecture. Does Thursday 2pm work? I'll come prepared so it really stays at 30 minutes." },
   { id: "C05", level: "schwer", to: "Lead", urgency: "before resource planning", text: "You want to step off a project and need your lead's sign-off for it.",
     sample: "Hi Ravi, I'd like to talk to you before resource planning: I want to step off project X to focus on Y. I've prepared a clean handover. When do you have 15 minutes?" },
+  { id: "C06", level: "schwer", to: "Team", urgency: "starting this sprint", text: "You keep getting pinged outside your working hours and want that to stop, without sounding difficult.",
+    sample: "Quick ask to everyone: I'm offline after 6pm and won't see pings until morning. If something's truly urgent, call me. Everything else I'll happily pick up next day, starting this sprint." },
 
   // Wild
   { id: "D01", level: "wild", to: "Colleague", urgency: "right now", text: "You made a mistake and need help to fix it now, fast.",
@@ -55,6 +63,10 @@ export const SITUATIONS: Situation[] = [
     sample: "Hi Tom and Anna, you gave me different specs for the report (weekly vs. monthly). Could you agree on one version by 4pm today? Then I'll implement it right away." },
   { id: "D03", level: "wild", to: "Manager", urgency: "in the next 1:1", text: "You want feedback on your work, but only ever get “it's fine”.",
     sample: "Hi Anna, “it's fine” unfortunately doesn't help me much. In the next 1:1, could you name one concrete thing that's going well and one I can improve? I'd like to work on that specifically." },
+  { id: "D04", level: "wild", to: "Presenter in a live meeting", urgency: "right now, mid-meeting", text: "A live demo to a client is going off the rails and you need the presenter to skip to the working part, without embarrassing them.",
+    sample: "Quick DM: the login part is eating our time. Jump straight to the dashboard demo, that's where it shines. I'll cover the login questions afterwards." },
+  { id: "D05", level: "wild", to: "Colleague", urgency: "before 4pm today", text: "A colleague announced 'someone should tell the client' about a delay. You need them to own it, today.",
+    sample: "Milan, you're closest to the client on this: can you tell them about the delay before 4pm today? Keep it short, new date plus one sentence on why. Ping me if you want a second pair of eyes." },
 ];
 
 export const ELEMENTS = [

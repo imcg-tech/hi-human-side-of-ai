@@ -23,7 +23,11 @@ const CHANNELS = [
 const sectionLabel: React.CSSProperties = { fontFamily: "var(--font-body)", fontSize: 12, fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase", color: "var(--text-muted)", marginBottom: 8 };
 const chip = (active: boolean, disabled = false): React.CSSProperties => ({ padding: "8px 14px", borderRadius: 999, cursor: disabled ? "not-allowed" : "pointer", fontFamily: "var(--font-body)", fontSize: 14, border: active ? `1.5px solid ${ACCENT_DEEP}` : "1.5px solid var(--border-strong)", background: active ? ACCENT : "rgba(255,255,255,0.55)", color: disabled ? "var(--text-muted)" : active ? "var(--ink-fill)" : "var(--text-secondary)", fontWeight: active ? 600 : 400, opacity: disabled ? 0.5 : 1 });
 
-const pickIn = (lvl: Level) => { const pool = SITUATIONS.filter((s) => s.level === lvl); return pool[Math.floor(Math.random() * pool.length)]; };
+const pickIn = (lvl: Level, excludeId?: string) => {
+  const all = SITUATIONS.filter((s) => s.level === lvl);
+  const pool = all.length > 1 ? all.filter((s) => s.id !== excludeId) : all; // never the same one twice in a row
+  return pool[Math.floor(Math.random() * pool.length)];
+};
 const EMPTY_CHECK: Record<BlockKey, boolean> = { adressat: false, was: false, wann: false, warum: false };
 
 type Screen = "situation" | "write" | "feedback";
@@ -56,7 +60,7 @@ export default function OneClearAsk({ onComplete, embedded = false }: { onComple
   function chooseLevel(l: Level) { setLevel(l); setSit(pickIn(l)); }
   function nextSituation() {
     if (!counted.current) { incrementOca(); counted.current = true; }
-    setSit(pickIn(level)); setText(""); setFirstText(""); setAttempt(0); setShowSample(false); setSelfCheck(EMPTY_CHECK); counted.current = false; setScreen("situation");
+    setSit(pickIn(level, sit.id)); setText(""); setFirstText(""); setAttempt(0); setShowSample(false); setSelfCheck(EMPTY_CHECK); counted.current = false; setScreen("situation");
   }
   function analyze() { if (attempt === 0) setFirstText(text); setSelfCheck(EMPTY_CHECK); setShowSample(false); setScreen("feedback"); }
   function retry() { setAttempt(1); setScreen("write"); }
@@ -109,7 +113,7 @@ export default function OneClearAsk({ onComplete, embedded = false }: { onComple
             </div>
 
             <div style={{ display: "flex", gap: 12 }}>
-              <button onClick={() => setSit(pickIn(level))} style={ghostBtn}>Another</button>
+              <button onClick={() => setSit(pickIn(level, sit.id))} style={ghostBtn}>Another</button>
               <button onClick={() => { setText(""); setAttempt(0); setScreen("write"); }} style={{ ...primaryBtn, flex: 1 }}>Go <Icon name="arrowRight" size={18} /></button>
             </div>
           </Glass>

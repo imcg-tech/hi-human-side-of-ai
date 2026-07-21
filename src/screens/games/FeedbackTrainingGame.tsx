@@ -6,7 +6,7 @@ import Icon from "../../components/Icon";
 import { Glass } from "../../components/ds";
 import { MODULES } from "../../data/modules";
 import type { Game } from "../../data/games";
-import { BARRIERS, PATHS, CULTURE_COUNTRIES, PRINCIPLES, INTRO_POINTS, LEITMOTIV, CLOSING_STATEMENT, MAP_DISCLAIMER, SELF_CHECKS, HOOK, STATS, SOURCES } from "../../data/feedbackTraining";
+import { BARRIERS, PATHS, pathVariant, CULTURE_COUNTRIES, PRINCIPLES, INTRO_POINTS, LEITMOTIV, CLOSING_STATEMENT, MAP_DISCLAIMER, SELF_CHECKS, HOOK, STATS, SOURCES } from "../../data/feedbackTraining";
 import { backBtn, primaryBtn, ghostBtn } from "./gameStyles";
 import PrivacyHint from "../../components/PrivacyHint";
 import GameBrief from "./GameBrief";
@@ -64,6 +64,8 @@ export default function FeedbackTrainingGame({ game: g }: { game: Game }) {
   function restart() { setScreen("intro"); setBarriers([]); setPathIdx(0); resetPractice(); setPlaced({}); setRevealed(false); setCultureScore(null); }
 
   const path = PATHS[barriers[pathIdx]];
+  // Daily-rotating scenario variant of this path (2.3: content pool, fresh distractors)
+  const pv = path ? pathVariant(path) : null;
 
   return (
     <div ref={scope} style={{ height: "100%", overflowY: "auto", padding: "8px 4px 40px", display: "flex", flexDirection: "column" }}>
@@ -145,16 +147,16 @@ export default function FeedbackTrainingGame({ game: g }: { game: Game }) {
       )}
 
       {/* 3, Path */}
-      {screen === "path" && path && (
+      {screen === "path" && path && pv && (
         <div className="ft-stage" key={pathIdx} style={{ maxWidth: 620, margin: "auto", width: "100%" }}>
           <div style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 13, color: "var(--text-secondary)", marginBottom: 8 }}>Learning path {pathIdx + 1} / {barriers.length}</div>
           <Glass pad={28}>
             <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 22, color: "var(--text-primary)", margin: "0 0 10px" }}>{path.title}</h2>
             <p style={{ fontFamily: "var(--font-body)", fontSize: 15, color: "var(--text-secondary)", lineHeight: 1.55, margin: "0 0 18px" }}>{path.insight}</p>
-            <div style={{ padding: "14px 16px", borderRadius: 14, background: "rgba(28,26,23,0.05)", fontFamily: "var(--font-body)", fontSize: 15.5, color: "var(--text-primary)", lineHeight: 1.5, marginBottom: 16 }}>{path.scenario}</div>
+            <div style={{ padding: "14px 16px", borderRadius: 14, background: "rgba(28,26,23,0.05)", fontFamily: "var(--font-body)", fontSize: 15.5, color: "var(--text-primary)", lineHeight: 1.5, marginBottom: 16 }}>{pv.scenario}</div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              {path.options.map((o, i) => {
+              {pv.options.map((o, i) => {
                 const revealedOpt = picked !== null;
                 const isPicked = picked === i;
                 const tone = revealedOpt && (o.ok ? "ok" : isPicked ? "no" : "dim");
@@ -184,7 +186,7 @@ export default function FeedbackTrainingGame({ game: g }: { game: Game }) {
               {/* „Jetzt du", optionale Formulier-Übung */}
               <Glass pad={24} style={{ marginTop: 14 }}>
                 <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 15, color: "var(--text-primary)", marginBottom: 6 }}>✍️ Now you <span style={{ fontFamily: "var(--font-body)", fontWeight: 400, fontSize: 13, color: "var(--text-muted)" }}>· optional</span></div>
-              <p style={{ fontFamily: "var(--font-body)", fontSize: 14.5, color: "var(--text-secondary)", lineHeight: 1.5, margin: "0 0 12px" }}>{path.practice.scenario}</p>
+              <p style={{ fontFamily: "var(--font-body)", fontSize: 14.5, color: "var(--text-secondary)", lineHeight: 1.5, margin: "0 0 12px" }}>{pv.practice.scenario}</p>
               <textarea value={practiceText} onChange={(e) => setPracticeText(e.target.value)} placeholder="How would YOU phrase it? (stays local, not saved)" style={{ width: "100%", minHeight: 80, resize: "vertical", boxSizing: "border-box", borderRadius: 12, border: "1px solid var(--border-default)", background: "rgba(255,255,255,0.6)", padding: "11px 13px", fontFamily: "var(--font-body)", fontSize: 15, color: "var(--text-primary)", outline: "none", lineHeight: 1.5 }} />
               <div style={{ display: "flex", gap: 12, marginTop: 12, flexWrap: "wrap" }}>
                 <button onClick={() => setShowCheck((v) => !v)} style={linkBtn}>{showCheck ? "Hide self-check" : "Self-check"}</button>
@@ -206,10 +208,10 @@ export default function FeedbackTrainingGame({ game: g }: { game: Game }) {
               {showSample && (
                 <div style={{ marginTop: 12, padding: "13px 15px", borderRadius: 12, background: "rgba(28,26,23,0.05)", fontFamily: "var(--font-body)", fontSize: 14.5, color: "var(--text-body)", lineHeight: 1.5 }}>
                   <div style={{ fontWeight: 600, fontSize: 12, letterSpacing: "0.04em", textTransform: "uppercase", color: "var(--text-muted)", marginBottom: 4 }}>Sample for comparison</div>
-                  {path.practice.sample}
+                  {pv.practice.sample}
                 </div>
               )}
-              <AiCoach kind="feedback" scenario={path.practice.scenario} text={practiceText} accent={ACCENT} />
+              <AiCoach kind="feedback" scenario={pv.practice.scenario} text={practiceText} accent={ACCENT} />
               </Glass>
               <button onClick={nextPath} style={{ ...primaryBtn, marginTop: 16, width: "100%" }}>{pathIdx + 1 < barriers.length ? (practiceText.trim() ? "Next" : "Next without exercise") : "To the culture map"} <Icon name="arrowRight" size={18} /></button>
             </>
