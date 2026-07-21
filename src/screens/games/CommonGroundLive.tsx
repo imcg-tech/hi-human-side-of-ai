@@ -9,6 +9,7 @@ import { MODULES } from "../../data/modules";
 import { CG_QUESTIONS, type CGQuestion } from "../../data/commonGround";
 import { backBtn, primaryBtn, ghostBtn } from "./gameStyles";
 import GameBrief from "./GameBrief";
+import { LiveDemoIntro } from "./RoomShell";
 import { GAMES } from "../../data/games";
 
 const NUM = 3;
@@ -125,12 +126,7 @@ export default function CommonGroundLive() {
   }
 
   if (!supabaseReady) {
-    return (
-      <div style={{ height: "100%", padding: "8px 4px" }}>
-        <button onClick={() => navigate("/app/module/bonding")} style={backBtn}><Icon name="arrowLeft" size={16} /> Bonding</button>
-        <div style={{ maxWidth: 520, margin: "40px auto" }}><Glass pad={32}><h2 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 22, color: "var(--text-primary)", margin: 0 }}>Live mode needs login</h2><p style={{ fontFamily: "var(--font-body)", fontSize: 15, color: "var(--text-secondary)", marginTop: 10 }}>Sign in first, then you can play together.</p></Glass></div>
-      </div>
-    );
+    return <LiveDemoIntro emoji="🎚️" title="Common Ground, Live" intro="Play together: everyone positions themselves anonymously on the scale, and the spread is revealed together." accent={ACCENT} backTo="/app/module/bonding" game={GAMES.commonground} />;
   }
 
   return (

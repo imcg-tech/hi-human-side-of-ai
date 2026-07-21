@@ -1,4 +1,4 @@
-import { type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import Icon from "../../components/Icon";
 import { Glass } from "../../components/ds";
@@ -7,6 +7,55 @@ import { backBtn, primaryBtn, ghostBtn } from "./gameStyles";
 import type { Player } from "./useGameRoom";
 import type { Game } from "../../data/games";
 import GameBrief from "./GameBrief";
+
+/** One-tap invite: share sheet where available, else clipboard, else visible link. */
+function InviteRow({ text, code, style }: { text: string; code?: string; style?: React.CSSProperties }) {
+  const [copied, setCopied] = useState(false);
+  const [showLink, setShowLink] = useState(false);
+  const url = window.location.origin + window.location.pathname + window.location.hash;
+  const msg = code ? `Play with me on HI: ${url} · Room code: ${code}` : `Play with me on HI: ${url}`;
+
+  async function invite() {
+    try { if (navigator.share) { await navigator.share({ title: "HI", text: msg, url }); return; } } catch { /* dismissed */ }
+    try { await navigator.clipboard.writeText(msg); setCopied(true); setTimeout(() => setCopied(false), 2500); }
+    catch { setShowLink(true); }
+  }
+
+  return (
+    <div style={style}>
+      <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+        <span style={{ flex: 1, minWidth: 160, fontFamily: "var(--font-body)", fontSize: 13.5, color: "var(--text-secondary)", lineHeight: 1.5 }}>{text}</span>
+        <button onClick={invite} style={{ display: "inline-flex", alignItems: "center", gap: 7, height: 42, padding: "0 18px", borderRadius: 999, border: "none", background: "var(--ink-fill)", color: "var(--text-on-ink)", fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 14, cursor: "pointer", flexShrink: 0 }}>
+          {copied ? <><Icon name="check" size={15} /> Copied</> : <><Icon name="users" size={15} /> Invite a colleague</>}
+        </button>
+      </div>
+      {showLink && <div style={{ marginTop: 10, padding: "9px 12px", borderRadius: 10, background: "rgba(28,26,23,0.05)", fontFamily: "var(--font-body)", fontSize: 13, color: "var(--text-body)", userSelect: "all", wordBreak: "break-all" }}>{msg}</div>}
+    </div>
+  );
+}
+
+/** Demo-mode landing for live games: explains the format, shows the brief, and
+ *  turns the former "needs login" dead end into an invite moment. */
+export function LiveDemoIntro({ emoji, title, intro, accent, backTo, game }: { emoji: string; title: string; intro: string; accent: string; backTo: string; game?: Game }) {
+  const navigate = useNavigate();
+  return (
+    <div style={{ height: "100%", overflowY: "auto", padding: "8px 4px 40px", display: "flex", flexDirection: "column" }}>
+      <button onClick={() => navigate(backTo)} style={backBtn}><Icon name="arrowLeft" size={16} /> back</button>
+      <div style={{ maxWidth: 520, margin: "auto", width: "100%" }}>
+        <Glass pad={34}>
+          <div style={{ width: 60, height: 60, borderRadius: 16, background: accent, display: "grid", placeItems: "center", fontSize: 30 }}>{emoji}</div>
+          <h1 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 30, color: "var(--text-primary)", margin: "14px 0 2px" }}>{title}</h1>
+          <p style={{ fontFamily: "var(--font-body)", fontSize: 15.5, color: "var(--text-body)", lineHeight: 1.55, margin: "10px 0 4px" }}>{intro}</p>
+          {game && <GameBrief g={game} accent={accent} />}
+          <div style={{ marginTop: 18, padding: "13px 15px", borderRadius: 13, background: "rgba(28,26,23,0.05)", fontFamily: "var(--font-body)", fontSize: 14, color: "var(--text-secondary)", lineHeight: 1.55 }}>
+            This is a <strong style={{ color: "var(--text-primary)" }}>live team game</strong>: you play it together, at the same time. In the team version everyone opens the game, one person creates a room and the rest hop in with a 4-letter code.
+          </div>
+          <InviteRow text="Curious? Send a colleague the link and try it as a pair." style={{ marginTop: 14 }} />
+        </Glass>
+      </div>
+    </div>
+  );
+}
 
 interface RoomLike {
   name: string; setName: (s: string) => void;
@@ -24,14 +73,8 @@ export function RoomShell({ room, emoji, title, intro, accent, backTo, started, 
 }) {
   const navigate = useNavigate();
 
-  if (!supabaseReady) {
-    return (
-      <div style={{ height: "100%", padding: "8px 4px" }}>
-        <button onClick={() => navigate(backTo)} style={backBtn}><Icon name="arrowLeft" size={16} /> back</button>
-        <div style={{ maxWidth: 520, margin: "40px auto" }}><Glass pad={32}><h2 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 22, color: "var(--text-primary)", margin: 0 }}>Live mode needs login</h2><p style={{ fontFamily: "var(--font-body)", fontSize: 15, color: "var(--text-secondary)", marginTop: 10 }}>Sign in first, then you can play together.</p></Glass></div>
-      </div>
-    );
-  }
+  // 1.3b: in demo mode (no backend) a live game must not be a dead end.
+  if (!supabaseReady) return <LiveDemoIntro emoji={emoji} title={title} intro={intro} accent={accent} backTo={backTo} game={game} />;
 
   return (
     <div style={{ height: "100%", overflowY: "auto", padding: "8px 4px 40px", display: "flex", flexDirection: "column" }}>
@@ -74,6 +117,7 @@ export function RoomShell({ room, emoji, title, intro, accent, backTo, started, 
                   <span key={p.key} style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "7px 13px", borderRadius: 999, background: "rgba(28,26,23,0.05)", fontFamily: "var(--font-body)", fontSize: 14, color: "var(--text-primary)" }}>{p.host ? "👑" : "🙂"} {p.name}</span>
                 ))}
               </div>
+              <InviteRow text="Missing people? Send the link + code." code={room.code} style={{ marginBottom: 16 }} />
               {room.isHost ? <button onClick={onStart} style={{ ...primaryBtn, width: "100%" }}>{startLabel} <Icon name="arrowRight" size={18} /></button> : <div style={{ fontFamily: "var(--font-body)", fontSize: 14.5, color: "var(--text-muted)", textAlign: "center" }}>Waiting for the host to start …</div>}
             </Glass>
           ) : children}
