@@ -9,7 +9,6 @@ export const SUBAREAS: SubArea[] = [
   { id: "meditation", title: "Meditation & Mindfulness", tagline: "Breathe and arrive", emoji: "🌬️", color: "var(--candy-mint)", games: [
     { id: "breath", title: "Breath Sync", desc: "Guided breathing, visual & with sound", status: "built", route: "/meditation" },
     { id: "bodyscan", title: "Bodyscan Journey", desc: "Guided body journey, 5–15 min", status: "soon" },
-    { id: "focus", title: "Focus Anchor", desc: "Quick mindfulness before important work", status: "soon" },
     { id: "soundbath", title: "Sound Bath", desc: "Ambient soundscapes to wind down", status: "built", route: "/app/balance/soundbath" },
   ] },
   { id: "stress", title: "Stress & Recovery", tagline: "Release pressure, recharge", emoji: "🫧", color: "var(--candy-blue)", games: [
@@ -20,11 +19,8 @@ export const SUBAREAS: SubArea[] = [
   ] },
   { id: "selfcare", title: "Self-care & Mood", tagline: "Look after yourself", emoji: "💛", color: "var(--candy-yellow)", games: [
     { id: "gratitude", title: "Gratitude Drop", desc: "One line of gratitude daily", status: "built", route: "/app/balance/gratitude" },
-    { id: "tiny", title: "Tiny Habits", desc: "Micro-habits with a gentle streak", status: "soon" },
-    { id: "selfcheck", title: "Self-Check", desc: "Weekly self-reflection, just for you", status: "soon" },
   ] },
   { id: "resilience", title: "Resilience & Mindset", tagline: "Grow your inner strength", emoji: "🌱", color: "var(--candy-lilac)", games: [
-    { id: "reframe", title: "Reframe It", desc: "Learn to reframe negative thoughts", status: "soon" },
     { id: "setback", title: "Setback Stories", desc: "Reflect on setbacks you've overcome", status: "built", route: "/app/balance/setback" },
     { id: "strength", title: "Strength Spotting", desc: "Spot each other's strengths", status: "built", route: "/app/balance/strength" },
     { id: "comeback", title: "The Comeback", desc: "Mini scenarios: what helps you back up?", status: "built", route: "/app/balance/comeback" },
