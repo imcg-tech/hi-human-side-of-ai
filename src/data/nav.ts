@@ -30,7 +30,7 @@ const balanceChildren: NavChild[] = SUBAREAS.map((s) => ({
 export const NAV_ITEMS: NavItem[] = [
   { id: "", label: "Home", icon: "home", route: "/app", color: "var(--text-secondary)", match: [""] },
   {
-    id: "team", label: "Universe", subtitle: "Team & Company", icon: "users", route: "/app/team", color: "var(--candy-peri)",
+    id: "team", label: "Team", subtitle: "People & company", icon: "users", route: "/app/team", color: "var(--candy-peri)",
     match: ["team", "culture"],
     children: [
       { label: "Team", route: "/app/team", icon: "users", color: "var(--candy-peri)" },
@@ -48,7 +48,7 @@ export const NAV_ITEMS: NavItem[] = [
     match: ["balance"],
     children: balanceChildren,
   },
-  { id: "signal", label: "Pulse", subtitle: "Mood & Trends", icon: "signal", route: "/app/signal", color: "var(--candy-blue)", match: ["signal"] },
+  { id: "signal", label: "Mood", subtitle: "Check-in & trends", icon: "signal", route: "/app/signal", color: "var(--candy-blue)", match: ["signal"] },
 ];
 
 /* Welcher Bereich ist zum aktuellen Segment aktiv? */

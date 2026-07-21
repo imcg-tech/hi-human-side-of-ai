@@ -57,7 +57,7 @@ export const GAMES: Record<string, Game> = {
     ],
   },
   ask: {
-    key: "ask", category: "communication", emoji: "🎯", title: "Ask clearly", skill: "Clear communication",
+    key: "ask", category: "communication", emoji: "🔍", title: "Spot the Ask", skill: "Pick the clearest wording",
     intro: "Remote, requests often fail on ambiguity. Each time, choose the wording that's clearest: unambiguous recipient, unambiguous what, unambiguous by-when.",
     closing: "A clear request names: WHO, WHAT exactly and BY WHEN. In remote teams that saves an enormous amount of back-and-forth.",
     howItWorks: ["Read a real remote request", "Choose the clearest wording", "See what makes it unambiguous"],
@@ -176,7 +176,7 @@ GAMES.commonground = {
 };
 GAMES.signalnoise = {
   key: "signalnoise", category: "communication", kind: "signalnoise", emoji: "📡",
-  title: "Signal & Noise", skill: "Clear communication & feedback",
+  title: "Signal & Noise", skill: "Close the say-understand gap",
   intro: "How big is the gap between what's meant and what lands? Read a pure word description and draw what you understand, then compare with the original.",
   closing: "Words leave room. In round 2 you're allowed to ask questions. That very feedback closes the gap. Carry it into your workday.",
   estMinutes: 5, metaTags: ["Draw & compare", "2 rounds"],
@@ -208,7 +208,7 @@ GAMES.crisisroom = {
 
 GAMES.feedbackclass = {
   key: "feedbackclass", category: "leadership", kind: "feedbackclass", emoji: "🎓",
-  title: "Feedback training", skill: "Feedback culture for leads",
+  title: "Feedback Masterclass", skill: "Build a feedback culture · for leads",
   intro: "An interactive mini-class: what holds you back from giving feedback? You choose your barriers, work through short learning paths with scenarios and practice how feedback lands, incl. culture map.",
   closing: "",
   estMinutes: 10, metaTags: ["Interactive class", "Private"],
@@ -241,7 +241,7 @@ GAMES.heist = {
 /* ── Communication: One Clear Ask (solo) + Translate This (live) ── */
 GAMES.oneclearask = {
   key: "oneclearask", category: "communication", route: "/app/communication/oneclearask", emoji: "🎯",
-  title: "One Clear Ask", skill: "Ask clearly · Solo, daily",
+  title: "One Clear Ask", skill: "Turn fuzzy into one clear request · Solo, daily",
   intro: "Daily micro-challenge: turn a situation into a crystal-clear request, along four building blocks.",
   closing: "",
   estMinutes: 3, metaTags: ["Solo", "Daily"],

@@ -41,7 +41,7 @@ export const SEARCH_INDEX: SearchEntry[] = [
   { label: "Check-in", sub: "How are you today?", route: "/app/signal", kind: "Mood", icon: "signal", keywords: ["mood", "feeling", "check in", "how am i", "wellbeing"] },
   { label: "Team Pulse", sub: "The team's anonymous mood", route: "/app/signal", kind: "Mood", icon: "signal", keywords: ["pulse", "team mood", "morale"] },
   { label: "Meditation", sub: "Breathe and unwind", route: "/meditation", kind: "Balance", icon: "leaf", keywords: ["breathe", "calm", "mindfulness", "relax", "stress"] },
-  { label: "Star Map", sub: "The company's shared world", route: "/network", kind: "Universe", icon: "sparkles", keywords: ["company", "team", "people", "colleagues"] },
+  { label: "Star Map", sub: "The company's shared world", route: "/network", kind: "Team", icon: "sparkles", keywords: ["company", "team", "people", "colleagues", "universe"] },
 ];
 
 const norm = (s: string) => s.toLowerCase();

@@ -67,7 +67,7 @@ export default function Dashboard() {
             <circle cx="50" cy="50" r="3.2" fill="#fff" />
           </svg>
           <div style={{ position: "relative" }}>
-            <Pill style={{ background: "rgba(255,255,255,0.12)", color: "#F4F1EB" }}>Universe</Pill>
+            <Pill style={{ background: "rgba(255,255,255,0.12)", color: "#F4F1EB" }}>Star Map</Pill>
           </div>
           <div style={{ position: "absolute", left: 20, right: 20, bottom: 18, display: "flex", alignItems: "flex-end", justifyContent: "space-between" }}>
             <span style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 18, lineHeight: 1.15 }}>Company<br />Star Map</span>

@@ -13,7 +13,7 @@ import { countryByCode } from "../data/countries";
 import { gameForPath } from "../lib/freshness";
 import { NAV_ITEMS, activeNavId, type NavItem } from "../data/nav";
 
-const TITLES: Record<string, string> = { "": "Good morning, Mara", team: "Universe", culture: "Culture Map", modules: "Modules", balance: "Balance", signal: "Pulse" };
+const TITLES: Record<string, string> = { "": "Good morning, Mara", team: "Team", culture: "Culture Map", modules: "Modules", balance: "Balance", signal: "Mood" };
 
 export default function AppLayout() {
   const navigate = useNavigate();
