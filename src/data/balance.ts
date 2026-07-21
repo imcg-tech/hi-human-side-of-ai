@@ -45,7 +45,7 @@ export const RESET_STEPS: ResetStep[] = [
 ];
 
 /* Sanfter Verweis auf echte Hilfe, kein Tracking, keine Diagnose. */
-export const HELP_NOTE = "This area is prevention and self-care, not therapy. If something is weighing on you more seriously: reaching out for help is a strong move. Telefonseelsorge 0800 111 0 111 (free, anonymous, 24/7), your EAP or your doctor.";
+export const HELP_NOTE = "This area is prevention and self-care, not therapy. If something is weighing on you more seriously: reaching out for help is a strong move. Find a free, anonymous helpline for your country at findahelpline.com, or talk to your EAP or your doctor.";
 
 /* ── Boundary Builder (Stress), one healthy boundary held for a week ── */
 export interface BoundarySuggestion { text: string; area: string; }

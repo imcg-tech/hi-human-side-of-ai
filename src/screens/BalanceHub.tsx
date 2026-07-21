@@ -47,7 +47,11 @@ export default function BalanceHub() {
       </div>
 
       {/* Safety */}
-      <p style={{ fontFamily: "var(--font-body)", fontSize: 12.5, color: "var(--text-muted)", lineHeight: 1.55, margin: "22px 4px 0" }}>{HELP_NOTE}</p>
+      <p style={{ fontFamily: "var(--font-body)", fontSize: 12.5, color: "var(--text-muted)", lineHeight: 1.55, margin: "22px 4px 0" }}>
+        {HELP_NOTE.split("findahelpline.com").map((part, i) => (
+          i === 0 ? <span key={i}>{part}<a href="https://findahelpline.com" target="_blank" rel="noopener noreferrer" style={{ color: "var(--brand-dark)", fontWeight: 600 }}>findahelpline.com</a></span> : <span key={i}>{part}</span>
+        ))}
+      </p>
     </div>
   );
 }
