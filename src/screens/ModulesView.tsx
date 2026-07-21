@@ -2,6 +2,8 @@ import { useNavigate } from "react-router-dom";
 import Icon from "../components/Icon";
 import { MODULES } from "../data/modules";
 import { gamesFor } from "../data/games";
+import { useStore } from "../lib/store";
+import { moduleFreshness } from "../lib/freshness";
 
 const openTarget = (id: string, route?: string) => route ?? `/app/module/${id}`;
 
@@ -10,6 +12,7 @@ const openTarget = (id: string, route?: string) => route ?? `/app/module/${id}`;
    mobile, and keeps a light lift on hover as a nod to the old metaphor. */
 export default function ModulesView() {
   const navigate = useNavigate();
+  const playLog = useStore((s) => s.playLog);
 
   return (
     <div style={{ height: "100%", overflowY: "auto", padding: "8px 4px 40px" }}>
@@ -21,6 +24,8 @@ export default function ModulesView() {
       <div style={{ display: "flex", flexDirection: "column", gap: 14, maxWidth: 700, margin: "0 auto" }}>
         {MODULES.map((m) => {
           const count = gamesFor(m.id).length;
+          // 2.5: skills aren't "done", so show recency instead of a percent
+          const f = moduleFreshness(playLog, m.id);
           return (
             <div
               key={m.id}
@@ -41,6 +46,10 @@ export default function ModulesView() {
                     )}
                   </div>
                   <div style={{ fontFamily: "var(--font-body)", fontSize: 13.5, color: "var(--text-secondary)", marginTop: 2 }}>{m.desc}</div>
+                  <div style={{ display: "inline-flex", alignItems: "center", gap: 6, fontFamily: "var(--font-body)", fontSize: 12.5, fontWeight: 600, color: "var(--text-secondary)", background: "rgba(255,255,255,0.5)", padding: "3px 10px", borderRadius: 999, marginTop: 7 }}>
+                    {f.fresh && <span style={{ width: 6, height: 6, borderRadius: 999, background: "var(--ink-fill)", flexShrink: 0 }} />}
+                    {f.line}
+                  </div>
                 </div>
                 <span style={{ width: 40, height: 40, borderRadius: "50%", background: "var(--ink-fill)", display: "grid", placeItems: "center", flexShrink: 0 }}>
                   <Icon name="arrowRight" size={18} color="var(--text-on-ink)" />

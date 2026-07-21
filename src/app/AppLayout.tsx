@@ -10,6 +10,7 @@ import { supabaseReady } from "../lib/supabase";
 import { useStore } from "../lib/store";
 import { useMediaQuery } from "../lib/useMediaQuery";
 import { countryByCode } from "../data/countries";
+import { gameForPath } from "../lib/freshness";
 import { NAV_ITEMS, activeNavId, type NavItem } from "../data/nav";
 
 const TITLES: Record<string, string> = { "": "Good morning, Mara", team: "Universe", culture: "Culture Map", modules: "Modules", balance: "Balance", signal: "Pulse" };
@@ -26,6 +27,12 @@ export default function AppLayout() {
   const [openId, setOpenId] = useState(active);
   const [searchOpen, setSearchOpen] = useState(false);
   useEffect(() => { setOpenId(active); }, [active]);
+
+  // 2.5 freshness: opening any game route counts as a play (deduped per day).
+  useEffect(() => {
+    const g = gameForPath(pathname);
+    if (g) useStore.getState().recordPlay(g.key, g.module);
+  }, [pathname]);
 
   const displayName = useStore((s) => s.displayName);
   const department = useStore((s) => s.department);

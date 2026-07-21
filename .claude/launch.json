@@ -17,6 +17,19 @@
         "5180"
       ],
       "port": 5180
+    },
+    {
+      "name": "fluido-survey",
+      "runtimeExecutable": "/Users/isabelgordalla/.local/node/bin/npx",
+      "runtimeArgs": [
+        "-y",
+        "http-server",
+        "/Users/isabelgordalla/Documents/fluido-survey/src",
+        "-p",
+        "5181",
+        "-c-1"
+      ],
+      "port": 5181
     }
   ]
 }

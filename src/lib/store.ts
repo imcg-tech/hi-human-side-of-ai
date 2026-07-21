@@ -106,6 +106,9 @@ export interface HiState {
   strengths: { id: string; text: string; moment?: string; source: "self" | "received"; date: string }[];
   // The Comeback (Resilience): private comeback kit, 3-5 personal recovery strategies. Local only.
   comebackKit: string[];
+  // 2.5 freshness: which game was opened when (game key, module id, ymd). One
+  // entry per game+day, capped. Powers "last played / this week" instead of %.
+  playLog: { k: string; m: string; d: string }[];
 
   hydrate: (partial: Partial<HiState>) => void; // fill from backend on login
   setEmail: (email: string) => void;
@@ -136,6 +139,7 @@ export interface HiState {
   addRecovery: (text: string, shared: boolean) => void; // log a recovery moment
   addStrength: (text: string, moment: string, source: "self" | "received") => void; // add to strengths collection
   setComebackKit: (items: string[]) => void;        // save the comeback kit
+  recordPlay: (gameKey: string, moduleId: string) => void; // freshness log, deduped per game+day
   reset: () => void;
 }
 
@@ -191,6 +195,7 @@ export const useStore = create<HiState>()(
       recovery: [],
       strengths: [],
       comebackKit: [],
+      playLog: [],
       hydrate: (partial) => set(partial),
       setEmail: (email) => set({ email }),
       setProfile: (profile) => set({ profile, discType: profile.primary, scores: profile.percent }),
@@ -271,7 +276,12 @@ export const useStore = create<HiState>()(
       addRecovery: (text, shared) => set((s) => ({ recovery: [{ id: Math.random().toString(36).slice(2, 10), date: ymd(new Date()), text: text.trim(), shared }, ...s.recovery] })),
       addStrength: (text, moment, source) => set((s) => ({ strengths: [{ id: Math.random().toString(36).slice(2, 10), text: text.trim(), moment: moment.trim() || undefined, source, date: ymd(new Date()) }, ...s.strengths] })),
       setComebackKit: (items) => set({ comebackKit: items }),
-      reset: () => set({ email: null, displayName: null, department: null, country: null, teamId: null, profileLoaded: false, discType: null, scores: null, profile: null, shareWithTeam: false, notify: false, mood: null, moodHistory: {}, moodShareDefault: false, gratitude: [], deckAnswers: {}, streakCurrent: 0, streakLongest: 0, lastAnsweredDate: null, todayCount: 0, fwqStart: null, fwqDone: [], momentum: 0, momentumDate: null, activeDays: [], lastGap: 0, isManager: false, ocaSolved: 0, oneOnOnes: [], coffeeEnabled: false, coffeeCadence: "weekly", coffeePref: "any", coffeePaused: false, coffeeMet: [], coffeeGood: 0, coffeeMeh: 0, boundary: null, recovery: [], strengths: [], comebackKit: [], assessmentSkipped: false }),
+      recordPlay: (gameKey, moduleId) => set((s) => {
+        const today = ymd(new Date());
+        if (s.playLog.some((p) => p.k === gameKey && p.d === today)) return {};
+        return { playLog: [{ k: gameKey, m: moduleId, d: today }, ...s.playLog].slice(0, 300) };
+      }),
+      reset: () => set({ email: null, displayName: null, department: null, country: null, teamId: null, profileLoaded: false, discType: null, scores: null, profile: null, shareWithTeam: false, notify: false, mood: null, moodHistory: {}, moodShareDefault: false, gratitude: [], deckAnswers: {}, streakCurrent: 0, streakLongest: 0, lastAnsweredDate: null, todayCount: 0, fwqStart: null, fwqDone: [], momentum: 0, momentumDate: null, activeDays: [], lastGap: 0, isManager: false, ocaSolved: 0, oneOnOnes: [], coffeeEnabled: false, coffeeCadence: "weekly", coffeePref: "any", coffeePaused: false, coffeeMet: [], coffeeGood: 0, coffeeMeh: 0, boundary: null, recovery: [], strengths: [], comebackKit: [], playLog: [], assessmentSkipped: false }),
     }),
     { name: "hi-app" }
   )
