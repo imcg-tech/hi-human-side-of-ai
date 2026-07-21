@@ -1,7 +1,11 @@
+import { lazy, Suspense } from "react";
 import { HashRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { AuthProvider, RequireAuth } from "./lib/auth";
 import { SyncProvider } from "./lib/sync";
-import Aura from "./three/Aura";
+// Heavy / rarely-first-seen screens are code-split so the initial bundle stays
+// small. Three.js (Aura background + Star Map) and the realtime Live games load
+// on demand instead of on every first paint.
+const Aura = lazy(() => import("./three/Aura"));
 import Login from "./screens/Login";
 import Onboarding, { OnboardingGate } from "./screens/Onboarding";
 import AppLayout from "./app/AppLayout";
@@ -14,11 +18,11 @@ import ProfileView from "./screens/ProfileView";
 import AssessmentView from "./screens/AssessmentView";
 import ModuleDetailView from "./screens/ModuleDetailView";
 import GameView from "./screens/GameView";
-import CommonGroundLive from "./screens/games/CommonGroundLive";
-import FailForwardLive from "./screens/games/FailForwardLive";
-import CrisisRoomLive from "./screens/games/CrisisRoomLive";
-import DefuseLive from "./screens/games/DefuseLive";
-import HeistLive from "./screens/games/HeistLive";
+const CommonGroundLive = lazy(() => import("./screens/games/CommonGroundLive"));
+const FailForwardLive = lazy(() => import("./screens/games/FailForwardLive"));
+const CrisisRoomLive = lazy(() => import("./screens/games/CrisisRoomLive"));
+const DefuseLive = lazy(() => import("./screens/games/DefuseLive"));
+const HeistLive = lazy(() => import("./screens/games/HeistLive"));
 import BalanceHub from "./screens/BalanceHub";
 import ResetRitual from "./screens/games/ResetRitual";
 import GratitudeDrop from "./screens/games/GratitudeDrop";
@@ -39,16 +43,16 @@ import RepairKit from "./screens/games/RepairKit";
 import ClearTheAir from "./screens/games/ClearTheAir";
 import FirstWeekQuest from "./screens/games/FirstWeekQuest";
 import GoalcraftSolo from "./screens/games/GoalcraftSolo";
-import GoalcraftLive from "./screens/games/GoalcraftLive";
+const GoalcraftLive = lazy(() => import("./screens/games/GoalcraftLive"));
 import OneClearAsk from "./screens/games/OneClearAsk";
 import OneOnOneCompanion from "./screens/games/OneOnOneCompanion";
 import TrustView from "./screens/TrustView";
-import TranslateThisLive from "./screens/games/TranslateThisLive";
+const TranslateThisLive = lazy(() => import("./screens/games/TranslateThisLive"));
 import OwnershipCards from "./screens/games/OwnershipCards";
-import OwnershipCardsLive from "./screens/games/OwnershipCardsLive";
-import TheTradeoff from "./screens/games/TheTradeoffLive";
+const OwnershipCardsLive = lazy(() => import("./screens/games/OwnershipCardsLive"));
+const TheTradeoff = lazy(() => import("./screens/games/TheTradeoffLive"));
 import MeditationView from "./screens/MeditationView";
-import Network from "./screens/Network";
+const Network = lazy(() => import("./screens/Network"));
 
 // warm "Reflexion & Mood" aura on meditation / mood / profile / assessment / balance screens
 const WARM = ["/meditation", "/app/signal", "/app/profile", "/app/assessment", "/app/balance"];
@@ -60,7 +64,9 @@ function Shell() {
 
   return (
     <>
-      <Aura intensity={intensity} variant={variant} />
+      {/* Aura loads separately (fallback null) so Three.js never blocks first paint. */}
+      <Suspense fallback={null}><Aura intensity={intensity} variant={variant} /></Suspense>
+      <Suspense fallback={<RouteFallback />}>
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/onboarding" element={<RequireAuth><Onboarding /></RequireAuth>} />
@@ -112,8 +118,14 @@ function Shell() {
         <Route path="/network" element={<RequireAuth><OnboardingGate><Network /></OnboardingGate></RequireAuth>} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+      </Suspense>
     </>
   );
+}
+
+/** Minimal loader shown while a code-split route chunk downloads. */
+function RouteFallback() {
+  return <div style={{ minHeight: "100dvh", display: "grid", placeItems: "center", fontFamily: "var(--font-body)", color: "var(--text-secondary)" }}>…</div>;
 }
 
 export default function App() {
