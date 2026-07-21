@@ -4,9 +4,11 @@
 
 type Pose = "wave" | "point" | "idle";
 
-const INK = "#211E1A";
+// Deep navy blue for the whole character (deliberately not a skin-like dark
+// brown/black), with a lighter blue spark so the antenna still pops.
+const INK = "#28306B";
 const CREAM = "#F4F1EB";
-const SPARK = "#3B6FF6";
+const SPARK = "#5F8BFF";
 
 export default function HiMascot({ size = 120, pose = "idle", reduced = false, style }: { size?: number; pose?: Pose; reduced?: boolean; style?: React.CSSProperties }) {
   const w = size * (150 / 200);
