@@ -41,7 +41,9 @@ export default function AppLayout() {
   const userEmail = session?.user?.email ?? "";
   const userName = live ? (displayName || userEmail.split("@")[0] || "Du") : "Mara Iqbal";
   const flag = countryByCode(country)?.flag ?? "";
-  const userSub = live ? [department, flag].filter(Boolean).join(" · ") || userEmail : "Product · Influence";
+  // Demo subline mirrors the live format (department · country) instead of the
+  // cryptic "Product · Influence" DISC tag that read like jargon.
+  const userSub = live ? [department, flag].filter(Boolean).join(" · ") || userEmail : "Product team · 🇸🇪 Sweden";
   const initial = (userName[0] || "?").toUpperCase();
 
   const activeItem = NAV_ITEMS.find((n) => n.id === active);
