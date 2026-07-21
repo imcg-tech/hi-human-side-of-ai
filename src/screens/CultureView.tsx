@@ -4,6 +4,7 @@ import { Glass } from "../components/ds";
 import { fetchTeamMembers } from "../lib/sync";
 import { supabaseReady } from "../lib/supabase";
 import { MOCK_MEMBERS, type MemberProfile } from "../data/teamInsights";
+import TeamFillState from "../components/TeamFillState";
 import { CULTURE_DIMS, culturePos, hasCultureData } from "../data/cultureMap";
 import { countryByCode } from "../data/countries";
 
@@ -74,6 +75,7 @@ export default function CultureView() {
         <p style={{ fontFamily: "var(--font-body)", fontSize: 11.5, color: "var(--text-muted)", lineHeight: 1.5, margin: "16px 0 0" }}>
           Positions are illustrative tendencies (based on Erin Meyer's "The Culture Map"). They describe cultural patterns, not individual people, use them to make expectations explicit.
         </p>
+        <TeamFillState participated={onMap.length} total={source === "demo" ? 8 : undefined} noun="put themselves on the map" style={{ marginTop: 16 }} />
       </Glass>
 
       {/* Werte */}

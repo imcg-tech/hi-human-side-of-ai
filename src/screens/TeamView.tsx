@@ -5,6 +5,7 @@ import Icon from "../components/Icon";
 import { DISC_INFO } from "../data/disc";
 import DiscModel from "../components/DiscModel";
 import { useStore } from "../lib/store";
+import TeamFillState from "../components/TeamFillState";
 import { fetchTeamMembers } from "../lib/sync";
 import { supabaseReady } from "../lib/supabase";
 import {
@@ -75,6 +76,9 @@ export default function TeamView() {
   const members = source === "real" ? real : MOCK_MEMBERS;
   const insights = buildTeamInsights(members);
   const showDemoBanner = supabaseReady && source === "demo";
+  // 2.2 fill-state: in demo mode we know the pretend team size; live mode only
+  // knows who shared, so the component falls back to an honest absolute count.
+  const teamTotal = source === "demo" ? 8 : undefined;
 
   const p = profile ? DISC_INFO[profile.primary] : null;
   const sec = profile ? DISC_INFO[profile.secondary] : null;
@@ -219,6 +223,7 @@ export default function TeamView() {
             <p style={{ fontFamily: "var(--font-body)", fontSize: 11.5, color: "var(--text-muted)", lineHeight: 1.5, margin: "14px 0 0" }}>
               🔒 Only the anonymous team mix, shares across the whole team. Who is which type stays private, that's for each person to share themselves.
             </p>
+            <TeamFillState participated={members.length} total={teamTotal} style={{ marginTop: 14 }} />
           </Glass>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
@@ -240,6 +245,7 @@ export default function TeamView() {
         <Glass pad={28}>
           <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 18, color: "var(--text-primary)" }}>Not enough results yet for the team mix</div>
           <p style={{ fontFamily: "var(--font-body)", fontSize: 15, color: "var(--text-secondary)", margin: "8px 0 0", lineHeight: 1.55 }}>Once at least 3 people have shared their profile, the anonymous team mix appears here.</p>
+          <TeamFillState participated={members.length} total={teamTotal} style={{ marginTop: 16 }} />
         </Glass>
       )}
 
