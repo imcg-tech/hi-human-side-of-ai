@@ -13,9 +13,15 @@ type Kind = "feedback" | "oneclearask";
 type Coaching = { warmth: string; sharpen: string; rewrite: string };
 type Status = "idle" | "loading" | "done" | "off" | "busy" | "error";
 
+// Build-time flag: the coach stays hidden until VITE_AI_COACH is set (e.g. "1"),
+// so the public demo shows no dead button while the AI backend is deferred.
+const AI_COACH_ON = import.meta.env.VITE_AI_COACH === "1" || import.meta.env.VITE_AI_COACH === "true";
+
 export default function AiCoach({ kind, scenario, text, accent = "var(--brand)" }: { kind: Kind; scenario?: string; text: string; accent?: string }) {
   const [status, setStatus] = useState<Status>("idle");
   const [result, setResult] = useState<Coaching | null>(null);
+
+  if (!AI_COACH_ON) return null;
 
   async function ask() {
     const trimmed = text.trim();
