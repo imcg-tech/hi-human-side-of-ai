@@ -5,9 +5,16 @@ import Icon from "../components/Icon";
 import PrivacyHint from "../components/PrivacyHint";
 import { useStore } from "../lib/store";
 import {
-  PULSE_QUESTIONS, PULSE_MIN_GROUP, MOCK_PULSE_RESPONSES,
-  currentCycle, pulseStats, pulseTag, type PulseAnswers,
+  PULSE_QUESTIONS, PULSE_DIMS, PULSE_MIN_GROUP, MOCK_PULSE_RESPONSES,
+  currentCycle, pulseStats, pulseTag, type PulseAnswers, type PulseDim,
 } from "../data/pulse";
+
+// The full question set grouped by dimension, for the "preview the questions"
+// panel so people can see exactly what they'll be asked before taking part.
+const PULSE_PREVIEW_GROUPS = [
+  ...(Object.keys(PULSE_DIMS) as PulseDim[]).map((d) => ({ name: PULSE_DIMS[d], qs: PULSE_QUESTIONS.filter((q) => q.d === d).map((q) => q.t) })),
+  { name: "Open questions", qs: PULSE_QUESTIONS.filter((q) => q.d === null).map((q) => q.t) },
+].filter((g) => g.qs.length > 0);
 
 /* Team Pulse Survey: einmal pro Quartal, anonym, ein Screen pro Frage.
    Ergebnisse nur als Team-Aggregat und nur ab PULSE_MIN_GROUP Antworten. */
@@ -27,6 +34,7 @@ export default function PulseView() {
   const [idx, setIdx] = useState(-1); // -1 = Intro, 0..n-1 = Fragen
   const [draft, setDraft] = useState<PulseAnswers>({});
   const [justFinished, setJustFinished] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
 
   // Team-Aggregat: 6 anonyme Demo-Antworten + die eigene, sobald abgegeben.
   const responses = useMemo(
@@ -85,6 +93,30 @@ export default function PulseView() {
             </p>
             <PrivacyHint boxed text={`Anonymous. Results appear only as a team aggregate and only from ${PULSE_MIN_GROUP} responses up. Nobody sees individual answers, not even your lead.`} style={{ marginBottom: 22 }} />
             <Button variant="accent" size="lg" full onClick={() => setIdx(0)}>Start the pulse</Button>
+
+            {/* Transparency: let people read every question before they commit. */}
+            <button onClick={() => setShowPreview((v) => !v)} style={{ display: "inline-flex", alignItems: "center", gap: 6, width: "100%", justifyContent: "center", marginTop: 14, background: "transparent", border: "none", cursor: "pointer", fontFamily: font("display"), fontWeight: 600, fontSize: 13.5, color: "var(--text-secondary)" }}>
+              <Icon name="chevronDown" size={16} style={{ transform: showPreview ? "rotate(180deg)" : "none", transition: "transform var(--dur-fast) var(--ease-out)" }} />
+              {showPreview ? "Hide the questions" : `Preview all ${PULSE_QUESTIONS.length} questions first`}
+            </button>
+
+            {showPreview && (
+              <div style={{ marginTop: 14, borderTop: "1px solid var(--border-default)", paddingTop: 18, display: "flex", flexDirection: "column", gap: 18 }}>
+                {PULSE_PREVIEW_GROUPS.map((g) => (
+                  <div key={g.name}>
+                    <div style={{ fontFamily: font("body"), fontSize: 12, fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase", color: "var(--text-muted)", marginBottom: 8 }}>{g.name}</div>
+                    <ol style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 8 }}>
+                      {g.qs.map((t) => (
+                        <li key={t} style={{ display: "flex", gap: 10, fontFamily: font("body"), fontSize: 14, color: "var(--text-body)", lineHeight: 1.5 }}>
+                          <span style={{ width: 6, height: 6, borderRadius: 999, marginTop: 7, flexShrink: 0, background: "var(--brand)" }} />
+                          {t}
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
+                ))}
+              </div>
+            )}
           </Glass>
         ) : (
           <Glass pad={32}>

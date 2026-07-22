@@ -4,6 +4,7 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import Icon from "../../components/Icon";
 import { Glass } from "../../components/ds";
+import { HiEmoji, type HiEmojiName } from "../../components/MoodFace";
 import { MODULES } from "../../data/modules";
 import type { Game } from "../../data/games";
 import { backBtn, primaryBtn, ghostBtn } from "./gameStyles";
@@ -111,7 +112,7 @@ export default function QuizGame({ game: g }: { game: Game }) {
       {phase === "end" && (
         <div className="gm-stage" style={{ maxWidth: 560, margin: "auto", width: "100%" }}>
           <Glass pad={34}>
-            <div style={{ width: 56, height: 56, borderRadius: 16, background: accent, display: "grid", placeItems: "center", margin: "0 auto 4px" }}><Icon name="check" size={28} color="#fff" /></div>
+            <div style={{ width: 92, height: 92, margin: "0 auto 6px" }}><HiEmoji name={resultEmoji(total ? score / total : 0)} size={92} /></div>
             <h1 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 30, color: "var(--text-primary)", margin: "8px 0 4px" }}>
               {score} / {total} {g.scoreNoun ?? "on-point answers"}
             </h1>
@@ -126,6 +127,15 @@ export default function QuizGame({ game: g }: { game: Game }) {
       )}
     </div>
   );
+}
+
+/* Reaction face for the result screen, warmer the better you did.
+   Even a zero lands on an encouraging "keep thinking", never a sad face. */
+function resultEmoji(ratio: number): HiEmojiName {
+  if (ratio >= 1) return "party";
+  if (ratio >= 0.6) return "win";
+  if (ratio > 0) return "cool";
+  return "think";
 }
 
 function optionBtn(tone: false | "ok" | "no" | "dim"): React.CSSProperties {
