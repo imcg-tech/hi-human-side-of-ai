@@ -48,7 +48,7 @@ export const NAV_ITEMS: NavItem[] = [
     match: ["balance"],
     children: balanceChildren,
   },
-  { id: "signal", label: "Mood", subtitle: "Check-in & trends", icon: "signal", route: "/app/signal", color: "var(--candy-blue)", match: ["signal"] },
+  { id: "signal", label: "Mood", subtitle: "Check-in & trends", icon: "signal", route: "/app/signal", color: "var(--candy-blue)", match: ["signal", "pulse"] },
 ];
 
 /* Welcher Bereich ist zum aktuellen Segment aktiv? */

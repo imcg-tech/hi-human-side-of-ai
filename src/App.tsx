@@ -13,6 +13,7 @@ import Dashboard from "./screens/Dashboard";
 import TeamView from "./screens/TeamView";
 import CultureView from "./screens/CultureView";
 import SignalView from "./screens/SignalView";
+import PulseView from "./screens/PulseView";
 import ModulesView from "./screens/ModulesView";
 import ProfileView from "./screens/ProfileView";
 import AssessmentView from "./screens/AssessmentView";
@@ -75,6 +76,7 @@ function Shell() {
           <Route path="team" element={<TeamView />} />
           <Route path="culture" element={<CultureView />} />
           <Route path="signal" element={<SignalView />} />
+          <Route path="pulse" element={<PulseView />} />
           <Route path="modules" element={<ModulesView />} />
           <Route path="module/:id" element={<ModuleDetailView />} />
           <Route path="game/:key" element={<GameView />} />

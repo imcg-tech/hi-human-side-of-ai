@@ -110,6 +110,12 @@ export interface HiState {
   // entry per game+day, capped. Powers "last played / this week" instead of %.
   playLog: { k: string; m: string; d: string }[];
 
+  // Team Pulse Survey (quarterly, anonymous). Only the fact of participation plus
+  // the own answers stay on this device (they feed the aggregate in demo mode).
+  // Never synced with a name attached; team results are aggregates only.
+  pulseCycle: string | null;                          // cycle of the last submission, e.g. "Q3 2026"
+  pulseAnswers: Record<number, number | string> | null;
+
   hydrate: (partial: Partial<HiState>) => void; // fill from backend on login
   setEmail: (email: string) => void;
   setProfile: (profile: DiscProfile) => void;
@@ -140,6 +146,7 @@ export interface HiState {
   addStrength: (text: string, moment: string, source: "self" | "received") => void; // add to strengths collection
   setComebackKit: (items: string[]) => void;        // save the comeback kit
   recordPlay: (gameKey: string, moduleId: string) => void; // freshness log, deduped per game+day
+  pulseSubmit: (cycle: string, answers: Record<number, number | string>) => void; // one submission per quarter
   reset: () => void;
 }
 
@@ -196,6 +203,8 @@ export const useStore = create<HiState>()(
       strengths: [],
       comebackKit: [],
       playLog: [],
+      pulseCycle: null,
+      pulseAnswers: null,
       hydrate: (partial) => set(partial),
       setEmail: (email) => set({ email }),
       setProfile: (profile) => set({ profile, discType: profile.primary, scores: profile.percent }),
@@ -281,7 +290,8 @@ export const useStore = create<HiState>()(
         if (s.playLog.some((p) => p.k === gameKey && p.d === today)) return {};
         return { playLog: [{ k: gameKey, m: moduleId, d: today }, ...s.playLog].slice(0, 300) };
       }),
-      reset: () => set({ email: null, displayName: null, department: null, country: null, teamId: null, profileLoaded: false, discType: null, scores: null, profile: null, shareWithTeam: false, notify: false, mood: null, moodHistory: {}, moodShareDefault: false, gratitude: [], deckAnswers: {}, streakCurrent: 0, streakLongest: 0, lastAnsweredDate: null, todayCount: 0, fwqStart: null, fwqDone: [], momentum: 0, momentumDate: null, activeDays: [], lastGap: 0, isManager: false, ocaSolved: 0, oneOnOnes: [], coffeeEnabled: false, coffeeCadence: "weekly", coffeePref: "any", coffeePaused: false, coffeeMet: [], coffeeGood: 0, coffeeMeh: 0, boundary: null, recovery: [], strengths: [], comebackKit: [], playLog: [], assessmentSkipped: false }),
+      pulseSubmit: (cycle, answers) => set({ pulseCycle: cycle, pulseAnswers: answers }),
+      reset: () => set({ email: null, displayName: null, department: null, country: null, teamId: null, profileLoaded: false, discType: null, scores: null, profile: null, shareWithTeam: false, notify: false, mood: null, moodHistory: {}, moodShareDefault: false, gratitude: [], deckAnswers: {}, streakCurrent: 0, streakLongest: 0, lastAnsweredDate: null, todayCount: 0, fwqStart: null, fwqDone: [], momentum: 0, momentumDate: null, activeDays: [], lastGap: 0, isManager: false, ocaSolved: 0, oneOnOnes: [], coffeeEnabled: false, coffeeCadence: "weekly", coffeePref: "any", coffeePaused: false, coffeeMet: [], coffeeGood: 0, coffeeMeh: 0, boundary: null, recovery: [], strengths: [], comebackKit: [], playLog: [], pulseCycle: null, pulseAnswers: null, assessmentSkipped: false }),
     }),
     { name: "hi-app" }
   )

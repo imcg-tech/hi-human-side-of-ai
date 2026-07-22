@@ -76,8 +76,10 @@ export default function HiGuide() {
     if (!tourSeen) return null;
     return (
       <button onClick={replay} aria-label="Replay the intro tour with Hi" title="Need a hand? Replay the tour"
-        style={{ position: "fixed", right: 16, bottom: isMobile ? 88 : 22, zIndex: 45, width: 58, height: 64, borderRadius: 20, border: "1px solid var(--border-default)", background: "var(--bg-elevated, #F7F4EF)", boxShadow: "0 8px 24px rgba(28,26,23,0.18)", cursor: "pointer", display: "grid", placeItems: "end center", paddingBottom: 4 }}>
-        <HiMascot size={52} pose="wave" reduced={reduced} />
+        onMouseEnter={(e) => { e.currentTarget.style.opacity = "1"; e.currentTarget.style.transform = "translateY(-2px)"; }}
+        onMouseLeave={(e) => { e.currentTarget.style.opacity = "0.82"; e.currentTarget.style.transform = "none"; }}
+        style={{ position: "fixed", right: 12, bottom: isMobile ? 84 : 18, zIndex: 45, width: 50, height: 56, borderRadius: 18, border: "1px solid var(--border-default)", background: "var(--bg-elevated, #F7F4EF)", boxShadow: "0 8px 24px rgba(28,26,23,0.18)", cursor: "pointer", display: "grid", placeItems: "end center", paddingBottom: 3, opacity: 0.82, transition: "opacity 0.2s, transform 0.2s" }}>
+        <HiMascot size={44} pose="wave" reduced={reduced} />
       </button>
     );
   }

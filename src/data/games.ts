@@ -165,7 +165,7 @@ export const GAMES: Record<string, Game> = {
 
 /* ── Live games from the game-design sheets (solo-playable adaptations) ── */
 GAMES.commonground = {
-  key: "commonground", category: "bonding", kind: "commonground", emoji: "🎚️",
+  key: "commonground", category: "bonding", kind: "commonground", emoji: "🤝",
   title: "Common Ground", skill: "Intercultural awareness",
   intro: "Make invisible work norms visible. Position yourself on the scale, then it appears how differently your team sees the same question. No right, no wrong.",
   closing: "The same terms mean something different to everyone. That very spread is the conversation starter: make expectations visible instead of assuming them.",
@@ -228,7 +228,7 @@ GAMES.defuse = {
   rounds: [],
 };
 GAMES.heist = {
-  key: "heist", category: "bonding", route: "/app/live/heist", emoji: "🔓",
+  key: "heist", category: "bonding", route: "/app/live/heist", emoji: "🗝️",
   title: "The Heist", skill: "Team effort · Live escape room",
   intro: "Collaborative escape room: no one sees all the clues. Only by sharing and combining do you break out together.",
   closing: "",
@@ -284,7 +284,7 @@ GAMES.thetradeoff = {
 
 /* ── Performance-Driven Culture: Goalcraft, solo + live ── */
 GAMES.goalcraft = {
-  key: "goalcraft", category: "performance", route: "/app/performance/goalcraft", emoji: "🎯",
+  key: "goalcraft", category: "performance", route: "/app/performance/goalcraft", emoji: "📐",
   title: "Goalcraft", skill: "Vague becomes measurable · Solo & Live",
   intro: "Turn a vague directive into a goal that pulls instead of pushes. Solo to practice, or live with the team.",
   closing: "",
@@ -331,7 +331,7 @@ GAMES.cleartheair = {
 };
 
 GAMES.conflictstyles = {
-  key: "conflictstyles", category: "conflict", route: "/app/conflict/styles", emoji: "⚖️",
+  key: "conflictstyles", category: "conflict", route: "/app/conflict/styles", emoji: "🎭",
   title: "Conflict Styles", skill: "Know your default · Solo & private",
   intro: "React to a few everyday conflict moments and discover which of the five conflict styles you lean on by default, plus when each one actually helps. A lens, not a label.",
   closing: "",

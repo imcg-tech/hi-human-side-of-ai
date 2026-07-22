@@ -228,6 +228,18 @@ export default function SignalView() {
         {/* ── TEAM-PULS (anonym, nur ab Mindestzahl) ── */}
         {tab === "team" && (
           <Glass pad={28}>
+            {/* Quartals-Survey: tieferer anonymer Puls, eigener Screen (/app/pulse) */}
+            <button onClick={() => navigate("/app/pulse")} style={{ display: "flex", alignItems: "center", gap: 14, width: "100%", textAlign: "left", cursor: "pointer", border: "1px solid var(--border-default)", background: "var(--bg-card)", borderRadius: "var(--radius-input)", padding: "14px 16px", marginBottom: 20 }}>
+              <span style={{ width: 42, height: 42, borderRadius: 13, background: "var(--candy-peri)", display: "grid", placeItems: "center", flexShrink: 0 }}>
+                <Icon name="target" size={20} color="var(--ink-fill)" />
+              </span>
+              <span style={{ flex: 1 }}>
+                <span style={{ display: "block", fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 15, color: "var(--text-primary)" }}>Quarterly Team Pulse</span>
+                <span style={{ fontFamily: "var(--font-body)", fontSize: 12.5, color: "var(--text-muted)" }}>30 questions on work, leadership & culture. Anonymous, team results only.</span>
+              </span>
+              <Icon name="arrowRight" size={18} color="var(--text-muted)" />
+            </button>
+
             <div style={{ fontFamily: "var(--font-body)", fontSize: 12, fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase", color: "var(--text-muted)", marginBottom: 8 }}>Anonymous team pulse</div>
             <p style={{ fontFamily: "var(--font-body)", fontSize: 14.5, color: "var(--text-secondary)", margin: "0 0 12px", lineHeight: 1.5 }}>Only an aggregated trend, never individual data. No link to performance or HR. Visible only from {MIN_TEAM} anonymous contributions on.</p>
             <PrivacyHint boxed text={`Anonymous & aggregated. No individual data visible. (from ${MIN_TEAM} people up)`} style={{ marginBottom: 18 }} />
