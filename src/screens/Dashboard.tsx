@@ -5,6 +5,7 @@ import { Pill } from "../components/ds";
 import MoodFace, { MOODS } from "../components/MoodFace";
 import MeditationFace from "../components/MeditationFace";
 import { MomentumCard, ManagerNudge } from "../components/engagement";
+import HiAssistant from "../components/HiAssistant";
 import { MODULES } from "../data/modules";
 import { DISC_INFO } from "../data/disc";
 import { teamActiveThisWeek, currentTheme } from "../data/engagement";
@@ -50,6 +51,10 @@ export default function Dashboard() {
           <Icon name="play" size={16} /> Start · {recMin} min
         </span>
       </button>
+
+      {/* ── Ask Hi: guided pick of a game / exercise for how you feel right now ── */}
+      <HiAssistant />
+
       <ManagerNudge />
 
       {/* ── Explore: everything below is secondary ── */}
