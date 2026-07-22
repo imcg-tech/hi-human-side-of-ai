@@ -4,6 +4,7 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import Icon from "../../components/Icon";
 import { Glass } from "../../components/ds";
+import { HiEmoji } from "../../components/MoodFace";
 import { MODULES } from "../../data/modules";
 import type { Game } from "../../data/games";
 import { CG_QUESTIONS, CG_TAKEAWAYS, type CGQuestion } from "../../data/commonGround";
@@ -141,7 +142,7 @@ export default function CommonGroundGame({ game: g }: { game: Game }) {
       {phase === "summary" && (
         <div className="cg-stage" style={{ maxWidth: 640, margin: "auto", width: "100%" }}>
           <Glass pad={30}>
-            <div style={{ fontSize: 40 }}>🎚️</div>
+            <div style={{ width: 72, height: 72, marginBottom: 4 }}><HiEmoji name="wow" size={72} /></div>
             <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 26, color: "var(--text-primary)", margin: "6px 0 4px" }}>Your common ground</h2>
             {take !== null && <div style={{ fontFamily: "var(--font-body)", fontSize: 14.5, color: "var(--text-secondary)", marginBottom: 16 }}>Your takeaway: “{CG_TAKEAWAYS[take]}”</div>}
             <div style={{ display: "flex", flexDirection: "column", gap: 18, margin: "10px 0 22px" }}>

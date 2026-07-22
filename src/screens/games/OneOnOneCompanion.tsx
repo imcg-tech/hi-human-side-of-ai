@@ -4,6 +4,7 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { Glass } from "../../components/ds";
 import Icon from "../../components/Icon";
+import MoodFace from "../../components/MoodFace";
 import { useStore, type OooSession, type OooSide, type OooTopic, type OooAgreement } from "../../lib/store";
 import { MOCK_MEMBERS } from "../../data/teamInsights";
 import { pickQuestions, STEPS, PRIVACY_NOTE } from "../../data/oneOnOne";
@@ -15,7 +16,6 @@ const ACCENT = "var(--candy-lilac)";
 const ACCENT_DEEP = "var(--candy-lilac-deep, #6C5CE0)";
 const uid = () => (globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`);
 
-const MOODS = ["😔", "😕", "😐", "🙂", "😄"];
 const MOOD_LABELS = ["Drained", "Tired", "Okay", "Good", "Energized"];
 
 const sectionLabel: React.CSSProperties = { fontFamily: "var(--font-body)", fontSize: 12, fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase", color: "var(--text-muted)", marginBottom: 8 };

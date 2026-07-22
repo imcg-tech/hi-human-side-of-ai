@@ -21,7 +21,12 @@ export const WEEKLY_THEMES: WeeklyTheme[] = [
   { title: "Week of trust", line: "Mistakes are okay, and here you practice that.", moduleId: "bonding", route: "/app/module/bonding" },
   { title: "Week of arriving", line: "Good to have you here, a warm start.", moduleId: "onboarding", route: "/app/module/onboarding" },
 ];
-export const currentTheme = (d: Date = new Date()): WeeklyTheme => WEEKLY_THEMES[weekOfYear(d) % WEEKLY_THEMES.length];
+/* The weekly theme. "Week of arriving" (onboarding) is only relevant for fresh
+   joiners, so established employees rotate through the pool without it. */
+export const currentTheme = (d: Date = new Date(), includeOnboarding = true): WeeklyTheme => {
+  const pool = includeOnboarding ? WEEKLY_THEMES : WEEKLY_THEMES.filter((t) => t.moduleId !== "onboarding");
+  return pool[weekOfYear(d) % pool.length];
+};
 
 /* ── Säule 2: verzeihendes Momentum ── */
 export function momentumLabel(momentum: number, justReturned: boolean): { title: string; line: string } {

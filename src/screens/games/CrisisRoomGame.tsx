@@ -4,6 +4,7 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import Icon from "../../components/Icon";
 import { Glass } from "../../components/ds";
+import { HiEmoji } from "../../components/MoodFace";
 import { MODULES } from "../../data/modules";
 import type { Game } from "../../data/games";
 import { CR_SCENARIOS, CR_REFLECTIONS, CR_ROLES } from "../../data/crisisRoom";
@@ -144,7 +145,7 @@ export default function CrisisRoomGame({ game: g }: { game: Game }) {
       {phase === "close" && (
         <div className="cr-stage" style={{ maxWidth: 580, margin: "auto", width: "100%" }}>
           <Glass pad={32}>
-            <div style={{ fontSize: 42 }}>🧭</div>
+            <div style={{ width: 72, height: 72, marginBottom: 4 }}><HiEmoji name="cool" size={72} /></div>
             <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 26, color: "var(--text-primary)", margin: "8px 0 4px" }}>Crisis handled</h2>
             {role !== null && <div style={{ fontFamily: "var(--font-body)", fontSize: 15, color: "var(--text-secondary)" }}>Your role today: <strong style={{ color: "var(--text-primary)" }}>{CR_ROLES[role].label}</strong></div>}
             {plan.trim() && <div style={{ marginTop: 14, padding: "12px 16px", borderRadius: 12, background: "rgba(28,26,23,0.05)", fontFamily: "var(--font-body)", fontSize: 14.5, color: "var(--text-body)" }}>“{plan.trim()}”</div>}

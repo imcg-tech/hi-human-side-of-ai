@@ -16,6 +16,7 @@ export default function Dashboard() {
   const mood = useStore((s) => s.mood);
   const discType = useStore((s) => s.discType);
   const recordVisit = useStore((s) => s.recordVisit);
+  const tenure = useStore((s) => s.tenure);
   const disc = discType ?? "I";
   const di = DISC_INFO[disc];
 
@@ -27,7 +28,8 @@ export default function Dashboard() {
   const activePct = Math.round((active / total) * 100);
 
   // One dominant action for today: this week's theme + a matching short exercise.
-  const theme = currentTheme();
+  // Only fresh joiners get the onboarding "Week of arriving" pushed here.
+  const theme = currentTheme(new Date(), tenure === "new");
   const themeAccent = MODULES.find((mm) => mm.id === theme.moduleId)?.color ?? "var(--candy-blue)";
   const recGame = gamesFor(theme.moduleId)[0];
   const recRoute = recGame ? (recGame.route ?? `/app/game/${recGame.key}`) : theme.route;

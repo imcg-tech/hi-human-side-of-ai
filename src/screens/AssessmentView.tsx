@@ -20,6 +20,8 @@ export default function AssessmentView() {
   const discType = useStore((s) => s.discType);
   const assessmentSkipped = useStore((s) => s.assessmentSkipped);
   const setAssessmentSkipped = useStore((s) => s.setAssessmentSkipped);
+  const tenure = useStore((s) => s.tenure);
+  const setTenure = useStore((s) => s.setTenure);
   const forced = !discType && !assessmentSkipped; // sent here as the first step
 
   const [phase, setPhase] = useState<"intro" | "quiz" | "result">("intro");
@@ -68,6 +70,23 @@ export default function AssessmentView() {
       {/* ───────── Intro ───────── */}
       {phase === "intro" && (
         <div className="aq-stage" style={{ maxWidth: 620, margin: "auto", width: "100%" }}>
+          {/* Quick welcome question: only fresh joiners get onboarding content later. */}
+          <Glass pad={26} style={{ marginBottom: 16 }}>
+            <span style={{ fontFamily: "var(--font-body)", fontSize: 12, fontWeight: 600, letterSpacing: "0.07em", textTransform: "uppercase", color: "var(--text-muted)" }}>Welcome 👋</span>
+            <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 19, color: "var(--text-primary)", margin: "8px 0 4px", lineHeight: 1.2 }}>First, a quick one: are you new here?</div>
+            <p style={{ fontFamily: "var(--font-body)", fontSize: 14, color: "var(--text-secondary)", margin: "0 0 16px", lineHeight: 1.5 }}>It just helps us show the right things. You can change it anytime.</p>
+            <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+              {([["new", "I'm new here"], ["existing", "I'm already on the team"]] as const).map(([val, label]) => {
+                const on = tenure === val;
+                return (
+                  <button key={val} onClick={() => setTenure(val)} style={{ flex: "1 1 160px", padding: "13px 16px", borderRadius: 14, cursor: "pointer", textAlign: "left", fontFamily: "var(--font-body)", fontSize: 14.5, fontWeight: 600, color: on ? "var(--ink-fill)" : "var(--text-primary)", background: on ? "var(--candy-blue)" : "rgba(255,255,255,0.6)", border: on ? "1.5px solid var(--candy-blue-deep, var(--brand))" : "1.5px solid var(--border-strong)", display: "inline-flex", alignItems: "center", gap: 9 }}>
+                    <span style={{ width: 22, height: 22, borderRadius: "50%", flexShrink: 0, display: "grid", placeItems: "center", background: on ? "var(--ink-fill)" : "transparent", border: on ? "none" : "2px solid var(--border-strong)" }}>{on && <Icon name="check" size={13} color="var(--text-on-ink)" />}</span>
+                    {label}
+                  </button>
+                );
+              })}
+            </div>
+          </Glass>
           <Glass pad={36}>
             <span style={{ fontFamily: "var(--font-body)", fontSize: 12, fontWeight: 600, letterSpacing: "0.07em", textTransform: "uppercase", color: "var(--text-muted)" }}>HI personality check</span>
             <h1 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 34, color: "var(--text-primary)", margin: "10px 0 0", lineHeight: 1.12 }}>Discover your DISC profile</h1>

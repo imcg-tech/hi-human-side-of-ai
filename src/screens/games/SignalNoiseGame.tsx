@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Icon from "../../components/Icon";
 import { Glass } from "../../components/ds";
+import { HiEmoji } from "../../components/MoodFace";
 import { MODULES } from "../../data/modules";
 import type { Game } from "../../data/games";
 import { SN_FIGURES } from "../../data/signalNoise";
@@ -124,7 +125,7 @@ export default function SignalNoiseGame({ game: g }: { game: Game }) {
       {phase === "end" && (
         <div style={{ maxWidth: 560, margin: "auto", width: "100%" }}>
           <Glass pad={34}>
-            <div style={{ fontSize: 44 }}>📡</div>
+            <div style={{ width: 76, height: 76, marginBottom: 4 }}><HiEmoji name="win" size={76} /></div>
             <h1 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 28, color: "var(--text-primary)", margin: "8px 0 4px" }}>Signal sent!</h1>
             <p style={{ fontFamily: "var(--font-body)", fontSize: 15.5, color: "var(--text-body)", lineHeight: 1.6, margin: "12px 0 26px" }}>{g.closing}</p>
             <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>

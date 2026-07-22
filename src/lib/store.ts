@@ -88,6 +88,9 @@ export interface HiState {
 
   // Onboarding: new users are sent through the DISC assessment first; this lets them defer it.
   assessmentSkipped: boolean;
+  // Are they a fresh joiner or an established employee? Only newcomers get the
+  // First Week Quest / onboarding content pushed on Home. null = not asked yet.
+  tenure: "new" | "existing" | null;
 
   // Coffee Roulette (Connection & Bonding), local participation state. Feedback is anonymous.
   coffeeEnabled: boolean;
@@ -136,6 +139,7 @@ export interface HiState {
   setPrivacyIntroSeen: () => void;
   setTourSeen: () => void;
   setAssessmentSkipped: () => void;
+  setTenure: (tenure: "new" | "existing") => void;
   coffeeSet: (patch: Partial<Pick<HiState, "coffeeEnabled" | "coffeeCadence" | "coffeePref" | "coffeePaused">>) => void;
   coffeeAddMet: (id: string) => void;
   coffeeRate: (good: boolean) => void;
@@ -191,6 +195,7 @@ export const useStore = create<HiState>()(
       privacyIntroSeen: false,
       tourSeen: false,
       assessmentSkipped: false,
+      tenure: null,
       coffeeEnabled: false,
       coffeeCadence: "weekly",
       coffeePref: "any",
@@ -276,6 +281,7 @@ export const useStore = create<HiState>()(
       setPrivacyIntroSeen: () => set({ privacyIntroSeen: true }),
       setTourSeen: () => set({ tourSeen: true }),
       setAssessmentSkipped: () => set({ assessmentSkipped: true }),
+      setTenure: (tenure) => set({ tenure }),
       coffeeSet: (patch) => set(patch),
       coffeeAddMet: (id) => set((s) => (s.coffeeMet.includes(id) ? {} : { coffeeMet: [...s.coffeeMet, id] })),
       coffeeRate: (good) => set((s) => (good ? { coffeeGood: s.coffeeGood + 1 } : { coffeeMeh: s.coffeeMeh + 1 })),
@@ -291,7 +297,7 @@ export const useStore = create<HiState>()(
         return { playLog: [{ k: gameKey, m: moduleId, d: today }, ...s.playLog].slice(0, 300) };
       }),
       pulseSubmit: (cycle, answers) => set({ pulseCycle: cycle, pulseAnswers: answers }),
-      reset: () => set({ email: null, displayName: null, department: null, country: null, teamId: null, profileLoaded: false, discType: null, scores: null, profile: null, shareWithTeam: false, notify: false, mood: null, moodHistory: {}, moodShareDefault: false, gratitude: [], deckAnswers: {}, streakCurrent: 0, streakLongest: 0, lastAnsweredDate: null, todayCount: 0, fwqStart: null, fwqDone: [], momentum: 0, momentumDate: null, activeDays: [], lastGap: 0, isManager: false, ocaSolved: 0, oneOnOnes: [], coffeeEnabled: false, coffeeCadence: "weekly", coffeePref: "any", coffeePaused: false, coffeeMet: [], coffeeGood: 0, coffeeMeh: 0, boundary: null, recovery: [], strengths: [], comebackKit: [], playLog: [], pulseCycle: null, pulseAnswers: null, assessmentSkipped: false }),
+      reset: () => set({ email: null, displayName: null, department: null, country: null, teamId: null, profileLoaded: false, discType: null, scores: null, profile: null, shareWithTeam: false, notify: false, mood: null, moodHistory: {}, moodShareDefault: false, gratitude: [], deckAnswers: {}, streakCurrent: 0, streakLongest: 0, lastAnsweredDate: null, todayCount: 0, fwqStart: null, fwqDone: [], momentum: 0, momentumDate: null, activeDays: [], lastGap: 0, isManager: false, ocaSolved: 0, oneOnOnes: [], coffeeEnabled: false, coffeeCadence: "weekly", coffeePref: "any", coffeePaused: false, coffeeMet: [], coffeeGood: 0, coffeeMeh: 0, boundary: null, recovery: [], strengths: [], comebackKit: [], playLog: [], pulseCycle: null, pulseAnswers: null, assessmentSkipped: false, tenure: null }),
     }),
     { name: "hi-app" }
   )
