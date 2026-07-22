@@ -19,7 +19,7 @@ const PATHS: Record<string, ReactNode> = {
   message: <path d="M4 5.5h16v11H9l-4 3.5v-3.5H4v-11Z" />,
   leaf: (<><path d="M5 19c0-8 6-13 14-13 0 8-5 14-13 14" /><path d="M5 19c3-3 6-5 9-6" /></>),
   lock: (<><rect x="5" y="10" width="14" height="10" rx="2.5" /><path d="M8 10V7a4 4 0 0 1 8 0v3" /></>),
-  bridge: (<><path d="M3 15v-1a9 9 0 0 1 18 0v1" /><path d="M3 15h18" /><path d="M7 15v5" /><path d="M12 15v5" /><path d="M17 15v5" /></>),
+  bridge: (<><path d="M3 16h18" /><path d="M7 16V6" /><path d="M17 16V6" /><path d="M3 14q0-5 4-8q5 8 10 0q4 3 4 8" /><path d="M3 16v3" /><path d="M21 16v3" /></>),
   sparkles: (<><path d="M12 3l1.7 4.8L18 9.5l-4.3 1.7L12 16l-1.7-4.8L6 9.5l4.3-1.7L12 3Z" /><path d="M18 14l.9 2.4L21 17l-2.1.6L18 20l-.9-2.4L15 17l2.1-.6L18 14Z" /></>),
   idcard: (<><rect x="3" y="5" width="18" height="14" rx="2.5" /><circle cx="8.5" cy="11" r="2" /><path d="M5.8 16a2.8 2.8 0 0 1 5.4 0" /><path d="M14.5 10h3.5" /><path d="M14.5 13.5h3.5" /></>),
   monitor: (<><rect x="3" y="4.5" width="18" height="12" rx="2" /><path d="M9 20h6" /><path d="M12 16.5V20" /></>),
