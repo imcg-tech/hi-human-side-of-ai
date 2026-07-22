@@ -28,7 +28,7 @@ const balanceChildren: NavChild[] = SUBAREAS.map((s) => ({
 }));
 
 export const NAV_ITEMS: NavItem[] = [
-  { id: "", label: "Home", icon: "home", route: "/app", color: "var(--text-secondary)", match: [""] },
+  { id: "", label: "Home", subtitle: "Your week at a glance", icon: "home", route: "/app", color: "var(--text-secondary)", match: [""] },
   {
     id: "team", label: "Team", subtitle: "People & company", icon: "users", route: "/app/team", color: "var(--candy-peri)",
     match: ["team", "culture"],
