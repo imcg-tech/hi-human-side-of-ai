@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Icon from "../../components/Icon";
 import { Glass } from "../../components/ds";
 import { HiEmoji } from "../../components/MoodFace";
+import GameIcon from "../../components/GameIcon";
 import { MODULES } from "../../data/modules";
 import type { Game } from "../../data/games";
 import { SN_FIGURES } from "../../data/signalNoise";
@@ -63,7 +64,7 @@ export default function SignalNoiseGame({ game: g }: { game: Game }) {
       {phase === "intro" && (
         <div style={{ maxWidth: 600, margin: "auto", width: "100%" }}>
           <Glass pad={36}>
-            <div style={{ width: 64, height: 64, borderRadius: 18, background: accent, display: "grid", placeItems: "center", fontSize: 32 }}>{g.emoji}</div>
+            <div style={{ width: 64, height: 64, borderRadius: 18, background: accent, display: "grid", placeItems: "center" }}><GameIcon game={g} size={36} /></div>
             <h1 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 32, color: "var(--text-primary)", margin: "16px 0 2px" }}>{g.title}</h1>
             <div style={{ fontFamily: "var(--font-body)", fontSize: 14, fontWeight: 600, letterSpacing: "0.04em", textTransform: "uppercase", color: "var(--text-muted)" }}>{g.skill}</div>
             <GameBrief g={g} accent={accent} />

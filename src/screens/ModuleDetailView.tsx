@@ -1,5 +1,6 @@
 import { useNavigate, useParams, Navigate } from "react-router-dom";
 import Icon from "../components/Icon";
+import GameIcon from "../components/GameIcon";
 import { Glass } from "../components/ds";
 import { MODULES } from "../data/modules";
 import { gamesFor, gameBadges, type Game } from "../data/games";
@@ -26,7 +27,7 @@ export default function ModuleDetailView() {
     return (
       <Glass pad={22} hover style={featured ? { border: `2px solid ${m!.color}` } : undefined}>
         <div style={{ display: "flex", alignItems: "flex-start", gap: 14 }}>
-          <span style={{ width: 48, height: 48, borderRadius: 14, background: m!.color, display: "grid", placeItems: "center", fontSize: 24, flexShrink: 0 }}>{g.emoji}</span>
+          <span style={{ width: 48, height: 48, borderRadius: 14, background: m!.color, display: "grid", placeItems: "center", flexShrink: 0 }}><GameIcon game={g} size={27} /></span>
           <div style={{ flex: 1 }}>
             <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 18, color: "var(--text-primary)", lineHeight: 1.15 }}>{g.title}</div>
             <div style={{ fontFamily: "var(--font-body)", fontSize: 13, color: "var(--text-secondary)" }}>{g.skill}</div>
