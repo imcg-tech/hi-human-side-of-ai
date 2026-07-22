@@ -3,50 +3,18 @@ import { useNavigate } from "react-router-dom";
 import Icon from "./Icon";
 import HiMascot from "./HiMascot";
 import { useMediaQuery } from "../lib/useMediaQuery";
+import { ASSISTANT_INTENTS, type AssistantIntent } from "../data/assistant";
 
 /* Home assistant: the Hi mascot asks what's on your mind and, via multiple
    choice, points you to the one game or Balance exercise that fits right now.
    Pure client-side mapping, no data leaves the device. */
 
-type Rec = { title: string; line: string; route: string };
-interface Intent { id: string; label: string; emoji: string; rec: Rec; alt?: { title: string; route: string } }
-
-const INTENTS: Intent[] = [
-  {
-    id: "tension", label: "Something's tense with a colleague", emoji: "🌩️",
-    rec: { title: "Cool Down", line: "A 2-minute reset to steady the heat before you respond.", route: "/app/conflict/cooldown" },
-    alt: { title: "Repair Kit", route: "/app/conflict/repair" },
-  },
-  {
-    id: "sayit", label: "I want to say something clearly", emoji: "🎯",
-    rec: { title: "One Clear Ask", line: "Turn a fuzzy situation into one clear, kind request.", route: "/app/communication/oneclearask" },
-    alt: { title: "Feedback Gym", route: "/app/game/feedback" },
-  },
-  {
-    id: "stressed", label: "I feel stressed or wired", emoji: "🫧",
-    rec: { title: "Pressure Valve", line: "Let the pressure out with a guided breathing moment.", route: "/app/balance/valve" },
-    alt: { title: "Reset Ritual", route: "/app/balance/reset" },
-  },
-  {
-    id: "lowenergy", label: "Low on energy, I need to recharge", emoji: "🌙",
-    rec: { title: "Meditation", line: "A calm few minutes to breathe and arrive.", route: "/meditation" },
-    alt: { title: "Sound Bath", route: "/app/balance/soundbath" },
-  },
-  {
-    id: "connect", label: "I'd like to feel closer to the team", emoji: "🤝",
-    rec: { title: "Common Ground", line: "A light team game about where you each stand.", route: "/app/live/commonground" },
-    alt: { title: "Coffee Roulette", route: "/app/balance/coffee" },
-  },
-  {
-    id: "checkin", label: "Just checking in on how I feel", emoji: "💛",
-    rec: { title: "Mood check-in", line: "Log how you're doing today. Always private, always yours.", route: "/app/signal" },
-  },
-];
+const INTENTS = ASSISTANT_INTENTS;
 
 export default function HiAssistant() {
   const navigate = useNavigate();
   const reduced = useMediaQuery("(prefers-reduced-motion: reduce)");
-  const [picked, setPicked] = useState<Intent | null>(null);
+  const [picked, setPicked] = useState<AssistantIntent | null>(null);
 
   return (
     <div style={{ borderRadius: 24, background: "var(--bg-elevated, #F7F4EF)", border: "1px solid var(--border-default)", padding: "20px 20px 18px", boxShadow: "var(--shadow-sm)" }}>

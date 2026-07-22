@@ -5,6 +5,7 @@ import Logo from "../components/Logo";
 import SearchOverlay from "../components/SearchOverlay";
 import PrivacyIntro from "../components/PrivacyIntro";
 import HiGuide from "../components/HiGuide";
+import HiWelcome from "../components/HiWelcome";
 import { useAuth } from "../lib/auth";
 import { supabaseReady } from "../lib/supabase";
 import { useStore } from "../lib/store";
@@ -195,6 +196,7 @@ export default function AppLayout() {
       <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
       <PrivacyIntro />
       <HiGuide />
+      <HiWelcome />
     </div>
   );
 }
