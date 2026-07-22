@@ -29,6 +29,7 @@ export default function CultureView() {
   const onMap = members.filter((m) => hasCultureData(m.country ?? null));
   const noData = members.filter((m) => m.country && !hasCultureData(m.country));
   const showDemoBanner = supabaseReady && source === "demo";
+  const countryCount = new Set(onMap.map((m) => m.country)).size; // distinct cultures represented
 
   return (
     <div style={{ height: "100%", overflowY: "auto", padding: "8px 4px 24px" }}>
@@ -43,6 +44,22 @@ export default function CultureView() {
         )}
       </div>
       <p style={{ fontFamily: "var(--font-body)", fontSize: 16, color: "var(--text-body)", margin: "0 0 18px", padding: "0 4px", textShadow: "0 1px 16px rgba(255,255,255,0.7)" }}>Where does your team stand culturally? Make tendencies visible, as a conversation opener, not a stereotype.</p>
+
+      {/* Framing: what the map shows, and the important thing it does NOT show. */}
+      <Glass pad={24} style={{ marginBottom: 18 }}>
+        <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 18, color: "var(--text-primary)", marginBottom: 8 }}>
+          {countryCount > 1 ? `${countryCount} cultures in one team` : "Culture, made visible"}
+        </div>
+        <p style={{ fontFamily: "var(--font-body)", fontSize: 14.5, color: "var(--text-body)", lineHeight: 1.6, margin: 0 }}>
+          Your team brings together people from {countryCount > 1 ? `${countryCount} countries` : "different places"}, and every culture carries its own quiet defaults. They show up in everyday things: how directly people <strong>communicate</strong>, how <strong>feedback</strong> is given, how <strong>time</strong> and <strong>decisions</strong> are handled, and how <strong>trust</strong> is built. Seeing those side by side helps you talk about differences openly, instead of mistaking them for someone being difficult.
+        </p>
+        <div style={{ display: "flex", gap: 9, alignItems: "flex-start", marginTop: 14, padding: "12px 14px", borderRadius: 13, background: "rgba(28,26,23,0.04)" }}>
+          <Icon name="shield" size={16} color="var(--brand-dark)" style={{ flexShrink: 0, marginTop: 1 }} />
+          <span style={{ fontFamily: "var(--font-body)", fontSize: 13, color: "var(--text-secondary)", lineHeight: 1.55 }}>
+            This says nothing about your individual colleagues. The positions are baseline cultural tendencies from research (based on Erin Meyer's <em>The Culture Map</em>), not a read on the people on your team. Everyone is unique, treat it as awareness, never a label.
+          </span>
+        </div>
+      </Glass>
 
       {showDemoBanner && (
         <div style={{ margin: "0 4px 18px", padding: "11px 16px", borderRadius: 14, background: "var(--brand-subtle)", border: "1px solid var(--brand-light)", fontFamily: "var(--font-body)", fontSize: 13.5, color: "var(--text-secondary)", lineHeight: 1.5 }}>
