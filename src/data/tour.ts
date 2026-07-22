@@ -12,7 +12,7 @@ export interface TourStep {
 
 export const TOUR: TourStep[] = [
   { title: "Hi, I'm Hi", line: "Your little guide here. Welcome! Let me show you around in ten seconds.", clip: "hi-1.mp3", wave: true },
-  { title: "Home", line: "Your home base. Start a game, check in on your mood, or just breathe. It all begins here.", target: "nav-home", clip: "hi-2.mp3" },
+  { title: "Home", line: "Your home base. Start a game, check in on your mood, or just breathe. It all begins here. Have fun!", target: "nav-home", clip: "hi-2.mp3" },
   { title: "Modules", line: "Playful mini-games to grow together, communication, trust, leadership. Short and light.", target: "nav-modules", clip: "hi-3.mp3" },
   { title: "Balance", line: "Your private corner: breathe, reset, recharge. Just for you.", target: "nav-balance", clip: "hi-4.mp3" },
   { title: "Mood", line: "Check in with how you feel. Always anonymous, always yours.", target: "nav-signal", clip: "hi-5.mp3" },
