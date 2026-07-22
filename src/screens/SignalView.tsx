@@ -10,6 +10,9 @@ import { MODULES, MOOD_SUGGESTIONS } from "../data/modules";
 import { useStore } from "../lib/store";
 
 const MIN_TEAM = 4; // Team-Wert nur ab dieser Zahl anonymer Beiträge
+// Demo team pulse: what the anonymous aggregate looks like when it's unlocked.
+// dist[i] = number of people who felt mood (i+1) this week; trend = last 6 weeks avg.
+const TEAM_PULSE_DEMO = { n: 7, dist: [0, 1, 1, 3, 2], trend: [3.3, 3.6, 3.4, 3.8, 3.7, 3.9] };
 const ymd = (d: Date) => d.toISOString().slice(0, 10);
 const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const WD = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -243,11 +246,70 @@ export default function SignalView() {
             <div style={{ fontFamily: "var(--font-body)", fontSize: 12, fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase", color: "var(--text-muted)", marginBottom: 8 }}>Anonymous team pulse</div>
             <p style={{ fontFamily: "var(--font-body)", fontSize: 14.5, color: "var(--text-secondary)", margin: "0 0 12px", lineHeight: 1.5 }}>Only an aggregated trend, never individual data. No link to performance or HR. Visible only from {MIN_TEAM} anonymous contributions on.</p>
             <PrivacyHint boxed text={`Anonymous & aggregated. No individual data visible. (from ${MIN_TEAM} people up)`} style={{ marginBottom: 18 }} />
-            <div style={{ padding: "22px 20px", borderRadius: 16, background: "rgba(28,26,23,0.04)", textAlign: "center" }}>
-              <Icon name="lock" size={22} color="var(--text-muted)" />
-              <p style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 16, color: "var(--text-primary)", margin: "10px 0 4px" }}>No team value yet</p>
-              <p style={{ fontFamily: "var(--font-body)", fontSize: 14, color: "var(--text-secondary)", margin: 0, lineHeight: 1.5 }}>Currently {anonCount} of {MIN_TEAM} anonymous contributions. Once enough people contribute voluntarily, a gentle team trend appears here, without anyone being able to see individual moods.</p>
-            </div>
+
+            {(() => {
+              const { n, dist, trend } = TEAM_PULSE_DEMO;
+              const avg = dist.reduce((s, c, i) => s + (i + 1) * c, 0) / n;
+              const avgMood = Math.max(1, Math.min(5, Math.round(avg)));
+              const secLabel: React.CSSProperties = { fontFamily: "var(--font-body)", fontSize: 12, fontWeight: 600, letterSpacing: "0.04em", textTransform: "uppercase", color: "var(--text-muted)", margin: "0 0 10px" };
+              return (
+                <>
+                  <div style={{ fontFamily: "var(--font-body)", fontSize: 11.5, fontWeight: 600, letterSpacing: "0.04em", textTransform: "uppercase", color: "var(--brand-dark)", background: "var(--brand-subtle)", display: "inline-block", padding: "4px 10px", borderRadius: 999, marginBottom: 14 }}>Demo preview</div>
+
+                  {/* This week's average team mood */}
+                  <div style={{ display: "flex", alignItems: "center", gap: 16, padding: "16px 18px", borderRadius: 16, background: "rgba(28,26,23,0.04)", marginBottom: 20 }}>
+                    <div style={{ width: 60, height: 60, flexShrink: 0 }}><MoodFace mood={avgMood} size={60} /></div>
+                    <div>
+                      <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 18, color: MOODS[avgMood].color, lineHeight: 1.1 }}>Mostly {MOODS[avgMood].label.toLowerCase()}</div>
+                      <div style={{ fontFamily: "var(--font-body)", fontSize: 13, color: "var(--text-secondary)", marginTop: 2 }}>{n} people shared anonymously this week · {avg.toFixed(1)} / 5 on average</div>
+                    </div>
+                  </div>
+
+                  {/* Distribution across moods */}
+                  <div style={secLabel}>How the team felt this week</div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 22 }}>
+                    {[5, 4, 3, 2, 1].map((m) => {
+                      const c = dist[m - 1]; const pct = Math.round((c / n) * 100);
+                      return (
+                        <div key={m} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                          <span style={{ width: 72, fontFamily: "var(--font-body)", fontSize: 13, color: "var(--text-secondary)", flexShrink: 0 }}>{MOODS[m].label}</span>
+                          <div style={{ flex: 1, height: 9, borderRadius: 999, background: "rgba(28,26,23,0.06)", overflow: "hidden" }}>
+                            <div style={{ width: `${pct}%`, height: "100%", borderRadius: 999, background: MOODS[m].color, transition: "width var(--dur-slow) var(--ease-out)" }} />
+                          </div>
+                          <span style={{ width: 22, textAlign: "right", fontFamily: "var(--font-body)", fontSize: 12.5, color: "var(--text-muted)", flexShrink: 0 }}>{c}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Gentle 6-week trend */}
+                  <div style={secLabel}>Last 6 weeks</div>
+                  <div style={{ display: "flex", alignItems: "flex-end", gap: 8, height: 56, marginBottom: 6 }}>
+                    {trend.map((v, i) => (
+                      <div key={i} style={{ flex: 1, height: `${(v / 5) * 100}%`, borderRadius: "8px 8px 3px 3px", background: MOODS[Math.max(1, Math.min(5, Math.round(v)))].color, opacity: i === trend.length - 1 ? 1 : 0.45 }} />
+                    ))}
+                  </div>
+                  <div style={{ fontFamily: "var(--font-body)", fontSize: 11.5, color: "var(--text-muted)", textAlign: "center", marginBottom: 22 }}>A calm signal over time, not a scoreboard.</div>
+
+                  {/* How it works */}
+                  <div style={secLabel}>How the team pulse works</div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 11 }}>
+                    {([
+                      ["heart", "Voluntary", "Sharing your daily mood is always optional, one tap and never required."],
+                      ["lock", "Anonymous", "Your entry flows into a team average, never tied to your name."],
+                      ["users", `Only from ${MIN_TEAM} up`, "A team value appears once enough people have shared, so no single mood is identifiable."],
+                    ] as const).map(([icon, t, d]) => (
+                      <div key={t} style={{ display: "flex", gap: 11, alignItems: "flex-start" }}>
+                        <span style={{ width: 30, height: 30, borderRadius: 9, background: "var(--brand-subtle)", display: "grid", placeItems: "center", flexShrink: 0 }}><Icon name={icon} size={15} color="var(--brand-dark)" /></span>
+                        <div><div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 13.5, color: "var(--text-primary)" }}>{t}</div><div style={{ fontFamily: "var(--font-body)", fontSize: 13, color: "var(--text-secondary)", lineHeight: 1.45 }}>{d}</div></div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <p style={{ fontFamily: "var(--font-body)", fontSize: 11.5, color: "var(--text-muted)", margin: "18px 0 0", lineHeight: 1.5 }}>Example shown for the demo. In your team this fills with real anonymous check-ins, from {MIN_TEAM} contributions on. So far {anonCount} of {MIN_TEAM}.</p>
+                </>
+              );
+            })()}
           </Glass>
         )}
       </div>
