@@ -200,8 +200,8 @@ export default function OneOnOneCompanion({ onComplete, embedded = false }: { on
             <div style={{ ...sectionLabel, marginTop: 22 }}>Their mood check-in · optional</div>
             <div style={{ fontFamily: "var(--font-body)", fontSize: 13, color: "var(--text-muted)", margin: "0 0 10px" }}>Only shown if they choose to share it.</div>
             <div style={{ display: "flex", gap: 8 }}>
-              {MOODS.map((e, i) => (
-                <button key={i} onClick={() => patch({ mood: session.mood === i + 1 ? null : i + 1 })} title={MOOD_LABELS[i]} style={{ flex: 1, height: 48, borderRadius: 12, cursor: "pointer", fontSize: 22, border: session.mood === i + 1 ? `2px solid ${ACCENT_DEEP}` : "1.5px solid var(--border-strong)", background: session.mood === i + 1 ? ACCENT : "rgba(255,255,255,0.55)" }}>{e}</button>
+              {MOOD_LABELS.map((_, i) => (
+                <button key={i} onClick={() => patch({ mood: session.mood === i + 1 ? null : i + 1 })} title={MOOD_LABELS[i]} style={{ flex: 1, height: 48, borderRadius: 12, cursor: "pointer", display: "grid", placeItems: "center", border: session.mood === i + 1 ? `2px solid ${ACCENT_DEEP}` : "1.5px solid var(--border-strong)", background: session.mood === i + 1 ? ACCENT : "rgba(255,255,255,0.55)" }}><MoodFace mood={i + 1} size={30} /></button>
               ))}
             </div>
 
@@ -322,7 +322,7 @@ export default function OneOnOneCompanion({ onComplete, embedded = false }: { on
             <Glass pad={28}>
               <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: 14 }}>
                 <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 22, color: "var(--text-primary)", margin: 0 }}>{session.partner} · {fmtDate(session.date)}</h2>
-                {session.mood && <span title={MOOD_LABELS[session.mood - 1]} style={{ fontSize: 22 }}>{MOODS[session.mood - 1]}</span>}
+                {session.mood && <span title={MOOD_LABELS[session.mood - 1]} style={{ display: "inline-flex" }}><MoodFace mood={session.mood} size={30} /></span>}
               </div>
 
               <div style={sectionLabel}>Agreements</div>
