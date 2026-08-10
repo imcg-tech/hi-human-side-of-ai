@@ -6,11 +6,18 @@ import { supabase, supabaseReady } from "./supabase";
 interface AuthCtx {
   session: Session | null;
   loading: boolean;
-  signInWithEmail: (email: string) => Promise<{ error: string | null }>;
+  signInWithPassword: (email: string, password: string) => Promise<{ error: string | null }>;
+  signUpWithPassword: (email: string, password: string) => Promise<{ error: string | null; needsConfirm?: boolean }>;
   signOut: () => Promise<void>;
 }
 
-const Ctx = createContext<AuthCtx>({ session: null, loading: true, signInWithEmail: async () => ({ error: null }), signOut: async () => {} });
+const Ctx = createContext<AuthCtx>({
+  session: null,
+  loading: true,
+  signInWithPassword: async () => ({ error: null }),
+  signUpWithPassword: async () => ({ error: null }),
+  signOut: async () => {},
+});
 export const useAuth = () => useContext(Ctx);
 
 /** Sign-in is limited to company email addresses. This is the first line of
@@ -30,25 +37,43 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => sub.subscription.unsubscribe();
   }, []);
 
-  async function signInWithEmail(email: string) {
+  async function signInWithPassword(email: string, password: string) {
     if (!isAllowedWorkEmail(email)) {
       return { error: `Please sign in with your @${ALLOWED_EMAIL_DOMAIN} work email.` };
     }
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: { emailRedirectTo: window.location.origin + window.location.pathname },
-    });
+    const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
     if (!error) return { error: null };
     const raw = (error.message || "").trim();
-    const looksRateLimited = error.status === 429 || /rate limit/i.test(raw) || raw === "" || raw === "{}";
-    const msg = looksRateLimited
-      ? "Email limit reached (Supabase's default sender is heavily throttled). Please try again later, or set up your own SMTP."
-      : raw || "Couldn't send. Please try again.";
-    return { error: msg };
+    if (/invalid login credentials/i.test(raw)) {
+      return { error: "Wrong email or password. New here? Use 'Create account' below." };
+    }
+    return { error: raw || "Couldn't sign in. Please try again." };
   }
+
+  async function signUpWithPassword(email: string, password: string) {
+    if (!isAllowedWorkEmail(email)) {
+      return { error: `Please sign up with your @${ALLOWED_EMAIL_DOMAIN} work email.` };
+    }
+    if (password.length < 8) {
+      return { error: "Please choose a password with at least 8 characters." };
+    }
+    const { data, error } = await supabase.auth.signUp({ email: email.trim(), password });
+    if (error) {
+      const raw = (error.message || "").trim();
+      if (/already registered/i.test(raw)) {
+        return { error: "This email already has an account. Use 'Sign in' instead." };
+      }
+      return { error: raw || "Couldn't create your account. Please try again." };
+    }
+    // With email confirmation disabled Supabase returns a session right away.
+    // If confirmation is still enabled there is no session yet and a mail went out.
+    if (!data.session) return { error: null, needsConfirm: true };
+    return { error: null };
+  }
+
   async function signOut() { await supabase.auth.signOut(); }
 
-  return <Ctx.Provider value={{ session, loading, signInWithEmail, signOut }}>{children}</Ctx.Provider>;
+  return <Ctx.Provider value={{ session, loading, signInWithPassword, signUpWithPassword, signOut }}>{children}</Ctx.Provider>;
 }
 
 /** Gate for protected routes. In demo mode (no Supabase env) it lets everything
