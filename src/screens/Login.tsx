@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Icon from "../components/Icon";
 import { Glass, Button } from "../components/ds";
 import Logo from "../components/Logo";
-import { useAuth } from "../lib/auth";
+import { useAuth, ALLOWED_EMAIL_DOMAIN } from "../lib/auth";
 import { supabaseReady } from "../lib/supabase";
 
 export default function Login() {
@@ -42,15 +42,15 @@ export default function Login() {
           </div>
         ) : (
           <>
-            <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="name@company.com" type="email"
+            <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder={`name@${ALLOWED_EMAIL_DOMAIN}`} type="email"
               onKeyDown={(e) => e.key === "Enter" && submit()}
               style={{ width: "100%", height: 52, padding: "0 18px", marginBottom: 12, borderRadius: "var(--radius-input)", border: "1.5px solid var(--border-strong)", background: "rgba(255,255,255,0.7)", fontFamily: "var(--font-body)", fontSize: 16, color: "var(--text-primary)", outline: "none", boxSizing: "border-box" }} />
             <Button variant="primary" size="lg" full onClick={submit} iconRight={<Icon name="arrowRight" size={20} />}>
               {status === "sending" ? "Sending …" : "Send magic link"}
             </Button>
             {status === "error" && <p style={{ fontFamily: "var(--font-body)", fontSize: 13.5, color: "var(--danger)", margin: "10px 0 0" }}>{error}</p>}
-            <p style={{ textAlign: "center", fontFamily: "var(--font-body)", fontSize: 13, color: "var(--text-muted)", margin: "14px 0 0" }}>
-              {supabaseReady ? "No password, you'll get a link by email." : "Demo mode: no backend connected yet."}
+            <p style={{ textAlign: "center", fontFamily: "var(--font-body)", fontSize: 13, color: "var(--text-muted)", margin: "14px 0 0", lineHeight: 1.5 }}>
+              {supabaseReady ? `No password. Sign in with your @${ALLOWED_EMAIL_DOMAIN} email and we'll send a link.` : "Demo mode: no backend connected yet."}
             </p>
           </>
         )}

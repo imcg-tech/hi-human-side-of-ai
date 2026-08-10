@@ -13,6 +13,12 @@ interface AuthCtx {
 const Ctx = createContext<AuthCtx>({ session: null, loading: true, signInWithEmail: async () => ({ error: null }), signOut: async () => {} });
 export const useAuth = () => useContext(Ctx);
 
+/** Sign-in is limited to company email addresses. This is the first line of
+ *  defense (better UX); the authoritative check lives server-side in Supabase
+ *  (a BEFORE INSERT trigger on auth.users that rejects other domains). */
+export const ALLOWED_EMAIL_DOMAIN = "fluidogroup.com";
+export const isAllowedWorkEmail = (email: string) => email.trim().toLowerCase().endsWith("@" + ALLOWED_EMAIL_DOMAIN);
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
@@ -25,6 +31,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   async function signInWithEmail(email: string) {
+    if (!isAllowedWorkEmail(email)) {
+      return { error: `Please sign in with your @${ALLOWED_EMAIL_DOMAIN} work email.` };
+    }
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: { emailRedirectTo: window.location.origin + window.location.pathname },
