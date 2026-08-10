@@ -1,15 +1,23 @@
 import { createClient } from "@supabase/supabase-js";
 
 // Backend wiring active once VITE_SUPABASE_* env vars are set at build time.
-const url = import.meta.env.VITE_SUPABASE_URL as string | undefined;
-const anon = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
+const rawUrl = ((import.meta.env.VITE_SUPABASE_URL as string | undefined) ?? "").trim();
+const rawAnon = ((import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined) ?? "").trim();
 
-/** True only when both env vars are present, lets the app run in offline/demo
- *  mode (localStorage only) until the Supabase project is wired up. */
-export const supabaseReady = Boolean(url && anon);
+// Only treat the backend as configured when the URL is a real http(s) URL AND a
+// key is present. A missing OR malformed/empty VITE_SUPABASE_URL must never reach
+// createClient — it throws "Invalid supabaseUrl" at module load and blanks the
+// entire app. In that case we fall back to demo mode with a safe placeholder.
+const validUrl = /^https?:\/\/[^\s]+$/.test(rawUrl);
+
+/** True only when the backend is properly configured; otherwise the app runs in
+ *  offline/demo mode (localStorage only). Guards against an empty/invalid URL. */
+export const supabaseReady = validUrl && rawAnon.length > 0;
 
 /** PKCE flow → magic-link returns as `?code=…` (query), which plays nicely with
  *  our HashRouter. detectSessionInUrl exchanges it automatically on load. */
-export const supabase = createClient(url ?? "http://localhost", anon ?? "anon", {
-  auth: { flowType: "pkce", persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
-});
+export const supabase = createClient(
+  supabaseReady ? rawUrl : "http://localhost",
+  supabaseReady ? rawAnon : "anon",
+  { auth: { flowType: "pkce", persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } },
+);
