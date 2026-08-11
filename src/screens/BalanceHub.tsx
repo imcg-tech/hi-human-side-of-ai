@@ -34,11 +34,15 @@ export default function BalanceHub() {
             <div style={{ display: "flex", flexWrap: "wrap", gap: 9 }}>
               {s.games.map((gm) => gm.status === "built" ? (
                 <button key={gm.id} onClick={() => gm.route && navigate(gm.route)} title={gm.desc} style={{ display: "inline-flex", alignItems: "center", gap: 7, cursor: "pointer", border: "none", borderRadius: 999, padding: "9px 15px", background: "var(--ink-fill)", color: "var(--text-on-ink)", fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 13.5 }}>
-                  {gm.title} <Icon name="arrowRight" size={14} />
+                  {gm.title}
+                  {gm.guided && <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.05em", textTransform: "uppercase", background: "rgba(255,255,255,0.22)", padding: "2.5px 7px", borderRadius: 999 }}>guided</span>}
+                  <Icon name="arrowRight" size={14} />
                 </button>
               ) : (
                 <span key={gm.id} title={gm.desc} style={{ display: "inline-flex", alignItems: "center", gap: 6, borderRadius: 999, padding: "9px 14px", background: "rgba(28,26,23,0.05)", color: "var(--text-muted)", fontFamily: "var(--font-body)", fontSize: 13.5 }}>
-                  {gm.title} <span style={{ fontSize: 11, opacity: 0.8 }}>· soon</span>
+                  {gm.title}
+                  {gm.guided && <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.05em", textTransform: "uppercase", background: "rgba(28,26,23,0.07)", padding: "2.5px 7px", borderRadius: 999 }}>guided</span>}
+                  <span style={{ fontSize: 11, opacity: 0.8 }}>· soon</span>
                 </span>
               ))}
             </div>

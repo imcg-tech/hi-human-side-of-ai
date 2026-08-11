@@ -2,18 +2,18 @@
    Leitprinzip: maximale Privatsphäre, kein Tracking/Vergleich, niedrigschwellig, einladend.
    Prävention & Selbstfürsorge, keine Therapie. */
 
-export interface BalanceGame { id: string; title: string; desc: string; status: "built" | "soon"; route?: string; }
+export interface BalanceGame { id: string; title: string; desc: string; status: "built" | "soon"; route?: string; guided?: boolean; }
 export interface SubArea { id: string; title: string; tagline: string; emoji: string; color: string; games: BalanceGame[]; }
 
 export const SUBAREAS: SubArea[] = [
   { id: "meditation", title: "Meditation & Mindfulness", tagline: "Breathe and arrive", emoji: "🌬️", color: "var(--candy-mint)", games: [
-    { id: "breath", title: "Breath Sync", desc: "Guided breathing, visual & with sound", status: "built", route: "/meditation" },
-    { id: "bodyscan", title: "Bodyscan Journey", desc: "Guided body journey, 5–15 min", status: "soon" },
+    { id: "breath", title: "Breath Sync", desc: "Guided breathing, visual & with sound", status: "built", route: "/meditation", guided: true },
+    { id: "bodyscan", title: "Bodyscan Journey", desc: "Guided body journey, 5–15 min", status: "soon", guided: true },
     { id: "soundbath", title: "Sound Bath", desc: "Ambient soundscapes to wind down", status: "built", route: "/app/balance/soundbath" },
   ] },
   { id: "stress", title: "Stress & Recovery", tagline: "Release pressure, recharge", emoji: "🫧", color: "var(--candy-blue)", games: [
-    { id: "reset", title: "Reset Ritual", desc: "2-min micro-break between meetings", status: "built", route: "/app/balance/reset" },
-    { id: "valve", title: "Pressure Valve", desc: "Stress relief in acute moments", status: "built", route: "/app/balance/valve" },
+    { id: "reset", title: "Reset Ritual", desc: "Guided 2-min micro-break between meetings", status: "built", route: "/app/balance/reset", guided: true },
+    { id: "valve", title: "Pressure Valve", desc: "Guided stress relief in acute moments", status: "built", route: "/app/balance/valve", guided: true },
     { id: "boundary", title: "Boundary Builder", desc: "Weekly challenge: consciously set a boundary", status: "built", route: "/app/balance/boundary" },
     { id: "recovery", title: "Recovery Wins", desc: "Share small moments of recovery", status: "built", route: "/app/balance/recovery" },
   ] },
@@ -27,7 +27,7 @@ export const SUBAREAS: SubArea[] = [
   ] },
   { id: "connection", title: "Connection & Loneliness", tagline: "You're not alone", emoji: "🤝", color: "var(--candy-peri)", games: [
     { id: "reachout", title: "Reach Out", desc: "A gentle nudge to reach out to someone", status: "built", route: "/app/balance/reachout" },
-    { id: "checkon", title: "Check on a Colleague", desc: "A guide for an honest “How are you?”", status: "built", route: "/app/balance/checkon" },
+    { id: "checkon", title: "Check on a Colleague", desc: "A guide for an honest “How are you?”", status: "built", route: "/app/balance/checkon", guided: true },
     { id: "notalone", title: "Not Alone", desc: "Anonymous, shared micro-feelings", status: "built", route: "/app/balance/notalone" },
     { id: "coffee", title: "Coffee Roulette", desc: "A random virtual coffee date", status: "built", route: "/app/balance/coffee" },
   ] },
