@@ -4,6 +4,8 @@ import Icon from "./Icon";
 import HiMascot from "./HiMascot";
 import { useMediaQuery } from "../lib/useMediaQuery";
 import { useStore } from "../lib/store";
+import { useAuth } from "../lib/auth";
+import { firstNameOf } from "../lib/name";
 import { ASSISTANT_INTENTS, type AssistantIntent } from "../data/assistant";
 
 /* On-open greeting: when the app is opened, Hi says hi and immediately asks
@@ -16,6 +18,7 @@ export default function HiWelcome() {
   const reduced = useMediaQuery("(prefers-reduced-motion: reduce)");
   const tourSeen = useStore((s) => s.tourSeen);
   const displayName = useStore((s) => s.displayName);
+  const { session } = useAuth();
 
   const [show, setShow] = useState(false);
   const [picked, setPicked] = useState<AssistantIntent | null>(null);
@@ -32,7 +35,7 @@ export default function HiWelcome() {
 
   const hour = new Date().getHours();
   const greet = hour < 11 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
-  const name = (displayName || "").split(" ")[0];
+  const name = firstNameOf(displayName, session?.user?.email ?? "");
   const dismiss = () => setShow(false);
   const go = (route: string) => { setShow(false); navigate(route); };
 

@@ -196,6 +196,9 @@ export default function Network() {
       </Canvas>
 
       <div className="net-ui">
+        {/* The you-star sits at the world origin, which the camera always orbits,
+            so it projects to the exact screen center. A plain overlay label works. */}
+        <div className="net-you-tag">✦ You</div>
         <header className="net-top">
           <button className="net-back" onClick={() => navigate("/app")}>← Home</button>
           <div className="net-title">Company Star Map</div>
@@ -273,12 +276,15 @@ export default function Network() {
           )}
         </section>
 
-        {/* bottom-right, propose a community question */}
-        <aside className="net-glass net-add">
-          <div className="a-h">💡 Got a question?</div>
-          <div className="a-sub">Add a question to the deck. It's quickly reviewed and could even become question of the day.</div>
-          <button className="a-btn" onClick={() => setShowForm(true)}>Suggest a question</button>
-        </aside>
+        {/* bottom-right, propose a community question. Demo-only for now: there is
+            no review pipeline behind it yet, so production hides the promise. */}
+        {!supabaseReady && (
+          <aside className="net-glass net-add">
+            <div className="a-h">💡 Got a question?</div>
+            <div className="a-sub">Add a question to the deck. It's quickly reviewed and could even become question of the day.</div>
+            <button className="a-btn" onClick={() => setShowForm(true)}>Suggest a question</button>
+          </aside>
+        )}
 
         {showForm && <CommunityForm onClose={() => setShowForm(false)} />}
       </div>

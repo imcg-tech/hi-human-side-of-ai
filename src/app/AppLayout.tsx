@@ -13,8 +13,9 @@ import { useMediaQuery } from "../lib/useMediaQuery";
 import { countryByCode } from "../data/countries";
 import { gameForPath } from "../lib/freshness";
 import { NAV_ITEMS, activeNavId, type NavItem } from "../data/nav";
+import { firstNameOf, prettyNameFromEmail } from "../lib/name";
 
-const TITLES: Record<string, string> = { "": "Good morning, Mara", team: "Team", culture: "Culture Map", modules: "Modules", balance: "Balance", signal: "Mood" };
+const TITLES: Record<string, string> = { team: "Team", culture: "Culture Map", modules: "Modules", balance: "Balance", signal: "Mood" };
 
 export default function AppLayout() {
   const navigate = useNavigate();
@@ -40,7 +41,7 @@ export default function AppLayout() {
   const country = useStore((s) => s.country);
   const live = supabaseReady && session;
   const userEmail = session?.user?.email ?? "";
-  const userName = live ? (displayName || userEmail.split("@")[0] || "Du") : "Mara Iqbal";
+  const userName = live ? (displayName || prettyNameFromEmail(userEmail) || "You") : "Mara Iqbal";
   const flag = countryByCode(country)?.flag ?? "";
   // Demo subline mirrors the live format (department · country) instead of the
   // cryptic "Product · Influence" DISC tag that read like jargon.
@@ -48,7 +49,12 @@ export default function AppLayout() {
   const initial = (userName[0] || "?").toUpperCase();
 
   const activeItem = NAV_ITEMS.find((n) => n.id === active);
-  const headerTitle = TITLES[seg] || activeItem?.label || "HI";
+  // Home header greets the signed-in person by their real first name (demo: Mara).
+  const hour = new Date().getHours();
+  const greet = hour < 11 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
+  const firstName = live ? firstNameOf(displayName, userEmail) : "Mara";
+  const homeTitle = firstName ? `${greet}, ${firstName}` : greet;
+  const headerTitle = seg === "" ? homeTitle : TITLES[seg] || activeItem?.label || "HI";
 
   /* ── one sidebar nav row (+ expandable children) ── */
   function NavRow({ n }: { n: NavItem }) {

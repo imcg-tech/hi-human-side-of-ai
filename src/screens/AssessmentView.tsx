@@ -73,10 +73,10 @@ export default function AssessmentView() {
           {/* Quick welcome question: only fresh joiners get onboarding content later. */}
           <Glass pad={26} style={{ marginBottom: 16 }}>
             <span style={{ fontFamily: "var(--font-body)", fontSize: 12, fontWeight: 600, letterSpacing: "0.07em", textTransform: "uppercase", color: "var(--text-muted)" }}>Welcome 👋</span>
-            <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 19, color: "var(--text-primary)", margin: "8px 0 4px", lineHeight: 1.2 }}>First, a quick one: are you new here?</div>
-            <p style={{ fontFamily: "var(--font-body)", fontSize: 14, color: "var(--text-secondary)", margin: "0 0 16px", lineHeight: 1.5 }}>It just helps us show the right things. You can change it anytime.</p>
+            <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 19, color: "var(--text-primary)", margin: "8px 0 4px", lineHeight: 1.2 }}>First, a quick one: did you just join the company?</div>
+            <p style={{ fontFamily: "var(--font-body)", fontSize: 14, color: "var(--text-secondary)", margin: "0 0 16px", lineHeight: 1.5 }}>Newcomers get a First Week Quest to settle in. You can change this anytime.</p>
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-              {([["new", "I'm new here"], ["existing", "I'm already on the team"]] as const).map(([val, label]) => {
+              {([["new", "I just joined"], ["existing", "I've been here a while"]] as const).map(([val, label]) => {
                 const on = tenure === val;
                 return (
                   <button key={val} onClick={() => setTenure(val)} style={{ flex: "1 1 160px", padding: "13px 16px", borderRadius: 14, cursor: "pointer", textAlign: "left", fontFamily: "var(--font-body)", fontSize: 14.5, fontWeight: 600, color: on ? "var(--ink-fill)" : "var(--text-primary)", background: on ? "var(--candy-blue)" : "rgba(255,255,255,0.6)", border: on ? "1.5px solid var(--candy-blue-deep, var(--brand))" : "1.5px solid var(--border-strong)", display: "inline-flex", alignItems: "center", gap: 9 }}>
