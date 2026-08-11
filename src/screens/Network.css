@@ -3,6 +3,8 @@
 
 .net-ui { position: absolute; inset: 0; pointer-events: none; }
 .net-you-tag { position: absolute; left: 50%; top: calc(50% + 32px); transform: translateX(-50%); color: #eaf1fb; background: rgba(10,15,22,0.55); border: 1px solid rgba(207,228,255,0.35); border-radius: 999px; padding: 4px 12px; font-family: var(--font-display); font-weight: 600; font-size: 12.5px; letter-spacing: 0.02em; }
+.net-mode-note { position: absolute; top: 64px; left: 50%; transform: translateX(-50%); max-width: min(92vw, 560px); text-align: center; color: #ffe3b0; background: rgba(58,42,12,0.72); border: 1px solid rgba(255,196,87,0.45); border-radius: 999px; padding: 7px 16px; font-family: var(--font-body); font-size: 13px; line-height: 1.4; backdrop-filter: blur(6px); }
+.net-mode-note button { pointer-events: auto; cursor: pointer; border: none; background: transparent; color: #ffd27a; font-family: var(--font-display); font-weight: 700; font-size: 13px; text-decoration: underline; padding: 0; }
 .net-ui button { pointer-events: auto; }
 
 /* top bar */

@@ -199,14 +199,22 @@ export default function Network() {
         {/* The you-star sits at the world origin, which the camera always orbits,
             so it projects to the exact screen center. A plain overlay label works. */}
         <div className="net-you-tag">✦ You</div>
+        {/* Live app showing the example universe: say so loudly, the fictional
+            colleagues (Lena, Theo, ...) must never read as real people. */}
+        {supabaseReady && loaded && source === "demo" && (
+          <div className="net-mode-note">
+            👀 Example view with fictional colleagues, just to show how it works.{" "}
+            <button onClick={() => setSource("real")}>Show my team</button>
+          </div>
+        )}
         <header className="net-top">
           <button className="net-back" onClick={() => navigate("/app")}>← Home</button>
           <div className="net-title">Company Star Map</div>
           <div className="net-legend">
             {supabaseReady && loaded && (
               <span className="net-toggle">
-                <button className={source === "real" ? "on" : ""} onClick={() => setSource("real")}>Real{realMatches.length > 0 ? ` (${realMatches.length})` : ""}</button>
-                <button className={source === "demo" ? "on" : ""} onClick={() => setSource("demo")}>Demo</button>
+                <button className={source === "real" ? "on" : ""} onClick={() => setSource("real")}>My team{realMatches.length > 0 ? ` (${realMatches.length})` : ""}</button>
+                <button className={source === "demo" ? "on" : ""} onClick={() => setSource("demo")}>Example</button>
               </span>
             )}
             {streakCurrent > 0 && <span className="net-streak">🔥 {streakCurrent} {streakCurrent === 1 ? "day" : "days"}</span>}
