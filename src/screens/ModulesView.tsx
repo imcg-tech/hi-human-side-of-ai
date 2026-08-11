@@ -13,6 +13,10 @@ const openTarget = (id: string, route?: string) => route ?? `/app/module/${id}`;
 export default function ModulesView() {
   const navigate = useNavigate();
   const playLog = useStore((s) => s.playLog);
+  const tenure = useStore((s) => s.tenure);
+  // Onboarding (First Week Quest) is for newcomers only; longer-tenured folks
+  // don't see the module at all. Unanswered (null) keeps it visible.
+  const modules = MODULES.filter((m) => m.id !== "onboarding" || tenure !== "existing");
 
   return (
     <div style={{ height: "100%", overflowY: "auto", padding: "8px 4px 40px" }}>
@@ -22,7 +26,7 @@ export default function ModulesView() {
       </div>
 
       <div style={{ display: "flex", flexDirection: "column", gap: 14, maxWidth: 700, margin: "0 auto" }}>
-        {MODULES.map((m) => {
+        {modules.map((m) => {
           const count = gamesFor(m.id).length;
           // 2.5: skills aren't "done", so show recency instead of a percent
           const f = moduleFreshness(playLog, m.id);

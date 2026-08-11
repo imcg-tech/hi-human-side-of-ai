@@ -254,7 +254,7 @@ export default function SignalView() {
               const secLabel: React.CSSProperties = { fontFamily: "var(--font-body)", fontSize: 12, fontWeight: 600, letterSpacing: "0.04em", textTransform: "uppercase", color: "var(--text-muted)", margin: "0 0 10px" };
               return (
                 <>
-                  <div style={{ fontFamily: "var(--font-body)", fontSize: 11.5, fontWeight: 600, letterSpacing: "0.04em", textTransform: "uppercase", color: "var(--brand-dark)", background: "var(--brand-subtle)", display: "inline-block", padding: "4px 10px", borderRadius: 999, marginBottom: 14 }}>Demo preview</div>
+                  <div style={{ fontFamily: "var(--font-body)", fontSize: 11.5, fontWeight: 600, letterSpacing: "0.04em", textTransform: "uppercase", color: "var(--brand-dark)", background: "var(--brand-subtle)", display: "inline-block", padding: "4px 10px", borderRadius: 999, marginBottom: 14 }}>Example data</div>
 
                   {/* This week's average team mood */}
                   <div style={{ display: "flex", alignItems: "center", gap: 16, padding: "16px 18px", borderRadius: 16, background: "rgba(28,26,23,0.04)", marginBottom: 20 }}>

@@ -302,6 +302,11 @@ function HostView({ displayName }: { displayName: string | null }) {
 export default function FirstWeekQuest({ onComplete, embedded = false }: { onComplete?: (r: { questsDone: number; connectionseMade: number }) => void; embedded?: boolean }) {
   const navigate = useNavigate();
   const displayName = useStore((s) => s.displayName);
+  const tenure = useStore((s) => s.tenure);
+  // Newcomers-only: direct links bounce longer-tenured folks back to the modules list.
+  useEffect(() => {
+    if (!embedded && tenure === "existing") navigate("/app/modules", { replace: true });
+  }, [embedded, tenure, navigate]);
   const fwqStart = useStore((s) => s.fwqStart);
   const fwqDone = useStore((s) => s.fwqDone);
   const startJourney = useStore((s) => s.fwqStartJourney);

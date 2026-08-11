@@ -39,6 +39,10 @@ export default function AppLayout() {
   const displayName = useStore((s) => s.displayName);
   const department = useStore((s) => s.department);
   const country = useStore((s) => s.country);
+  const tenure = useStore((s) => s.tenure);
+  // Onboarding module is newcomers-only; hide its nav entry for the rest.
+  const childrenOf = (n: NavItem) =>
+    n.children?.filter((c) => tenure !== "existing" || c.route !== "/app/module/onboarding");
   const live = supabaseReady && session;
   const userEmail = session?.user?.email ?? "";
   const userName = live ? (displayName || prettyNameFromEmail(userEmail) || "You") : "Mara Iqbal";
@@ -89,7 +93,7 @@ export default function AppLayout() {
           <div style={{ display: "grid", gridTemplateRows: expanded ? "1fr" : "0fr", transition: reduced ? "none" : "grid-template-rows 0.26s var(--ease-out)" }}>
             <div style={{ overflow: "hidden" }}>
               <div style={{ display: "flex", flexDirection: "column", gap: 1, padding: "3px 0 6px 18px" }}>
-                {n.children.map((c) => {
+                {childrenOf(n)!.map((c) => {
                   const conActive = pathname === c.route;
                   return (
                     <button key={c.label + c.route} onClick={() => navigate(c.route)} tabIndex={expanded ? 0 : -1}
@@ -166,7 +170,7 @@ export default function AppLayout() {
         {/* Mobile: Unterbereiche als horizontale Chips */}
         {isMobile && activeItem?.children && (
           <div style={{ display: "flex", gap: 8, overflowX: "auto", padding: "6px 18px 4px", WebkitOverflowScrolling: "touch" }}>
-            {activeItem.children.map((c) => {
+            {childrenOf(activeItem)!.map((c) => {
               const conActive = pathname === c.route;
               return (
                 <button key={c.label + c.route} onClick={() => navigate(c.route)} style={{ display: "inline-flex", alignItems: "center", gap: 7, flexShrink: 0, padding: "7px 13px", borderRadius: 999, cursor: "pointer", border: "1px solid var(--border-default)", background: conActive ? "var(--brand-subtle)" : "rgba(255,255,255,0.5)", color: conActive ? "var(--brand-dark)" : "var(--text-secondary)", fontFamily: "var(--font-body)", fontSize: 13, fontWeight: 600 }}>

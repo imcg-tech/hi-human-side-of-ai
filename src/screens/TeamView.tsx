@@ -92,7 +92,7 @@ export default function TeamView() {
         {supabaseReady && loaded && (
           <div style={{ display: "inline-flex", background: "rgba(28,26,23,0.06)", borderRadius: 999, padding: 3 }}>
             {(["real", "demo"] as const).map((s) => (
-              <button key={s} onClick={() => setSource(s)} style={{ border: "none", cursor: "pointer", borderRadius: 999, padding: "6px 14px", fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 13, background: source === s ? "#fff" : "transparent", color: source === s ? "var(--text-primary)" : "var(--text-secondary)", boxShadow: source === s ? "var(--shadow-sm)" : "none" }}>{s === "real" ? `Real (${real.length})` : "Demo"}</button>
+              <button key={s} onClick={() => setSource(s)} style={{ border: "none", cursor: "pointer", borderRadius: 999, padding: "6px 14px", fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 13, background: source === s ? "#fff" : "transparent", color: source === s ? "var(--text-primary)" : "var(--text-secondary)", boxShadow: source === s ? "var(--shadow-sm)" : "none" }}>{s === "real" ? `My team (${real.length})` : "Example"}</button>
             ))}
           </div>
         )}
@@ -192,7 +192,7 @@ export default function TeamView() {
 
       {showDemoBanner && (
         <div style={{ margin: "0 4px 18px", padding: "11px 16px", borderRadius: 14, background: "var(--brand-subtle)", border: "1px solid var(--brand-light)", fontFamily: "var(--font-body)", fontSize: 13.5, color: "var(--text-secondary)", lineHeight: 1.5 }}>
-          👀 <strong>Demo preview.</strong> Once at least 3 real team members have shared their profile, "Real" fills in automatically.
+          👀 <strong>Example view with fictional colleagues.</strong> Once at least 3 real team members have shared their profile, "My team" fills in automatically.
         </div>
       )}
 
