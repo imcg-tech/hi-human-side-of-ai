@@ -9,6 +9,7 @@ import HiAssistant from "../components/HiAssistant";
 import { MODULES } from "../data/modules";
 import { DISC_INFO } from "../data/disc";
 import { teamActiveThisWeek, currentTheme } from "../data/engagement";
+import { supabaseReady } from "../lib/supabase";
 import { gamesFor } from "../data/games";
 import { useStore } from "../lib/store";
 
@@ -164,19 +165,27 @@ export default function Dashboard() {
           <Pill style={{ background: "rgba(28,26,23,0.06)", color: "var(--text-primary)" }}>Team</Pill>
           <button onClick={() => navigate("/app/team")} aria-label="Open team view" style={{ display: "inline-flex", alignItems: "center", gap: 7, height: 34, padding: "0 14px", borderRadius: 999, border: "1px solid var(--border-strong)", background: "rgba(255,255,255,0.5)", cursor: "pointer", color: "var(--text-secondary)", fontFamily: "var(--font-body)", fontSize: 13.5, fontWeight: 600 }}>View team <Icon name="arrowRight" size={15} /></button>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 24, borderTop: "1px solid var(--border-default)", paddingTop: 22 }}>
-          <div style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 66, lineHeight: 1, letterSpacing: "-0.01em", color: "var(--text-primary)", textShadow: "0 1px 14px rgba(255,255,255,0.55)" }}>{activePct}%</div>
-          <div style={{ flex: 1 }}>
-            <div style={{ fontFamily: "var(--font-body)", fontSize: 15.5, color: "var(--text-body)", marginBottom: 10, lineHeight: 1.4 }}>of the company was active this week</div>
-            <div style={{ height: 8, borderRadius: 999, background: "rgba(28,26,23,0.08)", overflow: "hidden" }}>
-              <div style={{ width: `${activePct}%`, height: "100%", background: "var(--candy-blue)", borderRadius: 999 }} />
-            </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 10, fontFamily: "var(--font-body)", fontSize: 12.5, color: "var(--text-muted)" }}>
-              <Icon name="users" size={14} color="var(--text-muted)" stroke={1.75} />
-              <span>{active} of {total} people · always anonymous, never individual profiles</span>
+        {supabaseReady ? (
+          /* Live app: no real activity metric exists yet, so no invented one either. */
+          <div style={{ display: "flex", alignItems: "center", gap: 10, borderTop: "1px solid var(--border-default)", paddingTop: 22, fontFamily: "var(--font-body)", fontSize: 14.5, color: "var(--text-secondary)", lineHeight: 1.5 }}>
+            <Icon name="users" size={16} color="var(--text-muted)" stroke={1.75} />
+            <span>See your team's shared profiles and anonymous insights on the Team page. Always anonymous, never individual profiles.</span>
+          </div>
+        ) : (
+          <div style={{ display: "flex", alignItems: "center", gap: 24, borderTop: "1px solid var(--border-default)", paddingTop: 22 }}>
+            <div style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 66, lineHeight: 1, letterSpacing: "-0.01em", color: "var(--text-primary)", textShadow: "0 1px 14px rgba(255,255,255,0.55)" }}>{activePct}%</div>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontFamily: "var(--font-body)", fontSize: 15.5, color: "var(--text-body)", marginBottom: 10, lineHeight: 1.4 }}>of the company was active this week</div>
+              <div style={{ height: 8, borderRadius: 999, background: "rgba(28,26,23,0.08)", overflow: "hidden" }}>
+                <div style={{ width: `${activePct}%`, height: "100%", background: "var(--candy-blue)", borderRadius: 999 }} />
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 10, fontFamily: "var(--font-body)", fontSize: 12.5, color: "var(--text-muted)" }}>
+                <Icon name="users" size={14} color="var(--text-muted)" stroke={1.75} />
+                <span>{active} of {total} people · always anonymous, never individual profiles</span>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
