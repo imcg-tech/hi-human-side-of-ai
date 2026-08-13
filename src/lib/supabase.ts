@@ -14,6 +14,9 @@ const validUrl = /^https?:\/\/[^\s]+$/.test(rawUrl);
  *  offline/demo mode (localStorage only). Guards against an empty/invalid URL. */
 export const supabaseReady = validUrl && rawAnon.length > 0;
 
+/** Backend origin for connectivity self-diagnosis (empty in demo mode). */
+export const supabaseUrl = supabaseReady ? rawUrl : "";
+
 /** PKCE flow → magic-link returns as `?code=…` (query), which plays nicely with
  *  our HashRouter. detectSessionInUrl exchanges it automatically on load. */
 export const supabase = createClient(

@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 import type { Session } from "@supabase/supabase-js";
-import { supabase, supabaseReady } from "./supabase";
+import { supabase, supabaseReady, supabaseUrl } from "./supabase";
 
 interface AuthCtx {
   session: Session | null;
@@ -25,7 +25,24 @@ export const useAuth = () => useContext(Ctx);
  *  (a BEFORE INSERT trigger on auth.users that rejects other domains). */
 /** Fetch failures surface as "" or "{}" from supabase-js; show something human. */
 const looksLikeNetworkError = (raw: string) => raw === "" || raw === "{}" || /fetch|network/i.test(raw);
-const NETWORK_ERROR_MSG = "Couldn't reach the server. Check your connection (corporate networks sometimes block this) and try again.";
+
+/** When a request fails at the network layer, probe the backend two ways and
+ *  name the actual culprit in the error message, so nobody has to guess.
+ *  1) simple GET (no custom headers, no CORS preflight)  -> is the host reachable?
+ *  2) GET with a custom header (forces an OPTIONS preflight) -> do filters break API calls? */
+async function diagnoseNetwork(): Promise<string> {
+  const host = supabaseUrl.replace(/^https?:\/\//, "");
+  const probe = async (init?: RequestInit) => {
+    try { await fetch(`${supabaseUrl}/auth/v1/health`, init); return true; } catch { return false; }
+  };
+  if (!(await probe())) {
+    return `This device can't reach the app's server (${host}). A firewall, VPN or DNS filter on this device or network is blocking it.`;
+  }
+  if (!(await probe({ headers: { apikey: "probe" } }))) {
+    return "The server is reachable, but something on this device intercepts the app's API calls. Typical culprits: ad blocker apps (e.g. AdGuard system app), antivirus web protection, or a privacy VPN. Pause it for a moment and try again.";
+  }
+  return "The connection just recovered. Please try again now.";
+}
 
 export const ALLOWED_EMAIL_DOMAIN = "fluidogroup.com";
 /** Individually invited guests outside the company domain (exact addresses). */
@@ -56,7 +73,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (/invalid login credentials/i.test(raw)) {
       return { error: "Wrong email or password. New here? Use 'Create account' below." };
     }
-    if (looksLikeNetworkError(raw)) return { error: NETWORK_ERROR_MSG };
+    if (looksLikeNetworkError(raw)) return { error: await diagnoseNetwork() };
     return { error: raw || "Couldn't sign in. Please try again." };
   }
 
@@ -76,7 +93,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (/database error/i.test(raw)) {
         return { error: "This address isn't unlocked on the server yet. Ping Isabel to add it to the allowlist." };
       }
-      if (looksLikeNetworkError(raw)) return { error: NETWORK_ERROR_MSG };
+      if (looksLikeNetworkError(raw)) return { error: await diagnoseNetwork() };
       return { error: raw || "Couldn't create your account. Please try again." };
     }
     // With email confirmation disabled Supabase returns a session right away.
