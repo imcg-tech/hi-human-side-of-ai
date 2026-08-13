@@ -26,6 +26,19 @@ export const useAuth = () => useContext(Ctx);
 /** Fetch failures surface as "" or "{}" from supabase-js; show something human. */
 const looksLikeNetworkError = (raw: string) => raw === "" || raw === "{}" || /fetch|network/i.test(raw);
 
+/** Map meaningful HTTP statuses to honest messages (else null → keep raw). */
+function statusMessage(error: unknown): string | null {
+  const status = (error as { status?: number }).status;
+  if (!status) return null;
+  if (status === 429) {
+    return "Too many attempts from this internet connection. The server temporarily rate-limits after many tries; wait about an hour, then try exactly once. (Tip: it works right away on another connection, e.g. mobile hotspot.)";
+  }
+  if (status >= 500) {
+    return `The server answered with an error (HTTP ${status}). Please try again in a few minutes.`;
+  }
+  return null;
+}
+
 /** When a request fails at the network layer, probe the backend two ways and
  *  name the actual culprit in the error message, so nobody has to guess.
  *  1) simple GET (no custom headers, no CORS preflight)  -> is the host reachable?
@@ -88,6 +101,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (/invalid login credentials/i.test(raw)) {
       return { error: "Wrong email or password. New here? Use 'Create account' below." };
     }
+    const special = statusMessage(error);
+    if (special) return { error: special };
     if (looksLikeNetworkError(raw)) return { error: await diagnoseNetwork() };
     return { error: raw || "Couldn't sign in. Please try again." };
   }
@@ -108,6 +123,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (/database error/i.test(raw)) {
         return { error: "This address isn't unlocked on the server yet. Ping Isabel to add it to the allowlist." };
       }
+      const special = statusMessage(error);
+      if (special) return { error: special };
       if (looksLikeNetworkError(raw)) return { error: await diagnoseNetwork() };
       return { error: raw || "Couldn't create your account. Please try again." };
     }
