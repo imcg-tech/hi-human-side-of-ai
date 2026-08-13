@@ -139,8 +139,8 @@ export const GAMES: Record<string, Game> = {
     intro: "Leadership shows in small decisions, regardless of title. Read the dilemma and choose the most confident reaction. Then you'll see the consequence and the matching leadership principle.",
     closing: "Good leadership usually means: raise things early and calmly, coach instead of command, give feedback privately and concretely, and under uncertainty make a reversible decision rather than none at all.",
     howItWorks: ["Read a real leadership dilemma", "Choose your most confident reaction", "See the consequence and the principle behind it"],
-    concepts: ["GROW coaching", "SBI feedback", "Reversible decisions", "Psychological safety"],
-    estMinutes: 5,
+    concepts: ["GROW coaching", "SBI feedback", "Reversible decisions", "Psychological safety", "Amplification", "The 70% rule", "Yes-if"],
+    estMinutes: 8,
     metaTags: ["Private & solo"],
     rounds: [
       { dim: "Delegation & trust", msg: "A team member misses a deadline for the third time. You're annoyed. How do you react as an (informal) leader?", options: [
@@ -178,6 +178,33 @@ export const GAMES: Record<string, Game> = {
         title: "One-way vs. two-way doors",
         text: "Sort decisions into two kinds: one-way doors (hard to undo, decide slowly and carefully) and two-way doors (reversible, decide fast and learn). Most everyday decisions are two-way doors treated like one-way doors. Say your assumption out loud, pick a review date, and commit until then. Speed comes from reversibility, not from certainty.",
         steal: "Let's treat this as a two-way door: we go with option A, assumption X, and we review it in two weeks.",
+      } },
+      { dim: "Credit & visibility · tricky", msg: "In a meeting with senior leadership, someone presents your teammate Lena's idea as their own. Lena says nothing. You're only a peer. What do you do, right there in the room?", options: [
+        { t: "Nothing. It's Lena's battle, she can speak up for herself.", ok: false, fb: "Consequence: silence normalizes credit-taking, and Lena learns the team won't back her. Bystanding is a choice too." },
+        { t: "I call it out: “Hold on, that was Lena's idea, not yours.”", ok: false, fb: "Tempting, and better than silence. But framing it as an accusation in front of seniors forces defensiveness and makes the meeting about the conflict instead of the idea." },
+        { t: "I amplify: “Strong point, it builds directly on what Lena proposed earlier. Lena, want to walk us through the detail?”", ok: true, fb: "Attribution restored, no one publicly shamed, and Lena gets the floor. The idea stays center stage." },
+      ], learn: {
+        title: "Amplification: restore credit without a courtroom",
+        text: "When credit slips to the wrong person, you rarely need an accusation, you need re-attribution. Repeat the idea, name the originator, and hand them the microphone. The room updates who it belongs to, the taker keeps face, and you've shown the team that credit is protected here. If it happens repeatedly, that's a different conversation, in private, with the pattern named.",
+        steal: "It builds directly on what Lena proposed earlier. Lena, want to walk us through the detail?",
+      } },
+      { dim: "Delegation under pressure · tricky", msg: "Big deadline week. A task would take you 2 focused hours. Your junior colleague would need a full day and the result would be rougher. Everyone expects pace from you.", options: [
+        { t: "I do it myself. Fastest, safest, and the team needs pace right now.", ok: false, fb: "Tempting, and this week it's true. But do the math over a year: you stay the bottleneck, the junior stays junior, and every deadline week looks exactly like this one." },
+        { t: "I hand it over with the outcome and a midpoint check-in, and accept a good-enough result.", ok: true, fb: "Short-term slower, long-term the only version that scales. The check-in catches the big misses without hovering." },
+        { t: "I hand it over, then quietly rewrite it in the evening so the quality is right.", ok: false, fb: "Consequence: the junior learns nothing (or worse, false confidence), you work double, and the real quality bar stays invisible." },
+      ], learn: {
+        title: "The hero trap, and the 70% rule",
+        text: "If someone can do a task about 70% as well as you, delegating it is usually the right call, because your last 30% is bought with the whole team's future capacity. Delegate the outcome, not the steps: say what good looks like and by when, agree one midpoint check-in, and resist fixing the result in secret. Feedback on a rough draft teaches; a silent rewrite teaches nothing.",
+        steal: "Here's the outcome we need by Thursday. Let's look at a midpoint version Wednesday noon. What do you need from me to get there?",
+      } },
+      { dim: "Saying no to a peer · tricky", msg: "Your team is already at its limit. The lead of another team asks you “as a quick favor” for something that would quietly blow up your sprint. Saying no feels uncollegial.", options: [
+        { t: "I take it. Good relationships with other teams matter more than one sprint.", ok: false, fb: "Consequence: your team pays for your harmony, silently. And the next “quick favor” is already in the mail, because yes worked." },
+        { t: "I decline: “Sorry, we simply don't have capacity.”", ok: false, fb: "Honest, and sometimes necessary. But a flat no without alternatives reads as unwilling, and it hides the real question: what should come first?" },
+        { t: "I make the trade-off visible: “We can do this if X moves by a week. Which is more important right now?”", ok: true, fb: "A yes-if instead of a yes or a no: the cost becomes visible, the priority call lands where it belongs, and nobody has to be the villain." },
+      ], learn: {
+        title: "Yes-if: the no that keeps the relationship",
+        text: "Between silent self-sacrifice and a hard no there's a third move: name the cost and share the decision. “Yes, if X moves” turns a favor into a visible priority call. Your team is protected, the other lead keeps a path forward, and recurring overload becomes data instead of resentment. Protecting your team's focus is not uncollegial, it's your job.",
+        steal: "We can take this if X moves by a week. Which of the two is more important right now?",
       } },
     ],
   },
