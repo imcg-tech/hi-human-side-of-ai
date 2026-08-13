@@ -16,6 +16,8 @@ export const supabaseReady = validUrl && rawAnon.length > 0;
 
 /** Backend origin for connectivity self-diagnosis (empty in demo mode). */
 export const supabaseUrl = supabaseReady ? rawUrl : "";
+/** Public (frontend) key, re-exported for the connectivity self-diagnosis. */
+export const supabaseAnonKey = supabaseReady ? rawAnon : "";
 
 /** PKCE flow → magic-link returns as `?code=…` (query), which plays nicely with
  *  our HashRouter. detectSessionInUrl exchanges it automatically on load. */

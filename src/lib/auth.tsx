@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 import type { Session } from "@supabase/supabase-js";
-import { supabase, supabaseReady, supabaseUrl } from "./supabase";
+import { supabase, supabaseReady, supabaseUrl, supabaseAnonKey } from "./supabase";
 
 interface AuthCtx {
   session: Session | null;
@@ -40,6 +40,21 @@ async function diagnoseNetwork(): Promise<string> {
   }
   if (!(await probe({ headers: { apikey: "probe" } }))) {
     return "The server is reachable, but something on this device intercepts the app's API calls. Typical culprits: ad blocker apps (e.g. AdGuard system app), antivirus web protection, or a privacy VPN. Pause it for a moment and try again.";
+  }
+  // Reads pass; does a write? Deliberately invalid signup: the server answers
+  // 422 without creating anything, we only care if the request survives the path.
+  const postOk = (async () => {
+    try {
+      await fetch(`${supabaseUrl}/auth/v1/signup`, {
+        method: "POST",
+        headers: { apikey: supabaseAnonKey, "Content-Type": "application/json" },
+        body: JSON.stringify({ email: "probe@example.com", password: "x" }),
+      });
+      return true;
+    } catch { return false; }
+  })();
+  if (!(await postOk)) {
+    return "Reads reach the server, but write requests from this network are blocked. Since this hits every device on this connection, it's the router or the internet provider's security filter. Quick check: try once via mobile hotspot; if it works there, the home network is the culprit.";
   }
   return "The connection just recovered. Please try again now.";
 }
