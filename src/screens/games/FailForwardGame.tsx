@@ -7,7 +7,7 @@ import GameIcon from "../../components/GameIcon";
 import { Glass } from "../../components/ds";
 import { MODULES } from "../../data/modules";
 import type { Game } from "../../data/games";
-import { FF_CARDS, FF_REFLECTIONS, FF_TAKEAWAYS, FF_LEVEL } from "../../data/failForward";
+import { FF_CARDS, FF_LEVEL } from "../../data/failForward";
 import { backBtn, primaryBtn, ghostBtn } from "./gameStyles";
 import GameBrief from "./GameBrief";
 
@@ -20,7 +20,6 @@ export default function FailForwardGame({ game: g }: { game: Game }) {
   const [phase, setPhase] = useState<"intro" | "card" | "end">("intro");
   const [seen, setSeen] = useState<number[]>([]);
   const [cardIdx, setCardIdx] = useState<number | null>(null);
-  const [refIdx, setRefIdx] = useState(0);
   const [count, setCount] = useState(0);
   const [secs, setSecs] = useState(TURN);
   const [revealed, setRevealed] = useState(false);
@@ -41,7 +40,6 @@ export default function FailForwardGame({ game: g }: { game: Game }) {
     if (pool.length === 0) { setSeen([]); pool = FF_CARDS.map((_, i) => i); }
     const pick = pool[Math.floor(Math.random() * pool.length)];
     setCardIdx(pick);
-    setRefIdx(Math.floor(Math.random() * FF_REFLECTIONS.length));
     setSeen((s) => [...s, pick]);
     if (!replacePass) setCount((c) => c + 1);
     setRevealed(false);
@@ -87,7 +85,7 @@ export default function FailForwardGame({ game: g }: { game: Game }) {
               <p style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 22, color: "var(--text-primary)", lineHeight: 1.35, margin: 0 }}>{card!.text}</p>
               <div style={{ marginTop: 20, padding: "14px 16px", borderRadius: 14, background: "rgba(28,26,23,0.05)" }}>
                 <div style={{ fontFamily: "var(--font-body)", fontSize: 12, fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase", color: "var(--text-muted)", marginBottom: 4 }}>Reflection</div>
-                <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 17, color: "var(--text-primary)" }}>{FF_REFLECTIONS[refIdx]}</div>
+                <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 17, color: "var(--text-primary)" }}>{card!.reflection}</div>
               </div>
               <textarea placeholder="Your spontaneous reaction (optional, just for you) …" style={{ width: "100%", marginTop: 14, minHeight: 70, resize: "vertical", borderRadius: 12, border: "1px solid var(--border-default)", background: "rgba(255,255,255,0.6)", padding: "12px 14px", fontFamily: "var(--font-body)", fontSize: 15, color: "var(--text-primary)", outline: "none", boxSizing: "border-box" }} />
 
@@ -96,10 +94,10 @@ export default function FailForwardGame({ game: g }: { game: Game }) {
               ) : (
                 <div style={{ marginTop: 14, padding: "16px 18px", borderRadius: 14, background: `color-mix(in srgb, ${accent} 12%, rgba(255,255,255,0.7))` }}>
                   <div style={{ fontFamily: "var(--font-body)", fontSize: 12, fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase", color: "var(--text-muted)", marginBottom: 6 }}>💡 Take this with you</div>
-                  <p style={{ fontFamily: "var(--font-body)", fontSize: 14.5, color: "var(--text-body)", lineHeight: 1.6, margin: 0 }}>{FF_TAKEAWAYS[refIdx].lesson}</p>
+                  <p style={{ fontFamily: "var(--font-body)", fontSize: 14.5, color: "var(--text-body)", lineHeight: 1.6, margin: 0 }}>{card!.lesson}</p>
                   <div style={{ marginTop: 10, padding: "10px 13px", borderRadius: 11, background: "rgba(255,255,255,0.75)", borderLeft: `3px solid ${accent}` }}>
                     <div style={{ fontFamily: "var(--font-body)", fontSize: 11.5, fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase", color: "var(--text-muted)", marginBottom: 3 }}>Steal this sentence</div>
-                    <div style={{ fontFamily: "var(--font-body)", fontSize: 14, fontStyle: "italic", color: "var(--text-primary)", lineHeight: 1.5 }}>“{FF_TAKEAWAYS[refIdx].steal}”</div>
+                    <div style={{ fontFamily: "var(--font-body)", fontSize: 14, fontStyle: "italic", color: "var(--text-primary)", lineHeight: 1.5 }}>“{card!.steal}”</div>
                   </div>
                 </div>
               )}
