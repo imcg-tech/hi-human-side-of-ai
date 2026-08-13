@@ -24,7 +24,12 @@ export const useAuth = () => useContext(Ctx);
  *  defense (better UX); the authoritative check lives server-side in Supabase
  *  (a BEFORE INSERT trigger on auth.users that rejects other domains). */
 export const ALLOWED_EMAIL_DOMAIN = "fluidogroup.com";
-export const isAllowedWorkEmail = (email: string) => email.trim().toLowerCase().endsWith("@" + ALLOWED_EMAIL_DOMAIN);
+/** Individually invited guests outside the company domain (exact addresses). */
+export const ALLOWED_GUEST_EMAILS = ["tcross@banyansoftware.com"];
+export const isAllowedWorkEmail = (email: string) => {
+  const e = email.trim().toLowerCase();
+  return e.endsWith("@" + ALLOWED_EMAIL_DOMAIN) || ALLOWED_GUEST_EMAILS.includes(e);
+};
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
