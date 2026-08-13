@@ -16,7 +16,7 @@ begin
   if new.email is null
      or (
        lower(new.email) not like '%@fluidogroup.com'
-       and lower(new.email) not in ('tcross@banyansoftware.com', 'julian.l.oppelt@gmail.com')
+       and lower(new.email) not in ('tcross@banyansoftware.com', 'julian.l.oppelt@gmail.com', 'isabel.gordalla@hotmail.de')
      ) then
     raise exception 'Sign-up is restricted to @fluidogroup.com email addresses.'
       using errcode = 'check_violation';
