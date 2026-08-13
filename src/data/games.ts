@@ -47,17 +47,29 @@ export const GAMES: Record<string, Game> = {
         { t: "Don't make such a big deal, it's easy.", ok: false, fb: "That belittles and shuts things down. The person doesn't feel heard." },
         { t: "You should just watch the tutorial.", ok: false, fb: "Advice, but too early. The person first wanted to be understood, not solved." },
         { t: "Sounds frustrating, you feel alone with it right now. Want to show me where you're stuck?", ok: true, fb: "Strong! You mirror the feeling and open the conversation. That's exactly how connection happens." },
-      ] },
+      ], learn: {
+        title: "Understand first, solve second",
+        text: "When someone shares a struggle, the first thing they're asking for is rarely a solution, it's the feeling of not being alone with it. Advice that comes too early says, between the lines: stop feeling, start executing. Mirror the feeling in one sentence first, then ask whether they want ideas at all. Half the time, being heard IS the solution.",
+        steal: "That sounds frustrating. Do you want ideas, or do you mainly need to vent for a minute?",
+      } },
       { speaker: { name: "Kenji", flag: "🇯🇵" }, msg: "I didn't say anything in the meeting, even though I had a different opinion.", options: [
         { t: "Why didn't you say something?!", ok: false, fb: "“Why” questions sound like an accusation and trigger justification." },
         { t: "So you had a different view but held it back. What stopped you?", ok: true, fb: "Perfect: paraphrase + open question. That invites, instead of judging." },
         { t: "Next time just say something.", ok: false, fb: "Well-meant, but it skips over the real concern." },
-      ] },
+      ], learn: {
+        title: "Swap “why” for “what”, and paraphrase first",
+        text: "“Why didn't you…?” sounds like a cross-examination, and people answer it with a defense, not the truth. Two small tools change everything: paraphrase what you heard (“so you saw it differently but held back”), which proves you listened and slows down your judgment, and ask a “what” question instead of a “why” question. “What stopped you?” opens a story. “Why didn't you?” opens a trial.",
+        steal: "So you saw it differently but held back. What would have made it easier to speak up?",
+      } },
       { speaker: { name: "Luca", flag: "🇮🇹" }, msg: "Since moving to home office, I somehow feel cut off from the team.", options: [
         { t: "Same here! For me it's actually like…", ok: false, fb: "You redirect to yourself, that takes the person's space away." },
         { t: "That's just remote, you have to push through it.", ok: false, fb: "Brushing it off signals: your feeling doesn't count." },
         { t: "Cut off, that sounds lonely. What would help you feel more connected again?", ok: true, fb: "Yes! Name the feeling + ask about the need. That's how real closeness happens." },
-      ] },
+      ], learn: {
+        title: "Support response beats shift response",
+        text: "“Same here! For me it's…” feels like empathy from the inside, but it quietly moves the spotlight from them to you, sociologists call it the shift response. The support response keeps the light on the other person: name their feeling, ask about their need. Your own story isn't forbidden, it just goes second, after theirs has been fully heard. Rule of thumb: in their moment, you're the flashlight, not the stage.",
+        steal: "That sounds lonely. What would help you feel more connected again?",
+      } },
     ],
   },
   ask: {
@@ -73,12 +85,20 @@ export const GAMES: Record<string, Game> = {
         { t: "Can someone take a look at my slides?", ok: false, fb: "“Someone” and no time: no one feels responsible, no deadline." },
         { t: "@Mara, could you review slides 3–5 by Thursday 12pm and tell me if the message is clear?", ok: true, fb: "Clear: recipient, exact what, concrete time. That lands." },
         { t: "Could use some feedback on the slides sometime, that'd be nice.", ok: false, fb: "“Sometime” is non-committal, that fizzles out." },
-      ] },
+      ], learn: {
+        title: "“Someone” is nobody: the anatomy of an ask that lands",
+        text: "A request to “someone” triggers the bystander effect: everyone assumes someone else will do it, so nobody does. A clear ask has three parts: one named person, a scoped what (slides 3 to 5, one concrete question), and a real by-when. Bonus effect: small, scoped asks are much easier to say yes to than “look at my slides”, you're lowering their cost, not just raising your clarity.",
+        steal: "@Name, could you review X by Thursday noon and answer me one question: is the message clear?",
+      } },
       { msg: "You'd like the docs updated. Which request is clearest?", options: [
         { t: "The docs are out of date.", ok: false, fb: "A statement, not a request, unclear who should do what." },
         { t: "Could someone maybe update the docs at some point?", ok: false, fb: "Lots of softeners, no recipient, no deadline." },
         { t: "@Kenji, can you update section 2 of the docs to the new process by Friday?", ok: true, fb: "Top: concrete person, concrete part, concrete deadline." },
-      ] },
+      ], learn: {
+        title: "A complaint is not a request",
+        text: "“The docs are out of date” describes a problem and assigns it to nobody, in remote teams that message simply evaporates. Softeners (“maybe”, “someone”, “at some point”) feel polite but really just hand the decision to no one. Every ambiguity in async work costs a full message round-trip, or worse, silence. The polite version isn't vagueness, it's clarity plus an exit: name the person, the exact part, the deadline, and invite pushback.",
+        steal: "@Name, can you update section 2 to the new process by Friday? If that doesn't fit your week, tell me what would.",
+      } },
     ],
   },
   feedback: {
@@ -86,20 +106,46 @@ export const GAMES: Record<string, Game> = {
     intro: "Good feedback follows the SBI method: Situation – Behavior – Impact. Choose the feedback that's appreciative AND clear.",
     closing: "SBI separates observation from judgment: concrete situation, observable behavior, its impact on you. That keeps feedback fair and acceptable.",
     howItWorks: ["Read a feedback situation", "Pick the version that's kind and clear", "Learn why it lands without triggering defense"],
-    concepts: ["SBI method", "Observation vs. judgment", "Praise that's specific"],
-    estMinutes: 3,
+    concepts: ["SBI method", "Observation vs. judgment", "Praise that's specific", "Receiving feedback", "Feedback timing"],
+    estMinutes: 5,
     metaTags: ["Private & solo"],
     rounds: [
       { msg: "A colleague often interrupts you in meetings. How do you give feedback?", options: [
         { t: "You're so dominant and never let anyone finish.", ok: false, fb: "A character judgment (“you are…”). That triggers defensiveness." },
         { t: "In the standup today you interrupted me twice before I was done. It threw me off.", ok: true, fb: "SBI at its purest: situation, concrete behavior, impact on you, without an attack." },
         { t: "You always talk over everyone.", ok: false, fb: "“Always” generalizes and describes no concrete behavior." },
-      ] },
+      ], learn: {
+        title: "Behavior can change, character can only defend itself",
+        text: "The moment feedback describes who someone IS (“dominant”, “sloppy”, “difficult”), the only possible answer is defense, because nobody can change their character by Friday. Describe what happened and what it did to you instead: a time, a behavior, an impact. That version is checkable, answerable, and changeable. Watch for the two smuggle-words “always” and “never”, they turn any observation back into a verdict.",
+        steal: "In today's standup I was interrupted twice before finishing, and it threw me off. Can we let each other land the point?",
+      } },
       { msg: "You want to give positive feedback (which often gets missed!). Which is most effective?", options: [
         { t: "Well done, keep it up!", ok: false, fb: "Nice, but vague, the person doesn't know what exactly was good." },
         { t: "In the demo yesterday you explained the client's question calmly and in simple words. That saved us the deal.", ok: true, fb: "Praise works with SBI too: concrete, observable, with impact. That reinforces specifically." },
         { t: "You're just a natural.", ok: false, fb: "Sounds nice, but it's unspecific and hard to repeat." },
-      ] },
+      ], learn: {
+        title: "Vague praise is candy, specific praise is a map",
+        text: "“Well done” feels good for a minute; a concrete description of what worked tells the person exactly what to do more of. Same SBI skeleton as criticism: situation, behavior, impact. Two habits make praise powerful: name the impact (“that saved us the deal”), and deliver it soon, not saved up for the annual review. Healthy teams run on far more specific positive feedback than negative, most run a deficit.",
+        steal: "In the demo yesterday, the way you answered the client calmly in simple words saved us the deal. More of exactly that.",
+      } },
+      { msg: "Your team lead gives you critical feedback that stings, and part of you thinks it's unfair. What's the strongest reaction in the moment?", options: [
+        { t: "I defend myself point by point, right away, so the wrong picture doesn't stick.", ok: false, fb: "Understandable, but in the heat you defend instead of listen, and the conversation becomes a court case." },
+        { t: "I say nothing, swallow it, and quietly resent it.", ok: false, fb: "The sting stays, the disagreement goes underground, and nothing gets clarified or corrected." },
+        { t: "I ask for the concrete situation behind it, say thanks, and take a day before I respond.", ok: true, fb: "Receiving is a skill too: get the data, buy time, respond when your cortex is back in charge." },
+      ], learn: {
+        title: "Receiving feedback is a skill of its own",
+        text: "You don't have to agree with feedback to receive it well. Three moves: ask for the concrete situation behind it (turn a verdict back into data), thank the person for the risk they took saying it, and give yourself 24 hours before responding. Agreement is optional, curiosity is not. The rebuttal you write in your head during their sentence is the one you'll regret.",
+        steal: "Thanks, I want to take this seriously. Which situation is this based on? And give me a day to sit with it, then let's talk details.",
+      } },
+      { msg: "Something a colleague did last month still bothers you. The annual review is coming up in three weeks. When do you raise it?", options: [
+        { t: "In the annual review, that's what it's for.", ok: false, fb: "By then it's cold: the person can't remember the details, and it lands as a stored-up grievance." },
+        { t: "Not at all. After a month it would be petty to bring it up.", ok: false, fb: "The bother doesn't expire, it compounds. Unspoken feedback tends to leak out sideways as irritation." },
+        { t: "This week, in a short 1:1: small, fresh and private beats big, old and official.", ok: true, fb: "Feedback has a shelf life. Small and soon keeps it a conversation, saved-up makes it a case file." },
+      ], learn: {
+        title: "Feedback has a shelf life",
+        text: "The value of feedback decays fast: fresh, it's a helpful observation, aged, it's an indictment with exhibits. Waiting for the official moment (review season) also teaches your team that feedback is an event instead of a habit. The rule of thumb: if it still bothers you after two days, it earns a two-minute conversation this week, private and casual. Reviews are for patterns, not for surprises.",
+        steal: "Do you have two minutes today? I'd rather mention something small now than let it grow into something big.",
+      } },
     ],
   },
   culture: {
@@ -115,22 +161,38 @@ export const GAMES: Record<string, Game> = {
         { t: "I check in: “Am I reading this right, is something about my feedback not sitting well? How would you put it?”", ok: true, fb: "Read correctly: in indirect cultures, very direct criticism quickly feels hurtful. Checking in opens things up again." },
         { t: "His silence means agreement, I'll just carry on.", ok: false, fb: "A fallacy. Silence can be irritation or saving face, not agreement." },
         { t: "He's probably offended, typically sensitive.", ok: false, fb: "That takes it personally and judges. It's a difference in feedback norms, not a character flaw." },
-      ] },
+      ], learn: {
+        title: "Criticism has a dialect",
+        text: "Cultures differ hugely in how criticism is packaged: some say “this is wrong” and mean it kindly, others wrap it in three softeners and expect you to hear the message anyway. Neither is more honest, they're different dialects. Two rules travel well: never assume silence means agreement, and never deliver sharp criticism in front of the group when you're unsure of the norm. When a reaction surprises you, check in privately instead of diagnosing character.",
+        steal: "Am I reading this right, did something about my feedback not sit well? How would you have put it?",
+      } },
       { speaker: { name: "Luca", flag: "🇮🇹" }, dim: "Time & planning: linear ↔ flexible", msg: "The meeting starts at 5:00pm. Luca joins at 5:08, completely relaxed, but for you that's too late.", options: [
         { t: "I raise it with the team: “Let's agree together on what ‘on time' means for us.”", ok: true, fb: "Strong: instead of judging, you make the expectation explicit. That resolves time conflicts for good." },
         { t: "I make a pointed remark about his lateness.", ok: false, fb: "Shaming worsens the relationship. Flexible time cultures often don't see 5:08 as “late”." },
         { t: "I make a mental note: Luca is unreliable.", ok: false, fb: "A snap judgment. It's a different sense of time, not a lack of reliability." },
-      ] },
+      ], learn: {
+        title: "“On time” is a team setting, not a universal truth",
+        text: "Some cultures treat a start time as a precise commitment, others as a friendly approximation, and both sides think they're being normal. The mistake isn't 5:08, it's that the team never defined what “on time” means. Norms that stay implicit get enforced through resentment; norms made explicit get followed. One five-minute team agreement beats months of quiet judging.",
+        steal: "Let's agree what “on time” means for this team, so nobody has to guess or judge.",
+      } },
       { speaker: { name: "Amara", flag: "🇳🇬" }, dim: "Deciding: top-down ↔ consensus", msg: "You expect the team to decide for itself. Amara, however, visibly waits for a clear call from the team lead.", options: [
         { t: "I clarify openly: “Do we want to decide this together, or would you prefer a clear directive?”", ok: true, fb: "Exactly: expectations of “leadership” vary a lot by culture. Making it explicit creates clarity for everyone." },
         { t: "I think: she's just not self-reliant.", ok: false, fb: "A misreading. In more hierarchical cultures, waiting for a directive is respectful, not passive." },
         { t: "I ignore it and just decide alone.", ok: false, fb: "Wastes the chance to agree on a shared approach, the uncertainty stays." },
-      ] },
+      ], learn: {
+        title: "Waiting can be respect, not passivity",
+        text: "In egalitarian cultures, jumping in with your opinion signals engagement. In more hierarchical ones, waiting for the senior person's call signals respect, and speaking over it would be rude. Neither person is doing it wrong, they're following different scripts. When you notice hesitation, don't diagnose confidence, clarify the process: who decides this, and how? Saying the invisible rule out loud is the whole fix.",
+        steal: "Do we want to decide this together, or would a clear call from one person help more here?",
+      } },
       { speaker: { name: "Priya", flag: "🇮🇳" }, dim: "Trust: task-based ↔ relationship-based", msg: "Before the actual topic, Priya first wants to chat and connect personally. For you that's too much lead-up.", options: [
         { t: "I take the few minutes, relationship is the basis for the work here.", ok: true, fb: "Right: in relationship-based cultures, trust grows through the person. That's not lost time, it's the foundation." },
         { t: "I interrupt and get straight to the point.", ok: false, fb: "Can come across as cold and rude and cost trust, especially when trust is built through relationship." },
         { t: "Small talk is a waste of time, I think.", ok: false, fb: "That's your norm. For others, that's exactly the trust-building that makes good collaboration possible." },
-      ] },
+      ], learn: {
+        title: "Two currencies of trust",
+        text: "Task-based cultures build trust through work: you deliver reliably, so I trust you. Relationship-based cultures build it through the person: I know you, so I trust your work. If you're task-based, small talk feels like the queue before the real thing; for your counterpart, it IS the real thing, the infrastructure everything else runs on. Five personal minutes at the start of a call are often the highest-yield minutes in it.",
+        steal: "Before we jump into the agenda: how have you been since we last spoke?",
+      } },
     ],
   },
   leadership: {

@@ -15,8 +15,8 @@ export default function QuizGame({ game: g }: { game: Game }) {
   const navigate = useNavigate();
   const [phase, setPhase] = useState<"intro" | "play" | "end">("intro");
   const [round, setRound] = useState(0);
-  const [score, setScore] = useState(0);
-  const [picked, setPicked] = useState<number | null>(null);
+  // One remembered answer per round, so going back never double-counts the score.
+  const [answers, setAnswers] = useState<(number | null)[]>([]);
 
   const scope = useRef<HTMLDivElement>(null);
   useGSAP(() => { gsap.from(".gm-stage", { y: 20, duration: 0.38, ease: "power2.out" }); }, { dependencies: [phase, round], scope });
@@ -24,17 +24,19 @@ export default function QuizGame({ game: g }: { game: Game }) {
   const accent = MODULES.find((m) => m.id === g.category)?.color ?? "var(--brand)";
   const total = g.rounds.length;
   const r = g.rounds[round];
+  const picked = answers[round] ?? null;
+  const score = g.rounds.reduce((s, rr, i) => s + (answers[i] != null && rr.options[answers[i]!].ok ? 1 : 0), 0);
 
   function choose(i: number) {
     if (picked !== null) return;
-    setPicked(i);
-    if (r.options[i].ok) setScore((s) => s + 1);
+    setAnswers((a) => { const n = [...a]; n[round] = i; return n; });
   }
   function next() {
-    if (round < total - 1) { setRound(round + 1); setPicked(null); }
+    if (round < total - 1) setRound(round + 1);
     else setPhase("end");
   }
-  function restart() { setRound(0); setScore(0); setPicked(null); setPhase("intro"); }
+  function prev() { if (round > 0) setRound(round - 1); }
+  function restart() { setRound(0); setAnswers([]); setPhase("intro"); }
 
   return (
     <div ref={scope} style={{ height: "100%", overflowY: "auto", padding: "8px 4px 40px", display: "flex", flexDirection: "column" }}>
@@ -115,11 +117,18 @@ export default function QuizGame({ game: g }: { game: Game }) {
               </Glass>
             )}
 
-            {picked !== null && (
-              <button onClick={next} style={{ ...primaryBtn, marginTop: 18, width: "100%" }}>
-                {round < total - 1 ? "Next round" : "See result"} <Icon name="arrowRight" size={18} />
-              </button>
-            )}
+            <div style={{ display: "flex", gap: 12, marginTop: 18 }}>
+              {round > 0 && (
+                <button onClick={prev} style={{ ...ghostBtn, flexShrink: 0 }}>
+                  <Icon name="arrowLeft" size={16} /> Back
+                </button>
+              )}
+              {picked !== null && (
+                <button onClick={next} style={{ ...primaryBtn, flex: 1 }}>
+                  {round < total - 1 ? "Next round" : "See result"} <Icon name="arrowRight" size={18} />
+                </button>
+              )}
+            </div>
           </div>
         </div>
       )}

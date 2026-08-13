@@ -13,6 +13,14 @@ import GameBrief from "./GameBrief";
 
 const TURN = 60; // seconds per card (visual, no penalty)
 
+/* Self-check instead of AI analysis (fully offline, nothing leaves the device):
+   the three marks of a good recovery, to hold your own answer against. */
+const SELF_CHECKS = [
+  "I named the mistake plainly, no excuses attached",
+  "My answer contains a concrete fix or next step",
+  "Nobody else gets blamed in my version",
+];
+
 export default function FailForwardGame({ game: g }: { game: Game }) {
   const navigate = useNavigate();
   const accent = MODULES.find((m) => m.id === g.category)?.color ?? "var(--brand)";
@@ -23,6 +31,7 @@ export default function FailForwardGame({ game: g }: { game: Game }) {
   const [count, setCount] = useState(0);
   const [secs, setSecs] = useState(TURN);
   const [revealed, setRevealed] = useState(false);
+  const [checks, setChecks] = useState<boolean[]>([false, false, false]);
 
   const scope = useRef<HTMLDivElement>(null);
   useGSAP(() => { gsap.from(".ff-card", { y: 18, scale: 0.96, duration: 0.4, ease: "back.out(1.6)" }); }, { dependencies: [cardIdx], scope });
@@ -43,6 +52,7 @@ export default function FailForwardGame({ game: g }: { game: Game }) {
     setSeen((s) => [...s, pick]);
     if (!replacePass) setCount((c) => c + 1);
     setRevealed(false);
+    setChecks([false, false, false]);
     setPhase("card");
   }
 
@@ -55,7 +65,7 @@ export default function FailForwardGame({ game: g }: { game: Game }) {
         <Icon name="arrowLeft" size={16} /> {MODULES.find((m) => m.id === g.category)?.title ?? "Module"}
       </button>
 
-      {phase === "intro" ? (
+      {phase === "intro" && (
         <div style={{ maxWidth: 600, margin: "auto", width: "100%" }}>
           <Glass pad={36}>
             <div style={{ width: 64, height: 64, borderRadius: 18, background: accent, display: "grid", placeItems: "center" }}><GameIcon game={g} size={36} /></div>
@@ -69,7 +79,9 @@ export default function FailForwardGame({ game: g }: { game: Game }) {
             </div>
           </Glass>
         </div>
-      ) : (
+      )}
+
+      {phase === "card" && card && (
         <div style={{ maxWidth: 600, margin: "auto", width: "100%" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
             <span style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 14, color: "var(--text-secondary)" }}>🃏 {count} {count === 1 ? "card" : "cards"} drawn</span>
@@ -98,6 +110,35 @@ export default function FailForwardGame({ game: g }: { game: Game }) {
                   <div style={{ marginTop: 10, padding: "10px 13px", borderRadius: 11, background: "rgba(255,255,255,0.75)", borderLeft: `3px solid ${accent}` }}>
                     <div style={{ fontFamily: "var(--font-body)", fontSize: 11.5, fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase", color: "var(--text-muted)", marginBottom: 3 }}>Steal this sentence</div>
                     <div style={{ fontFamily: "var(--font-body)", fontSize: 14, fontStyle: "italic", color: "var(--text-primary)", lineHeight: 1.5 }}>“{card!.steal}”</div>
+                  </div>
+
+                  {/* Self-check: hold your own reaction against the three marks of a good recovery. */}
+                  <div style={{ marginTop: 14 }}>
+                    <div style={{ fontFamily: "var(--font-body)", fontSize: 11.5, fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase", color: "var(--text-muted)", marginBottom: 8 }}>Now check your own answer</div>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                      {SELF_CHECKS.map((c, i) => (
+                        <button key={i} onClick={() => setChecks((p) => p.map((x, j) => (j === i ? !x : x)))}
+                          style={{ display: "flex", alignItems: "flex-start", gap: 10, textAlign: "left", padding: "10px 12px", borderRadius: 11, cursor: "pointer",
+                            border: checks[i] ? `1.5px solid ${accent}` : "1.5px solid var(--border-default)",
+                            background: checks[i] ? "rgba(255,255,255,0.85)" : "rgba(255,255,255,0.5)",
+                            fontFamily: "var(--font-body)", fontSize: 14, color: "var(--text-primary)", lineHeight: 1.4 }}>
+                          <span style={{ width: 20, height: 20, borderRadius: 7, flexShrink: 0, display: "grid", placeItems: "center", background: checks[i] ? accent : "transparent", border: checks[i] ? "none" : "2px solid var(--border-strong)" }}>
+                            {checks[i] && <Icon name="check" size={13} color="#fff" />}
+                          </span>
+                          {c}
+                        </button>
+                      ))}
+                    </div>
+                    {checks.every(Boolean) && (
+                      <div style={{ marginTop: 10, fontFamily: "var(--font-body)", fontSize: 14, color: "var(--text-body)", lineHeight: 1.5 }}>
+                        ✨ That's a textbook recovery: owned, fixed, nobody thrown under the bus. That's the version to use in real life.
+                      </div>
+                    )}
+                    {revealed && !checks.every(Boolean) && checks.some(Boolean) && (
+                      <div style={{ marginTop: 10, fontFamily: "var(--font-body)", fontSize: 13.5, color: "var(--text-secondary)", lineHeight: 1.5 }}>
+                        The unchecked ones are your edit: one sentence usually fixes them.
+                      </div>
+                    )}
                   </div>
                 </div>
               )}
