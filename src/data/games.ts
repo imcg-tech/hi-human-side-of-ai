@@ -2,11 +2,15 @@
    Each round: a scenario + answer options; ok=true is the confident/connecting answer. */
 
 export interface GameOption { t: string; ok: boolean; fb: string; }
+/** Teaching block shown after answering: the principle behind the round plus a
+ *  ready-to-use sentence people can take into their next real conversation. */
+export interface GameLearn { title: string; text: string; steal?: string; }
 export interface GameRound {
   msg: string;
   options: GameOption[];
   speaker?: { name: string; flag?: string };
   dim?: string;
+  learn?: GameLearn;
 }
 export type GameKind = "quiz" | "commonground" | "signalnoise" | "failforward" | "crisisroom" | "feedbackclass";
 
@@ -143,22 +147,38 @@ export const GAMES: Record<string, Game> = {
         { t: "From now on I check every intermediate step daily.", ok: false, fb: "Consequence: micromanagement. It solves the problem short-term, but undermines trust and ownership." },
         { t: "I just take the task off their plate.", ok: false, fb: "Consequence: you become the bottleneck and the person learns nothing. Overload is guaranteed." },
         { t: "I seek a calm conversation: “What's holding you up? What do you need to hit the deadline?”", ok: true, fb: "Confidently led (GROW model): understand first, then clarify the solution & responsibility together. Coach instead of punish." },
-      ] },
+      ], learn: {
+        title: "The GROW model, coaching in 4 questions",
+        text: "Instead of fixing it for them, walk them through four questions: Goal (what should be true by when?), Reality (what's actually in the way?), Options (what could you try?), Will (what will you do, by when?). The person keeps ownership, you get reliability back. Rule of thumb: if you're talking more than they are, you're commanding, not coaching.",
+        steal: "What would need to be true for you to hit the next deadline comfortably?",
+      } },
       { dim: "Moderating conflict", msg: "Two colleagues clash in the meeting, the mood tips. Everyone's watching how you react.", options: [
         { t: "I let it run, they can sort it out among themselves.", ok: false, fb: "Consequence: the conflict keeps smoldering and poisons the team dynamic. Looking away is also a decision." },
         { t: "I name it calmly: “I notice two views are colliding here, let's hear both of them out clearly.”", ok: true, fb: "Confident: you make the conflict discussable without taking sides. Creates psychological safety." },
         { t: "I side with the person who's usually right on the facts.", ok: false, fb: "Consequence: taking sides damages trust and reinforces camp-building." },
-      ] },
+      ], learn: {
+        title: "Name the dynamic, not the guilty party",
+        text: "In a heated moment the team doesn't need a judge, it needs someone who makes the situation speakable. Describe what's happening on the process level (“two views are colliding”) instead of who's right. That lowers the temperature, keeps both faces intact, and signals: conflict is allowed here, contempt is not. That's the core of psychological safety.",
+        steal: "I notice we have two strong views here. Let's give each one two minutes, uninterrupted.",
+      } },
       { dim: "Difficult feedback", msg: "The work quality of an otherwise strong colleague has noticeably dropped. How do you raise it?", options: [
         { t: "I mention it casually in the team call so everyone hears.", ok: false, fb: "Consequence: public criticism shames and destroys safety. Criticism belongs one-on-one." },
         { t: "I say nothing, she'll surely notice herself.", ok: false, fb: "Consequence: the problem grows, and you miss the chance to support early." },
         { t: "I ask for a 1:1 and use SBI: concrete situation, observed behavior, its impact, and I ask questions.", ok: true, fb: "Confident (SBI + 1:1): concrete, appreciative, private. That keeps feedback acceptable and solution-oriented." },
-      ] },
+      ], learn: {
+        title: "SBI: feedback that lands instead of hurts",
+        text: "SBI = Situation, Behavior, Impact. Name the concrete situation (“in Tuesday's review”), the observable behavior (“the numbers were missing”), and the impact on you or the team (“we couldn't decide”). No character judgments (“you're sloppy”), no “always/never”. Then hand over the microphone: ask what's going on. Praise works with SBI too, and lands twice as well.",
+        steal: "In Tuesday's review the numbers were missing, so we couldn't decide. What happened, and how can I help?",
+      } },
       { dim: "Deciding under uncertainty", msg: "You have to set a direction, but data is still missing. The team looks to you.", options: [
         { t: "I wait until we really have all the information.", ok: false, fb: "Consequence: paralysis. Perfect data rarely exists, hesitating blocks the whole team." },
         { t: "I decide quickly alone and communicate it as final.", ok: false, fb: "Consequence: pace, yes, but without input & without a way back you risk a wrong call and resistance." },
         { t: "I make a deliberately reversible decision, explain the assumption and set a review date.", ok: true, fb: "Confident: able to act despite uncertainty. Reversible decisions + transparency = pace without recklessness." },
-      ] },
+      ], learn: {
+        title: "One-way vs. two-way doors",
+        text: "Sort decisions into two kinds: one-way doors (hard to undo, decide slowly and carefully) and two-way doors (reversible, decide fast and learn). Most everyday decisions are two-way doors treated like one-way doors. Say your assumption out loud, pick a review date, and commit until then. Speed comes from reversibility, not from certainty.",
+        steal: "Let's treat this as a two-way door: we go with option A, assumption X, and we review it in two weeks.",
+      } },
     ],
   },
 };

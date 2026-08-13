@@ -19,7 +19,16 @@ const BREATH_MS = 5500; // one full breath, matches the pulse animation
    fact vs. story lives in Clear the Air, which we hand over to at the end. */
 type Phase = "intro" | "steady" | "feeling" | "decide" | "close";
 
-const FEELINGS = ["Angry", "Hurt", "Ignored", "Embarrassed", "Treated unfairly", "Under pressure"];
+/* Every feeling gets its own empathic echo: validate it, soften it, then turn
+   the gaze inward with one small question. */
+const FEELINGS: Array<{ label: string; echo: string }> = [
+  { label: "Angry", echo: "Anger is fair. It usually flares when something you care about got stepped on. Listen inwards: what exactly was it? And will it still burn in 10 minutes, or is it already cooling?" },
+  { label: "Hurt", echo: "That stings, and it's okay that it does. Hurt often just means someone's opinion matters to you. Ask yourself: is this about what they said, or what you made it mean?" },
+  { label: "Ignored", echo: "Being overlooked feels lonely. Most of the time it says more about their attention than about your worth. What did you want them to see? That's worth asking for, calmly." },
+  { label: "Embarrassed", echo: "Everyone knows that heat in the face. From the inside it feels huge; from the outside it's usually barely visible. Honestly: will anyone else still think about it in 10 minutes?" },
+  { label: "Treated unfairly", echo: "Unfairness is hard to swallow. That's your sense of justice doing its job. Listen inwards: what would fair have looked like? Naming that is your next step, not the comeback." },
+  { label: "Under pressure", echo: "A lot at once. Pressure narrows your view until everything looks urgent. One more slow breath, then ask: what is truly urgent right now, and what only feels that way?" },
+];
 
 export default function CoolDown({ onComplete, embedded = false }: { onComplete?: () => void; embedded?: boolean }) {
   const navigate = useNavigate();
@@ -32,8 +41,8 @@ export default function CoolDown({ onComplete, embedded = false }: { onComplete?
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const reduce = typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
 
-  // Ambient sound for every phase after the intro; gentle fade-in, hard stop on leave.
-  const soundOn = phase !== "intro" && phase !== "close";
+  // Ambient sound only during the breathing phase; it stops when the breaths are done.
+  const soundOn = phase === "steady";
   useEffect(() => {
     if (!soundOn) { audioRef.current?.pause(); return; }
     if (!audioRef.current) {
@@ -133,20 +142,20 @@ export default function CoolDown({ onComplete, embedded = false }: { onComplete?
             <p style={{ fontFamily: "var(--font-body)", fontSize: 14, color: "var(--text-secondary)", margin: "0 0 18px", lineHeight: 1.5 }}>Just tap it. Putting a name on a feeling measurably turns its volume down.</p>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginBottom: 18 }}>
               {FEELINGS.map((f) => {
-                const on = feeling === f;
+                const on = feeling === f.label;
                 return (
-                  <button key={f} onClick={() => setFeeling(on ? null : f)}
+                  <button key={f.label} onClick={() => setFeeling(on ? null : f.label)}
                     style={{ padding: "11px 18px", borderRadius: 999, cursor: "pointer", fontFamily: "var(--font-body)", fontSize: 14.5, fontWeight: 600,
                       color: on ? "#fff" : "var(--text-primary)", background: on ? ACCENT_DEEP : "rgba(255,255,255,0.6)",
                       border: on ? `1.5px solid ${ACCENT_DEEP}` : "1.5px solid var(--border-strong)" }}>
-                    {f}
+                    {f.label}
                   </button>
                 );
               })}
             </div>
             {feeling && (
-              <div style={{ padding: "14px 16px", borderRadius: 14, background: "rgba(199,125,147,0.08)", border: "1px solid rgba(199,125,147,0.25)", fontFamily: "var(--font-body)", fontSize: 14.5, color: "var(--text-body)", lineHeight: 1.55, marginBottom: 18 }}>
-                Feeling <strong style={{ color: ACCENT_DEEP }}>{feeling.toLowerCase()}</strong> makes sense. It's information, not an instruction.
+              <div style={{ padding: "14px 16px", borderRadius: 14, background: "rgba(199,125,147,0.08)", border: "1px solid rgba(199,125,147,0.25)", fontFamily: "var(--font-body)", fontSize: 14.5, color: "var(--text-body)", lineHeight: 1.6, marginBottom: 18 }}>
+                {FEELINGS.find((f) => f.label === feeling)?.echo}
               </div>
             )}
             <button onClick={() => setPhase("decide")} disabled={!feeling} style={{ ...primaryBtn, width: "100%", opacity: feeling ? 1 : 0.45, cursor: feeling ? "pointer" : "not-allowed" }}>Next <Icon name="arrowRight" size={18} /></button>

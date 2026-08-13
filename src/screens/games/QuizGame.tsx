@@ -101,6 +101,20 @@ export default function QuizGame({ game: g }: { game: Game }) {
               })}
             </div>
 
+            {picked !== null && r.learn && (
+              <Glass pad={22} style={{ marginTop: 16, background: `color-mix(in srgb, ${accent} 10%, rgba(255,255,255,0.7))` }}>
+                <div style={{ fontFamily: "var(--font-body)", fontSize: 12, fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase", color: "var(--text-muted)", marginBottom: 6 }}>💡 Take this with you</div>
+                <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 17, color: "var(--text-primary)", marginBottom: 8, lineHeight: 1.3 }}>{r.learn.title}</div>
+                <p style={{ fontFamily: "var(--font-body)", fontSize: 14.5, color: "var(--text-body)", lineHeight: 1.6, margin: 0 }}>{r.learn.text}</p>
+                {r.learn.steal && (
+                  <div style={{ marginTop: 12, padding: "12px 14px", borderRadius: 12, background: "rgba(255,255,255,0.75)", borderLeft: `3px solid ${accent}` }}>
+                    <div style={{ fontFamily: "var(--font-body)", fontSize: 11.5, fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase", color: "var(--text-muted)", marginBottom: 4 }}>Steal this sentence</div>
+                    <div style={{ fontFamily: "var(--font-body)", fontSize: 14.5, fontStyle: "italic", color: "var(--text-primary)", lineHeight: 1.5 }}>“{r.learn.steal}”</div>
+                  </div>
+                )}
+              </Glass>
+            )}
+
             {picked !== null && (
               <button onClick={next} style={{ ...primaryBtn, marginTop: 18, width: "100%" }}>
                 {round < total - 1 ? "Next round" : "See result"} <Icon name="arrowRight" size={18} />
