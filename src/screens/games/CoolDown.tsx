@@ -16,6 +16,7 @@ const AMBIENT_VOL = 0.22;
 type Phase = "intro" | "steady" | "split" | "need" | "decide" | "close";
 
 const label: React.CSSProperties = { fontFamily: "var(--font-body)", fontSize: 12, fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase", color: "var(--text-muted)", marginBottom: 8 };
+const exampleBox: React.CSSProperties = { padding: "12px 14px", borderRadius: 12, background: "rgba(199,125,147,0.08)", border: "1px solid rgba(199,125,147,0.25)", fontFamily: "var(--font-body)", fontSize: 13.5, color: "var(--text-secondary)", lineHeight: 1.55, marginBottom: 18 };
 const taArea: React.CSSProperties = { width: "100%", minHeight: 74, resize: "vertical", boxSizing: "border-box", borderRadius: 14, border: "1.5px solid var(--border-strong)", background: "rgba(255,255,255,0.7)", padding: "12px 14px", fontFamily: "var(--font-body)", fontSize: 15.5, color: "var(--text-primary)", outline: "none", lineHeight: 1.5 };
 
 export default function CoolDown({ onComplete, embedded = false }: { onComplete?: () => void; embedded?: boolean }) {
@@ -91,7 +92,8 @@ export default function CoolDown({ onComplete, embedded = false }: { onComplete?
             </div>
             <style>{"@keyframes cdpulse{0%,100%{transform:scale(0.82)}50%{transform:scale(1.06)}}"}</style>
             <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 24, color: "var(--text-primary)", margin: "0 0 10px" }}>Let the heat drop a notch</h2>
-            <p style={{ fontFamily: "var(--font-body)", fontSize: 16, color: "var(--text-secondary)", margin: "0 auto 28px", maxWidth: 340, lineHeight: 1.5 }}>Unclench your jaw. One slow breath out. There's no message you have to send this second.</p>
+            <p style={{ fontFamily: "var(--font-body)", fontSize: 16, color: "var(--text-secondary)", margin: "0 auto 12px", maxWidth: 340, lineHeight: 1.5 }}>Unclench your jaw. One slow breath out. There's no message you have to send this second.</p>
+            <p style={{ fontFamily: "var(--font-body)", fontSize: 14, color: "var(--text-muted)", margin: "0 auto 28px", maxWidth: 340, lineHeight: 1.5 }}>Keep the moment that stung in mind, a message, a comment, a look. We'll take it apart together in the next step.</p>
             <button onClick={() => setPhase("split")} style={{ ...primaryBtn, width: "100%", maxWidth: 340 }}>I'm a bit steadier <Icon name="arrowRight" size={18} /></button>
           </div>
         )}
@@ -100,14 +102,18 @@ export default function CoolDown({ onComplete, embedded = false }: { onComplete?
           <Glass pad={32}>
             <div style={label}>Fact vs. story</div>
             <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 22, color: "var(--text-primary)", margin: "0 0 6px", lineHeight: 1.3 }}>Split what happened from the story about it.</h2>
-            <p style={{ fontFamily: "var(--font-body)", fontSize: 14, color: "var(--text-secondary)", margin: "0 0 18px", lineHeight: 1.5 }}>The heat usually lives in the story, not the fact. Naming both takes the edge off.</p>
+            <p style={{ fontFamily: "var(--font-body)", fontSize: 14, color: "var(--text-secondary)", margin: "0 0 14px", lineHeight: 1.5 }}>The heat usually lives in the story, not the fact. Naming both takes the edge off.</p>
+            <div style={exampleBox}>
+              <strong>Example:</strong> Sam replied to your proposal with just "ok."<br />
+              <strong>The fact:</strong> Sam wrote "ok." <strong style={{ color: ACCENT_DEEP }}>The story:</strong> "Sam doesn't value my work."
+            </div>
             <div style={{ marginBottom: 16 }}>
               <div style={{ fontFamily: "var(--font-body)", fontSize: 14.5, fontWeight: 600, color: "var(--text-primary)", marginBottom: 6 }}>The fact, just what was said or done</div>
-              <textarea value={fact} onChange={(e) => setFact(e.target.value)} placeholder="Observable, no interpretation …" autoFocus style={taArea} />
+              <textarea value={fact} onChange={(e) => setFact(e.target.value)} placeholder="What a camera would have recorded …" autoFocus style={taArea} />
             </div>
             <div>
               <div style={{ fontFamily: "var(--font-body)", fontSize: 14.5, fontWeight: 600, color: ACCENT_DEEP, marginBottom: 6 }}>The story, what I'm making it mean</div>
-              <textarea value={story} onChange={(e) => setStory(e.target.value)} placeholder="“They don't respect me”, “this always happens” …" style={taArea} />
+              <textarea value={story} onChange={(e) => setStory(e.target.value)} placeholder="What you're reading into it, e.g. “they don't respect me” …" style={taArea} />
             </div>
             <button onClick={() => setPhase("need")} style={{ ...primaryBtn, width: "100%", marginTop: 18 }}>Next <Icon name="arrowRight" size={18} /></button>
           </Glass>
@@ -116,13 +122,15 @@ export default function CoolDown({ onComplete, embedded = false }: { onComplete?
         {phase === "need" && (
           <Glass pad={32}>
             <div style={label}>Underneath the heat</div>
+            <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 22, color: "var(--text-primary)", margin: "0 0 6px", lineHeight: 1.3 }}>Two quick questions.</h2>
+            <p style={{ fontFamily: "var(--font-body)", fontSize: 14, color: "var(--text-secondary)", margin: "0 0 18px", lineHeight: 1.5 }}>Anger usually guards something you need. And the other person usually has a less dramatic reason than your story says.</p>
             <div style={{ marginBottom: 16 }}>
               <div style={{ fontFamily: "var(--font-body)", fontSize: 14.5, fontWeight: 600, color: "var(--text-primary)", marginBottom: 6 }}>What do you actually need here?</div>
-              <textarea value={need} onChange={(e) => setNeed(e.target.value)} placeholder="To be heard? An apology? Clarity? A change?" autoFocus style={taArea} />
+              <textarea value={need} onChange={(e) => setNeed(e.target.value)} placeholder="e.g. to be heard, an apology, clarity, a change …" autoFocus style={taArea} />
             </div>
             <div>
               <div style={{ fontFamily: "var(--font-body)", fontSize: 14.5, fontWeight: 600, color: "var(--text-primary)", marginBottom: 6 }}>A more generous read of them</div>
-              <textarea value={generous} onChange={(e) => setGenerous(e.target.value)} placeholder="What else could explain it, if you assumed good intent?" style={taArea} />
+              <textarea value={generous} onChange={(e) => setGenerous(e.target.value)} placeholder="e.g. maybe Sam was in a rush and it wasn't about me …" style={taArea} />
             </div>
             <button onClick={() => setPhase("decide")} style={{ ...primaryBtn, width: "100%", marginTop: 18 }}>Next <Icon name="arrowRight" size={18} /></button>
           </Glass>
