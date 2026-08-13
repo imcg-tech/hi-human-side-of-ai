@@ -5,6 +5,7 @@ import Icon from "../../components/Icon";
 import { GAMES } from "../../data/games";
 import { backBtn, primaryBtn, ghostBtn } from "./gameStyles";
 import GameBrief from "./GameBrief";
+import PrivacyHint from "../../components/PrivacyHint";
 
 const ACCENT = "var(--candy-pink)";
 const ACCENT_DEEP = "#C77D93";
@@ -139,7 +140,8 @@ export default function CoolDown({ onComplete, embedded = false }: { onComplete?
           <Glass pad={32}>
             <div style={{ fontFamily: "var(--font-body)", fontSize: 12, fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase", color: "var(--text-muted)", marginBottom: 8 }}>Name it to tame it</div>
             <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 22, color: "var(--text-primary)", margin: "0 0 6px", lineHeight: 1.3 }}>What's the feeling, in one word?</h2>
-            <p style={{ fontFamily: "var(--font-body)", fontSize: 14, color: "var(--text-secondary)", margin: "0 0 18px", lineHeight: 1.5 }}>Just tap it. Putting a name on a feeling measurably turns its volume down.</p>
+            <p style={{ fontFamily: "var(--font-body)", fontSize: 14, color: "var(--text-secondary)", margin: "0 0 12px", lineHeight: 1.5 }}>Just tap it. Putting a name on a feeling measurably turns its volume down. There's no wrong answer, whatever is there is allowed to be there.</p>
+            <PrivacyHint boxed text="This stays between you and this screen. Nothing is saved, shared or seen by anyone, so be honest with yourself." style={{ marginBottom: 16 }} />
             <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginBottom: 18 }}>
               {FEELINGS.map((f) => {
                 const on = feeling === f.label;
@@ -165,7 +167,8 @@ export default function CoolDown({ onComplete, embedded = false }: { onComplete?
         {phase === "decide" && (
           <Glass pad={32}>
             <div style={{ fontFamily: "var(--font-body)", fontSize: 12, fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase", color: "var(--text-muted)", marginBottom: 8 }}>Your move, on purpose</div>
-            <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 22, color: "var(--text-primary)", margin: "0 0 18px", lineHeight: 1.3 }}>Respond now, or later?</h2>
+            <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 22, color: "var(--text-primary)", margin: "0 0 6px", lineHeight: 1.3 }}>Respond now, or later?</h2>
+            <p style={{ fontFamily: "var(--font-body)", fontSize: 14, color: "var(--text-secondary)", margin: "0 0 18px", lineHeight: 1.5 }}>Both are okay. The only thing that matters is that it's your choice, not the anger's.</p>
             <div style={{ display: "flex", gap: 12, marginBottom: 18 }}>
               <button onClick={() => setChoice("later")} style={{ ...(choice === "later" ? primaryBtn : ghostBtn), flex: 1, height: 52, background: choice === "later" ? ACCENT_DEEP : undefined, borderColor: choice === "later" ? ACCENT_DEEP : undefined }}>Later</button>
               <button onClick={() => setChoice("now")} style={{ ...(choice === "now" ? primaryBtn : ghostBtn), flex: 1, height: 52, background: choice === "now" ? ACCENT_DEEP : undefined, borderColor: choice === "now" ? ACCENT_DEEP : undefined }}>Now</button>
