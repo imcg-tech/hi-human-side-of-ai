@@ -25,7 +25,7 @@ export const useAuth = () => useContext(Ctx);
  *  (a BEFORE INSERT trigger on auth.users that rejects other domains). */
 export const ALLOWED_EMAIL_DOMAIN = "fluidogroup.com";
 /** Individually invited guests outside the company domain (exact addresses). */
-export const ALLOWED_GUEST_EMAILS = ["tcross@banyansoftware.com"];
+export const ALLOWED_GUEST_EMAILS = ["tcross@banyansoftware.com", "julian.l.oppelt@gmail.com"];
 export const isAllowedWorkEmail = (email: string) => {
   const e = email.trim().toLowerCase();
   return e.endsWith("@" + ALLOWED_EMAIL_DOMAIN) || ALLOWED_GUEST_EMAILS.includes(e);
