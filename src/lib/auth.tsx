@@ -23,6 +23,10 @@ export const useAuth = () => useContext(Ctx);
 /** Sign-in is limited to company email addresses. This is the first line of
  *  defense (better UX); the authoritative check lives server-side in Supabase
  *  (a BEFORE INSERT trigger on auth.users that rejects other domains). */
+/** Fetch failures surface as "" or "{}" from supabase-js; show something human. */
+const looksLikeNetworkError = (raw: string) => raw === "" || raw === "{}" || /fetch|network/i.test(raw);
+const NETWORK_ERROR_MSG = "Couldn't reach the server. Check your connection (corporate networks sometimes block this) and try again.";
+
 export const ALLOWED_EMAIL_DOMAIN = "fluidogroup.com";
 /** Individually invited guests outside the company domain (exact addresses). */
 export const ALLOWED_GUEST_EMAILS = ["tcross@banyansoftware.com", "julian.l.oppelt@gmail.com", "isabel.gordalla@hotmail.de"];
@@ -52,6 +56,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (/invalid login credentials/i.test(raw)) {
       return { error: "Wrong email or password. New here? Use 'Create account' below." };
     }
+    if (looksLikeNetworkError(raw)) return { error: NETWORK_ERROR_MSG };
     return { error: raw || "Couldn't sign in. Please try again." };
   }
 
@@ -68,6 +73,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (/already registered/i.test(raw)) {
         return { error: "This email already has an account. Use 'Sign in' instead." };
       }
+      if (/database error/i.test(raw)) {
+        return { error: "This address isn't unlocked on the server yet. Ping Isabel to add it to the allowlist." };
+      }
+      if (looksLikeNetworkError(raw)) return { error: NETWORK_ERROR_MSG };
       return { error: raw || "Couldn't create your account. Please try again." };
     }
     // With email confirmation disabled Supabase returns a session right away.
