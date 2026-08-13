@@ -6,6 +6,7 @@ import { Glass } from "../../components/ds";
 import Icon from "../../components/Icon";
 import { backBtn, primaryBtn, ghostBtn } from "./gameStyles";
 import GameBrief from "./GameBrief";
+import BreathingGate from "./BreathingGate";
 import { GAMES } from "../../data/games";
 import PrivacyHint from "../../components/PrivacyHint";
 
@@ -72,6 +73,8 @@ function Help({ children }: { children: React.ReactNode }) {
 export default function ClearTheAir({ onComplete, embedded = false }: { onComplete?: (r: { prepared: boolean; chosenPath: string }) => void; embedded?: boolean }) {
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
+  // Full-screen breathing moment between intro and the actual sorting work.
+  const [breathing, setBreathing] = useState(false);
 
   // Alle Freitexte rein lokal, niemals gespeichert oder übertragen.
   const [observation, setObservation] = useState("");
@@ -154,9 +157,11 @@ export default function ClearTheAir({ onComplete, embedded = false }: { onComple
 
             <PrivacyHint boxed text="Nothing is saved or shared. Just for your own preparation." style={{ marginTop: 18 }} />
 
-            <button onClick={next} style={{ ...primaryBtn, marginTop: 22, width: "100%" }}>Let's go <Icon name="arrowRight" size={18} /></button>
+            <button onClick={() => setBreathing(true)} style={{ ...primaryBtn, marginTop: 22, width: "100%" }}>Let's go <Icon name="arrowRight" size={18} /></button>
           </Glass>
         )}
+
+        {breathing && <BreathingGate onDone={() => { setBreathing(false); setStep(1); }} />}
 
         {/* ───────── Screen 2: Was ist los? (sortieren) ───────── */}
         {step === 1 && (

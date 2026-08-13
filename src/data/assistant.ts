@@ -8,7 +8,7 @@ export interface AssistantIntent { id: string; label: string; emoji: string; rec
 export const ASSISTANT_INTENTS: AssistantIntent[] = [
   {
     id: "tension", label: "Something's tense with a colleague", emoji: "🌩️",
-    rec: { title: "Cool Down", line: "A 2-minute reset to steady the heat before you respond.", route: "/app/conflict/cooldown" },
+    rec: { title: "Clear the Air", line: "Arrive with a breath, sort the tension out calmly, and find a fair way to raise it.", route: "/app/conflict/cleartheair" },
     alt: { title: "Repair Kit", route: "/app/conflict/repair" },
   },
   {

@@ -7,7 +7,7 @@ import GameIcon from "../../components/GameIcon";
 import { Glass } from "../../components/ds";
 import { MODULES } from "../../data/modules";
 import type { Game } from "../../data/games";
-import { FF_CARDS, FF_REFLECTIONS, FF_LEVEL } from "../../data/failForward";
+import { FF_CARDS, FF_REFLECTIONS, FF_TAKEAWAYS, FF_LEVEL } from "../../data/failForward";
 import { backBtn, primaryBtn, ghostBtn } from "./gameStyles";
 import GameBrief from "./GameBrief";
 
@@ -17,12 +17,13 @@ export default function FailForwardGame({ game: g }: { game: Game }) {
   const navigate = useNavigate();
   const accent = MODULES.find((m) => m.id === g.category)?.color ?? "var(--brand)";
 
-  const [phase, setPhase] = useState<"intro" | "card">("intro");
+  const [phase, setPhase] = useState<"intro" | "card" | "end">("intro");
   const [seen, setSeen] = useState<number[]>([]);
   const [cardIdx, setCardIdx] = useState<number | null>(null);
   const [refIdx, setRefIdx] = useState(0);
   const [count, setCount] = useState(0);
   const [secs, setSecs] = useState(TURN);
+  const [revealed, setRevealed] = useState(false);
 
   const scope = useRef<HTMLDivElement>(null);
   useGSAP(() => { gsap.from(".ff-card", { y: 18, scale: 0.96, duration: 0.4, ease: "back.out(1.6)" }); }, { dependencies: [cardIdx], scope });
@@ -43,6 +44,7 @@ export default function FailForwardGame({ game: g }: { game: Game }) {
     setRefIdx(Math.floor(Math.random() * FF_REFLECTIONS.length));
     setSeen((s) => [...s, pick]);
     if (!replacePass) setCount((c) => c + 1);
+    setRevealed(false);
     setPhase("card");
   }
 
@@ -88,13 +90,51 @@ export default function FailForwardGame({ game: g }: { game: Game }) {
                 <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 17, color: "var(--text-primary)" }}>{FF_REFLECTIONS[refIdx]}</div>
               </div>
               <textarea placeholder="Your spontaneous reaction (optional, just for you) …" style={{ width: "100%", marginTop: 14, minHeight: 70, resize: "vertical", borderRadius: 12, border: "1px solid var(--border-default)", background: "rgba(255,255,255,0.6)", padding: "12px 14px", fontFamily: "var(--font-body)", fontSize: 15, color: "var(--text-primary)", outline: "none", boxSizing: "border-box" }} />
+
+              {!revealed ? (
+                <button onClick={() => setRevealed(true)} style={{ ...ghostBtn, marginTop: 14, width: "100%" }}>💡 Show the takeaway</button>
+              ) : (
+                <div style={{ marginTop: 14, padding: "16px 18px", borderRadius: 14, background: `color-mix(in srgb, ${accent} 12%, rgba(255,255,255,0.7))` }}>
+                  <div style={{ fontFamily: "var(--font-body)", fontSize: 12, fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase", color: "var(--text-muted)", marginBottom: 6 }}>💡 Take this with you</div>
+                  <p style={{ fontFamily: "var(--font-body)", fontSize: 14.5, color: "var(--text-body)", lineHeight: 1.6, margin: 0 }}>{FF_TAKEAWAYS[refIdx].lesson}</p>
+                  <div style={{ marginTop: 10, padding: "10px 13px", borderRadius: 11, background: "rgba(255,255,255,0.75)", borderLeft: `3px solid ${accent}` }}>
+                    <div style={{ fontFamily: "var(--font-body)", fontSize: 11.5, fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase", color: "var(--text-muted)", marginBottom: 3 }}>Steal this sentence</div>
+                    <div style={{ fontFamily: "var(--font-body)", fontSize: 14, fontStyle: "italic", color: "var(--text-primary)", lineHeight: 1.5 }}>“{FF_TAKEAWAYS[refIdx].steal}”</div>
+                  </div>
+                </div>
+              )}
             </Glass>
           </div>
 
           <div style={{ display: "flex", gap: 12, marginTop: 18, flexWrap: "wrap" }}>
-            <button onClick={() => draw()} style={primaryBtn}>Next card <Icon name="arrowRight" size={18} /></button>
-            <button onClick={() => draw(true)} style={ghostBtn}>Pass, new card</button>
+            {count >= 3 ? (
+              <button onClick={() => setPhase("end")} style={primaryBtn}>Wrap up <Icon name="arrowRight" size={18} /></button>
+            ) : (
+              <button onClick={() => draw()} style={primaryBtn}>Next card <Icon name="arrowRight" size={18} /></button>
+            )}
+            {count >= 3 && <button onClick={() => draw()} style={ghostBtn}>One more card</button>}
+            {count < 3 && <button onClick={() => draw(true)} style={ghostBtn}>Pass, new card</button>}
           </div>
+        </div>
+      )}
+
+      {phase === "end" && (
+        <div style={{ maxWidth: 600, margin: "auto", width: "100%" }}>
+          <Glass pad={34}>
+            <div style={{ fontSize: 40, marginBottom: 8 }}>🛟</div>
+            <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 26, color: "var(--text-primary)", margin: "0 0 10px" }}>That's the muscle</h2>
+            <p style={{ fontFamily: "var(--font-body)", fontSize: 15.5, color: "var(--text-body)", lineHeight: 1.6, margin: "0 0 16px" }}>
+              You just practiced reacting to failure with curiosity instead of shame, three times. That reflex is what makes real slips smaller: own it fast, mine it for the lesson, say it out loud.
+            </p>
+            <div style={{ padding: "14px 16px", borderRadius: 14, background: `color-mix(in srgb, ${accent} 12%, rgba(255,255,255,0.7))`, fontFamily: "var(--font-body)", fontSize: 14.5, color: "var(--text-body)", lineHeight: 1.6, marginBottom: 22 }}>
+              <strong>Try it with your team:</strong> a 5-minute “fail of the week” round in your next team call. One person goes first (that could be you), everyone tops it, nobody fixes anything. Watch what it does to honesty over a month.
+            </div>
+            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+              <button onClick={() => { setCount(0); draw(); }} style={primaryBtn}>Play again</button>
+              <button onClick={() => navigate("/app/live/failforward")} style={ghostBtn}>Live with the team</button>
+              <button onClick={() => navigate(`/app/module/${g.category}`)} style={ghostBtn}>Back to the module</button>
+            </div>
+          </Glass>
         </div>
       )}
     </div>

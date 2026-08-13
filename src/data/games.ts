@@ -372,8 +372,8 @@ GAMES.cleartheair = {
   intro: "Sort out a tension calmly for yourself and find a good way to raise it. Calm, fair and without blame.",
   closing: "",
   estMinutes: 8, metaTags: ["Solo", "Private"],
-  howItWorks: ["Name the tension for yourself, calmly", "Separate the facts from the story", "Shape a fair way to raise it, no blame"],
-  concepts: ["Fair repair", "Non-blaming language"],
+  howItWorks: ["Arrive with three guided breaths", "Sort the tension out calmly, facts, feeling, need", "Shape a fair way to raise it, no blame"],
+  concepts: ["Fair repair", "Non-blaming language", "The gap between spark and reaction"],
   rounds: [],
 };
 
@@ -385,17 +385,6 @@ GAMES.conflictstyles = {
   estMinutes: 5, metaTags: ["Solo & private", "Educational"],
   howItWorks: ["React to a few quick conflict moments", "See which style you reach for by default", "Learn when each of the five styles helps, and costs"],
   concepts: ["Thomas-Kilmann modes", "Assertiveness × cooperation", "No style is 'best'"],
-  rounds: [],
-};
-
-GAMES.cooldown = {
-  key: "cooldown", category: "conflict", route: "/app/conflict/cooldown", emoji: "🧊",
-  title: "Cool Down", skill: "Steady the heat · Solo & private",
-  intro: "Something just got under your skin. This is the emergency brake: two minutes, nothing to write. Breathe, name the feeling, and choose your next move on purpose. For sorting it out properly later, there's Clear the Air.",
-  closing: "",
-  estMinutes: 2, metaTags: ["Solo & private", "In the moment"],
-  howItWorks: ["Three guided breaths", "Name the feeling in one word", "Decide, on purpose, to respond now or later"],
-  concepts: ["The gap between spark and reaction", "Naming the feeling"],
   rounds: [],
 };
 

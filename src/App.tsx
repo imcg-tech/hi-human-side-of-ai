@@ -39,7 +39,6 @@ import TheComeback from "./screens/games/TheComeback";
 import CheckOnAColleague from "./screens/games/CheckOnAColleague";
 import NotAlone from "./screens/games/NotAlone";
 import ConflictStyles from "./screens/games/ConflictStyles";
-import CoolDown from "./screens/games/CoolDown";
 import RepairKit from "./screens/games/RepairKit";
 import ClearTheAir from "./screens/games/ClearTheAir";
 import FirstWeekQuest from "./screens/games/FirstWeekQuest";
@@ -108,7 +107,6 @@ function Shell() {
           <Route path="balance/notalone" element={<NotAlone />} />
           <Route path="conflict/cleartheair" element={<ClearTheAir />} />
           <Route path="conflict/styles" element={<ConflictStyles />} />
-          <Route path="conflict/cooldown" element={<CoolDown />} />
           <Route path="conflict/repair" element={<RepairKit />} />
           <Route path="onboarding/firstweek" element={<FirstWeekQuest />} />
           <Route path="performance/goalcraft" element={<GoalcraftSolo />} />
