@@ -8,6 +8,11 @@ interface AuthCtx {
   loading: boolean;
   signInWithPassword: (email: string, password: string) => Promise<{ error: string | null }>;
   signUpWithPassword: (email: string, password: string) => Promise<{ error: string | null; needsConfirm?: boolean }>;
+  resetPassword: (email: string) => Promise<{ error: string | null }>;
+  updatePassword: (password: string) => Promise<{ error: string | null }>;
+  /** True after arriving via a password-recovery email link, until a new password is saved. */
+  recovery: boolean;
+  clearRecovery: () => void;
   signOut: () => Promise<void>;
 }
 
@@ -16,6 +21,10 @@ const Ctx = createContext<AuthCtx>({
   loading: true,
   signInWithPassword: async () => ({ error: null }),
   signUpWithPassword: async () => ({ error: null }),
+  resetPassword: async () => ({ error: null }),
+  updatePassword: async () => ({ error: null }),
+  recovery: false,
+  clearRecovery: () => {},
   signOut: async () => {},
 });
 export const useAuth = () => useContext(Ctx);
@@ -83,11 +92,15 @@ export const isAllowedWorkEmail = (email: string) => {
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+  const [recovery, setRecovery] = useState(false);
 
   useEffect(() => {
     if (!supabaseReady) { setLoading(false); return; }
     supabase.auth.getSession().then(({ data }) => { setSession(data.session); setLoading(false); });
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => setSession(s));
+    const { data: sub } = supabase.auth.onAuthStateChange((event, s) => {
+      setSession(s);
+      if (event === "PASSWORD_RECOVERY") setRecovery(true);
+    });
     return () => sub.subscription.unsubscribe();
   }, []);
 
@@ -134,9 +147,35 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return { error: null };
   }
 
+  async function resetPassword(email: string) {
+    if (!isAllowedWorkEmail(email)) {
+      return { error: `Please use your @${ALLOWED_EMAIL_DOMAIN} work email.` };
+    }
+    const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+      redirectTo: window.location.origin + window.location.pathname,
+    });
+    if (!error) return { error: null };
+    const raw = (error.message || "").trim();
+    const special = statusMessage(error);
+    if (special) return { error: special };
+    if (looksLikeNetworkError(raw)) return { error: await diagnoseNetwork() };
+    return { error: raw || "Couldn't send the reset email. Please try again." };
+  }
+
+  async function updatePassword(password: string) {
+    if (password.length < 8) {
+      return { error: "Please choose a password with at least 8 characters." };
+    }
+    const { error } = await supabase.auth.updateUser({ password });
+    if (!error) { setRecovery(false); return { error: null }; }
+    const raw = (error.message || "").trim();
+    if (/same password/i.test(raw)) return { error: "That's already your current password. Pick a different one." };
+    return { error: raw || "Couldn't save the new password. Please try again." };
+  }
+
   async function signOut() { await supabase.auth.signOut(); }
 
-  return <Ctx.Provider value={{ session, loading, signInWithPassword, signUpWithPassword, signOut }}>{children}</Ctx.Provider>;
+  return <Ctx.Provider value={{ session, loading, signInWithPassword, signUpWithPassword, resetPassword, updatePassword, recovery, clearRecovery: () => setRecovery(false), signOut }}>{children}</Ctx.Provider>;
 }
 
 /** Gate for protected routes. In demo mode (no Supabase env) it lets everything

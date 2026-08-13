@@ -6,6 +6,7 @@ import SearchOverlay from "../components/SearchOverlay";
 import PrivacyIntro from "../components/PrivacyIntro";
 import HiGuide from "../components/HiGuide";
 import HiWelcome from "../components/HiWelcome";
+import NewPasswordOverlay from "../components/NewPasswordOverlay";
 import { useAuth } from "../lib/auth";
 import { supabaseReady } from "../lib/supabase";
 import { useStore } from "../lib/store";
@@ -207,6 +208,7 @@ export default function AppLayout() {
       <PrivacyIntro />
       <HiGuide />
       <HiWelcome />
+      <NewPasswordOverlay />
     </div>
   );
 }

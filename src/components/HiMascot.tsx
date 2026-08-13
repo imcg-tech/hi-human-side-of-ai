@@ -27,7 +27,7 @@ export default function HiMascot({ size = 120, pose = "idle", reduced = false, s
         .him-eyes{ transform-box:fill-box; transform-origin:center; ${anim ? "animation:hi-blink 5.5s ease-in-out infinite;" : ""} }
         .him-spark{ transform-box:fill-box; transform-origin:center; ${anim ? "animation:hi-spark 2.6s ease-in-out infinite;" : ""} }
         .him-ant{ transform-box:fill-box; transform-origin:50% 100%; ${anim ? "animation:hi-antenna 3.2s ease-in-out infinite;" : ""} }
-        .him-wave{ transform-box:fill-box; transform-origin:12% 88%; ${anim && waving ? "animation:hi-wave 0.7s ease-in-out infinite;" : ""} }
+        .him-wave{ transform-box:fill-box; transform-origin:12% 88%; ${anim && waving ? "animation:hi-wave 0.7s ease-in-out 3;" : ""} }
       `}</style>
       <div className="him-bob" style={{ width: "100%", height: "100%" }}>
         <svg viewBox="0 0 150 200" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">

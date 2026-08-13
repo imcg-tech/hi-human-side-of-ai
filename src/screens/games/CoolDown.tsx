@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Glass } from "../../components/ds";
 import Icon from "../../components/Icon";
@@ -8,6 +8,10 @@ import GameBrief from "./GameBrief";
 
 const ACCENT = "var(--candy-pink)";
 const ACCENT_DEEP = "#C77D93";
+/* Quiet ambient loop while cooling down (starts on the first click, so
+   autoplay rules are satisfied). Shares the Sound Bath asset. */
+const AMBIENT_SRC = "audio/singing-bowls.mp3";
+const AMBIENT_VOL = 0.22;
 
 type Phase = "intro" | "steady" | "split" | "need" | "decide" | "close";
 
@@ -22,7 +26,29 @@ export default function CoolDown({ onComplete, embedded = false }: { onComplete?
   const [need, setNeed] = useState("");
   const [generous, setGenerous] = useState("");
   const [choice, setChoice] = useState<"now" | "later" | null>(null);
+  const [muted, setMuted] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const reduce = typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+
+  // Ambient sound for every phase after the intro; gentle fade-in, hard stop on leave.
+  const soundOn = phase !== "intro" && phase !== "close";
+  useEffect(() => {
+    if (!soundOn) { audioRef.current?.pause(); return; }
+    if (!audioRef.current) {
+      const a = new Audio(AMBIENT_SRC);
+      a.loop = true; a.volume = 0;
+      audioRef.current = a;
+    }
+    const a = audioRef.current;
+    a.muted = muted;
+    a.play().catch(() => {});
+    const fade = setInterval(() => {
+      a.volume = Math.min(AMBIENT_VOL, a.volume + 0.02);
+      if (a.volume >= AMBIENT_VOL) clearInterval(fade);
+    }, 90);
+    return () => clearInterval(fade);
+  }, [soundOn, muted]);
+  useEffect(() => () => { audioRef.current?.pause(); audioRef.current = null; }, []);
 
   function finish() { onComplete?.(); if (!embedded) navigate("/app/module/conflict"); }
 
@@ -39,6 +65,14 @@ export default function CoolDown({ onComplete, embedded = false }: { onComplete?
       )}
 
       <div style={{ maxWidth: 560, margin: embedded ? "0" : "auto", width: "100%" }}>
+        {soundOn && (
+          <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 10 }}>
+            <button onClick={() => setMuted(!muted)} aria-label={muted ? "Turn sound on" : "Turn sound off"}
+              style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "7px 13px", borderRadius: 999, cursor: "pointer", border: "1px solid var(--border-strong)", background: "rgba(255,255,255,0.55)", color: "var(--text-secondary)", fontFamily: "var(--font-body)", fontSize: 13, fontWeight: 600 }}>
+              {muted ? "🔇 Sound off" : "🔊 Sound on"}
+            </button>
+          </div>
+        )}
         {phase === "intro" && (
           <Glass pad={36}>
             <div style={{ width: 64, height: 64, borderRadius: 18, background: ACCENT, display: "grid", placeItems: "center", fontSize: 32 }}>🧊</div>
