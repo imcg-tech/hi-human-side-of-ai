@@ -12,21 +12,22 @@ const ACCENT_DEEP = "#C77D93";
    autoplay rules are satisfied). Shares the Sound Bath asset. */
 const AMBIENT_SRC = "audio/singing-bowls.mp3";
 const AMBIENT_VOL = 0.22;
+const BREATH_MS = 5500; // one full breath, matches the pulse animation
 
-type Phase = "intro" | "steady" | "split" | "need" | "decide" | "close";
+/* Deliberately NO writing in this game: Cool Down is the in-the-moment
+   emergency brake (breathe, name it, choose). The thorough sort-out with
+   fact vs. story lives in Clear the Air, which we hand over to at the end. */
+type Phase = "intro" | "steady" | "feeling" | "decide" | "close";
 
-const label: React.CSSProperties = { fontFamily: "var(--font-body)", fontSize: 12, fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase", color: "var(--text-muted)", marginBottom: 8 };
-const exampleBox: React.CSSProperties = { padding: "12px 14px", borderRadius: 12, background: "rgba(199,125,147,0.08)", border: "1px solid rgba(199,125,147,0.25)", fontFamily: "var(--font-body)", fontSize: 13.5, color: "var(--text-secondary)", lineHeight: 1.55, marginBottom: 18 };
-const taArea: React.CSSProperties = { width: "100%", minHeight: 74, resize: "vertical", boxSizing: "border-box", borderRadius: 14, border: "1.5px solid var(--border-strong)", background: "rgba(255,255,255,0.7)", padding: "12px 14px", fontFamily: "var(--font-body)", fontSize: 15.5, color: "var(--text-primary)", outline: "none", lineHeight: 1.5 };
+const FEELINGS = ["Angry", "Hurt", "Ignored", "Embarrassed", "Treated unfairly", "Under pressure"];
 
 export default function CoolDown({ onComplete, embedded = false }: { onComplete?: () => void; embedded?: boolean }) {
   const navigate = useNavigate();
   const [phase, setPhase] = useState<Phase>("intro");
-  const [fact, setFact] = useState("");
-  const [story, setStory] = useState("");
-  const [need, setNeed] = useState("");
-  const [generous, setGenerous] = useState("");
+  const [feeling, setFeeling] = useState<string | null>(null);
   const [choice, setChoice] = useState<"now" | "later" | null>(null);
+  const [breaths, setBreaths] = useState(0);
+  const [inhale, setInhale] = useState(true);
   const [muted, setMuted] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const reduce = typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
@@ -51,11 +52,22 @@ export default function CoolDown({ onComplete, embedded = false }: { onComplete?
   }, [soundOn, muted]);
   useEffect(() => () => { audioRef.current?.pause(); audioRef.current = null; }, []);
 
+  // Guided breathing: count breaths, alternate in/out cue in sync with the pulse.
+  useEffect(() => {
+    if (phase !== "steady") return;
+    setBreaths(0); setInhale(true);
+    const half = setInterval(() => setInhale((v) => !v), BREATH_MS / 2);
+    const full = setInterval(() => setBreaths((b) => b + 1), BREATH_MS);
+    return () => { clearInterval(half); clearInterval(full); };
+  }, [phase]);
+
   function finish() { onComplete?.(); if (!embedded) navigate("/app/module/conflict"); }
 
   const wrap: React.CSSProperties = embedded
     ? { width: "100%" }
     : { height: "100%", overflowY: "auto", padding: "8px 4px 40px", display: "flex", flexDirection: "column" };
+
+  const breathsDone = breaths >= 3;
 
   return (
     <div style={wrap}>
@@ -74,6 +86,7 @@ export default function CoolDown({ onComplete, embedded = false }: { onComplete?
             </button>
           </div>
         )}
+
         {phase === "intro" && (
           <Glass pad={36}>
             <div style={{ width: 64, height: 64, borderRadius: 18, background: ACCENT, display: "grid", placeItems: "center", fontSize: 32 }}>🧊</div>
@@ -87,71 +100,83 @@ export default function CoolDown({ onComplete, embedded = false }: { onComplete?
 
         {phase === "steady" && (
           <div style={{ textAlign: "center", paddingTop: 10 }}>
-            <div style={{ height: 220, display: "grid", placeItems: "center", marginBottom: 8 }}>
+            <div style={{ height: 220, display: "grid", placeItems: "center", marginBottom: 8, position: "relative" }}>
               <div style={{ width: 170, height: 170, borderRadius: "50%", background: `radial-gradient(circle at 50% 45%, ${ACCENT}, rgba(215,150,175,0.2))`, boxShadow: "0 18px 46px rgba(190,120,150,0.28)", animation: reduce ? "none" : "cdpulse 5.5s ease-in-out infinite" }} />
+              <div style={{ position: "absolute", fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 17, color: "var(--text-primary)", textShadow: "0 1px 12px rgba(255,255,255,0.8)" }}>
+                {reduce ? "Breathe slowly" : inhale ? "Breathe in …" : "… and out"}
+              </div>
             </div>
             <style>{"@keyframes cdpulse{0%,100%{transform:scale(0.82)}50%{transform:scale(1.06)}}"}</style>
-            <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 24, color: "var(--text-primary)", margin: "0 0 10px" }}>Let the heat drop a notch</h2>
-            <p style={{ fontFamily: "var(--font-body)", fontSize: 16, color: "var(--text-secondary)", margin: "0 auto 12px", maxWidth: 340, lineHeight: 1.5 }}>Unclench your jaw. One slow breath out. There's no message you have to send this second.</p>
-            <p style={{ fontFamily: "var(--font-body)", fontSize: 14, color: "var(--text-muted)", margin: "0 auto 28px", maxWidth: 340, lineHeight: 1.5 }}>Keep the moment that stung in mind, a message, a comment, a look. We'll take it apart together in the next step.</p>
-            <button onClick={() => setPhase("split")} style={{ ...primaryBtn, width: "100%", maxWidth: 340 }}>I'm a bit steadier <Icon name="arrowRight" size={18} /></button>
+            <div style={{ display: "flex", justifyContent: "center", gap: 8, marginBottom: 14 }} aria-label={`${Math.min(breaths, 3)} of 3 breaths`}>
+              {[0, 1, 2].map((i) => (
+                <span key={i} style={{ width: 10, height: 10, borderRadius: "50%", background: breaths > i ? ACCENT_DEEP : "rgba(28,26,23,0.15)", transition: "background 0.4s" }} />
+              ))}
+            </div>
+            <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 24, color: "var(--text-primary)", margin: "0 0 10px" }}>
+              {breathsDone ? "Good. That's the gap." : "Three breaths with the circle"}
+            </h2>
+            <p style={{ fontFamily: "var(--font-body)", fontSize: 15.5, color: "var(--text-secondary)", margin: "0 auto 24px", maxWidth: 340, lineHeight: 1.5 }}>
+              {breathsDone
+                ? "There's no message you have to send this second."
+                : "Unclench your jaw, drop your shoulders. Follow the circle."}
+            </p>
+            <button onClick={() => setPhase("feeling")} style={{ ...primaryBtn, width: "100%", maxWidth: 340, opacity: breathsDone ? 1 : 0.75 }}>
+              {breathsDone ? "I'm steadier" : "Skip the breaths"} <Icon name="arrowRight" size={18} />
+            </button>
           </div>
         )}
 
-        {phase === "split" && (
+        {phase === "feeling" && (
           <Glass pad={32}>
-            <div style={label}>Fact vs. story</div>
-            <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 22, color: "var(--text-primary)", margin: "0 0 6px", lineHeight: 1.3 }}>Split what happened from the story about it.</h2>
-            <p style={{ fontFamily: "var(--font-body)", fontSize: 14, color: "var(--text-secondary)", margin: "0 0 14px", lineHeight: 1.5 }}>The heat usually lives in the story, not the fact. Naming both takes the edge off.</p>
-            <div style={exampleBox}>
-              <strong>Example:</strong> Sam replied to your proposal with just "ok."<br />
-              <strong>The fact:</strong> Sam wrote "ok." <strong style={{ color: ACCENT_DEEP }}>The story:</strong> "Sam doesn't value my work."
+            <div style={{ fontFamily: "var(--font-body)", fontSize: 12, fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase", color: "var(--text-muted)", marginBottom: 8 }}>Name it to tame it</div>
+            <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 22, color: "var(--text-primary)", margin: "0 0 6px", lineHeight: 1.3 }}>What's the feeling, in one word?</h2>
+            <p style={{ fontFamily: "var(--font-body)", fontSize: 14, color: "var(--text-secondary)", margin: "0 0 18px", lineHeight: 1.5 }}>Just tap it. Putting a name on a feeling measurably turns its volume down.</p>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginBottom: 18 }}>
+              {FEELINGS.map((f) => {
+                const on = feeling === f;
+                return (
+                  <button key={f} onClick={() => setFeeling(on ? null : f)}
+                    style={{ padding: "11px 18px", borderRadius: 999, cursor: "pointer", fontFamily: "var(--font-body)", fontSize: 14.5, fontWeight: 600,
+                      color: on ? "#fff" : "var(--text-primary)", background: on ? ACCENT_DEEP : "rgba(255,255,255,0.6)",
+                      border: on ? `1.5px solid ${ACCENT_DEEP}` : "1.5px solid var(--border-strong)" }}>
+                    {f}
+                  </button>
+                );
+              })}
             </div>
-            <div style={{ marginBottom: 16 }}>
-              <div style={{ fontFamily: "var(--font-body)", fontSize: 14.5, fontWeight: 600, color: "var(--text-primary)", marginBottom: 6 }}>The fact, just what was said or done</div>
-              <textarea value={fact} onChange={(e) => setFact(e.target.value)} placeholder="What a camera would have recorded …" autoFocus style={taArea} />
-            </div>
-            <div>
-              <div style={{ fontFamily: "var(--font-body)", fontSize: 14.5, fontWeight: 600, color: ACCENT_DEEP, marginBottom: 6 }}>The story, what I'm making it mean</div>
-              <textarea value={story} onChange={(e) => setStory(e.target.value)} placeholder="What you're reading into it, e.g. “they don't respect me” …" style={taArea} />
-            </div>
-            <button onClick={() => setPhase("need")} style={{ ...primaryBtn, width: "100%", marginTop: 18 }}>Next <Icon name="arrowRight" size={18} /></button>
-          </Glass>
-        )}
-
-        {phase === "need" && (
-          <Glass pad={32}>
-            <div style={label}>Underneath the heat</div>
-            <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 22, color: "var(--text-primary)", margin: "0 0 6px", lineHeight: 1.3 }}>Two quick questions.</h2>
-            <p style={{ fontFamily: "var(--font-body)", fontSize: 14, color: "var(--text-secondary)", margin: "0 0 18px", lineHeight: 1.5 }}>Anger usually guards something you need. And the other person usually has a less dramatic reason than your story says.</p>
-            <div style={{ marginBottom: 16 }}>
-              <div style={{ fontFamily: "var(--font-body)", fontSize: 14.5, fontWeight: 600, color: "var(--text-primary)", marginBottom: 6 }}>What do you actually need here?</div>
-              <textarea value={need} onChange={(e) => setNeed(e.target.value)} placeholder="e.g. to be heard, an apology, clarity, a change …" autoFocus style={taArea} />
-            </div>
-            <div>
-              <div style={{ fontFamily: "var(--font-body)", fontSize: 14.5, fontWeight: 600, color: "var(--text-primary)", marginBottom: 6 }}>A more generous read of them</div>
-              <textarea value={generous} onChange={(e) => setGenerous(e.target.value)} placeholder="e.g. maybe Sam was in a rush and it wasn't about me …" style={taArea} />
-            </div>
-            <button onClick={() => setPhase("decide")} style={{ ...primaryBtn, width: "100%", marginTop: 18 }}>Next <Icon name="arrowRight" size={18} /></button>
+            {feeling && (
+              <div style={{ padding: "14px 16px", borderRadius: 14, background: "rgba(199,125,147,0.08)", border: "1px solid rgba(199,125,147,0.25)", fontFamily: "var(--font-body)", fontSize: 14.5, color: "var(--text-body)", lineHeight: 1.55, marginBottom: 18 }}>
+                Feeling <strong style={{ color: ACCENT_DEEP }}>{feeling.toLowerCase()}</strong> makes sense. It's information, not an instruction.
+              </div>
+            )}
+            <button onClick={() => setPhase("decide")} disabled={!feeling} style={{ ...primaryBtn, width: "100%", opacity: feeling ? 1 : 0.45, cursor: feeling ? "pointer" : "not-allowed" }}>Next <Icon name="arrowRight" size={18} /></button>
           </Glass>
         )}
 
         {phase === "decide" && (
           <Glass pad={32}>
-            <div style={label}>Your move, on purpose</div>
+            <div style={{ fontFamily: "var(--font-body)", fontSize: 12, fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase", color: "var(--text-muted)", marginBottom: 8 }}>Your move, on purpose</div>
             <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 22, color: "var(--text-primary)", margin: "0 0 18px", lineHeight: 1.3 }}>Respond now, or later?</h2>
             <div style={{ display: "flex", gap: 12, marginBottom: 18 }}>
               <button onClick={() => setChoice("later")} style={{ ...(choice === "later" ? primaryBtn : ghostBtn), flex: 1, height: 52, background: choice === "later" ? ACCENT_DEEP : undefined, borderColor: choice === "later" ? ACCENT_DEEP : undefined }}>Later</button>
               <button onClick={() => setChoice("now")} style={{ ...(choice === "now" ? primaryBtn : ghostBtn), flex: 1, height: 52, background: choice === "now" ? ACCENT_DEEP : undefined, borderColor: choice === "now" ? ACCENT_DEEP : undefined }}>Now</button>
             </div>
             {choice && (
-              <div style={{ padding: "16px 18px", borderRadius: 14, background: "rgba(28,26,23,0.04)", fontFamily: "var(--font-body)", fontSize: 15, color: "var(--text-body)", lineHeight: 1.55 }}>
+              <div style={{ padding: "16px 18px", borderRadius: 14, background: "rgba(28,26,23,0.04)", fontFamily: "var(--font-body)", fontSize: 15, color: "var(--text-body)", lineHeight: 1.55, marginBottom: choice === "later" ? 14 : 0 }}>
                 {choice === "later"
-                  ? "Good call. Give it an hour, even a day. The story usually shrinks with time. Come back when you're responding, not reacting."
-                  : "Then speak from the fact, not the story. Name the impact on you, ask a real question, and leave room for their side. You can always start with, “Can I share how that landed for me?”"}
+                  ? "Good call. Give it an hour, even a day. Things usually shrink with time. Come back when you're responding, not reacting."
+                  : "Then keep it to what actually happened, name how it landed for you, and leave room for their side. A good opener: “Can I share how that landed for me?”"}
               </div>
             )}
-            <button onClick={() => setPhase("close")} disabled={!choice} style={{ ...primaryBtn, width: "100%", marginTop: 18, opacity: choice ? 1 : 0.45, cursor: choice ? "pointer" : "not-allowed" }}>Done <Icon name="arrowRight" size={18} /></button>
+            {choice === "later" && (
+              <button onClick={() => navigate("/app/conflict/cleartheair")}
+                style={{ display: "flex", alignItems: "center", gap: 10, width: "100%", textAlign: "left", padding: "14px 16px", borderRadius: 14, cursor: "pointer", border: "1px solid var(--border-strong)", background: "rgba(255,255,255,0.6)", fontFamily: "var(--font-body)", fontSize: 14.5, color: "var(--text-primary)", marginBottom: 4 }}>
+                <span style={{ fontSize: 20 }}>🌬️</span>
+                <span style={{ flex: 1 }}><strong>When you're calmer: Clear the Air.</strong><br /><span style={{ color: "var(--text-secondary)", fontSize: 13.5 }}>Sort the tension out properly and find a fair way to raise it.</span></span>
+                <Icon name="arrowRight" size={16} />
+              </button>
+            )}
+            <button onClick={() => setPhase("close")} disabled={!choice} style={{ ...primaryBtn, width: "100%", marginTop: 14, opacity: choice ? 1 : 0.45, cursor: choice ? "pointer" : "not-allowed" }}>Done <Icon name="arrowRight" size={18} /></button>
           </Glass>
         )}
 
@@ -161,7 +186,7 @@ export default function CoolDown({ onComplete, embedded = false }: { onComplete?
             <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 24, color: "var(--text-primary)", margin: "0 0 10px" }}>You made a gap</h2>
             <p style={{ fontFamily: "var(--font-body)", fontSize: 15.5, color: "var(--text-secondary)", margin: "0 0 24px", lineHeight: 1.55 }}>Between the spark and the reaction, you put a gap. That gap is where your power is. Nothing here was saved.</p>
             <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-              <button onClick={() => { setFact(""); setStory(""); setNeed(""); setGenerous(""); setChoice(null); setPhase("steady"); }} style={primaryBtn}>Again</button>
+              <button onClick={() => { setFeeling(null); setChoice(null); setPhase("steady"); }} style={primaryBtn}>Again</button>
               <button onClick={finish} style={ghostBtn}>Back to the module</button>
             </div>
           </Glass>

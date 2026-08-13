@@ -344,11 +344,11 @@ GAMES.conflictstyles = {
 GAMES.cooldown = {
   key: "cooldown", category: "conflict", route: "/app/conflict/cooldown", emoji: "🧊",
   title: "Cool Down", skill: "Steady the heat · Solo & private",
-  intro: "Something just got under your skin. Before you fire back, take a moment to let the heat drop, separate the fact from the story, and choose your next move on purpose.",
+  intro: "Something just got under your skin. This is the emergency brake: two minutes, nothing to write. Breathe, name the feeling, and choose your next move on purpose. For sorting it out properly later, there's Clear the Air.",
   closing: "",
   estMinutes: 2, metaTags: ["Solo & private", "In the moment"],
-  howItWorks: ["Take one steadying beat", "Split what happened from the story about it", "Decide, on purpose, to respond now or later"],
-  concepts: ["Fact vs. story", "The gap between spark and reaction", "Naming the feeling"],
+  howItWorks: ["Three guided breaths", "Name the feeling in one word", "Decide, on purpose, to respond now or later"],
+  concepts: ["The gap between spark and reaction", "Naming the feeling"],
   rounds: [],
 };
 
